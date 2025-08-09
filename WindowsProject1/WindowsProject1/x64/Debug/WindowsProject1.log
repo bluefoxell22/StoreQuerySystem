@@ -1,0 +1,3 @@
+﻿  DBFReadWrite.cpp
+C:\Users\Audrey\Gunung Agung\WindowsProject1\WindowsProject1\DBFReadWrite.cpp(116,40): error C2589: '(': illegal token on right side of '::'
+C:\Users\Audrey\Gunung Agung\WindowsProject1\WindowsProject1\DBFReadWrite.cpp(116,40): error C2059: syntax error: ')'

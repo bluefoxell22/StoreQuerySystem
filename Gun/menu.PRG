@@ -1,0 +1,20954 @@
+on error do pesn
+set decimal to 2
+set excl off
+set bell off
+set talk off
+set esca off
+set dele on
+set readb off
+set date brit
+set cent on
+set safe off
+set sysmenu SAVE
+set sysmenu to
+set help off
+set esca off
+pagiw=spac(1)
+tgskr=date()
+clos data
+*
+do dtop
+*
+SET COLOR OF SCHEME 2 TO ,,,,,6  W+/N
+SET COLOR OF SCHEME 3 TO ,,,,,6  W+/N
+SET COLOR OF SCHEME 4 TO ,,,,,6  W+/N
+CLOS DATA
+JAMSAIKI=TIME()
+TGSAIKI=DATE()
+wayah=spac(1)
+asmo='BOS'
+*asmo=spac(12)
+*do pword
+*
+MENGGABUNG=''
+DO LHJAMB
+CLOS DATA
+*
+DEFINE MENU  _MSYSMENU IN SCREEN
+DEFINE PAD stokpad   OF _MSYSMENU PROMPT '\<Item   '  COLOR SCHEME 3 ;
+	KEY ALT+I, '' mess'Menu kontrol stok';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD angpad   OF _MSYSMENU PROMPT '\<Suplier   '  COLOR SCHEME 3 ;
+	KEY ALT+S, '' mess'Menu kontrol supplier';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD aggpad   OF _MSYSMENU PROMPT '\<Customer   '  COLOR SCHEME 3 ;
+	KEY ALT+A, '' mess'Menu kontrol customer';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD kpbpad OF _MSYSMENU PROMPT '\<Beli   ' COLOR SCHEME 3 ;
+	KEY ALT+B, '' mess'Menu Kontrol Transaksi pembelian';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD kpapad OF _MSYSMENU PROMPT '\<Jual   ' COLOR SCHEME 3 ;
+	KEY ALT+J, '' mess'Menu Kontrol Transaksi Penjualan'
+DEFINE PAD indpad   OF _MSYSMENU PROMPT '\<Tools   '   COLOR SCHEME 3 ;
+	KEY ALT+R, '' mess'Reindex data';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD outpad   OF _MSYSMENU PROMPT 'E\<xit   '   COLOR SCHEME 3 ;
+	KEY ALT+X, '' mess'keluar dari program'
+*
+on pad stokpad of _MSYSMENU activate popup stokpop
+on pad angpad of _MSYSMENU activate popup angpop
+on pad aggpad of _MSYSMENU activate popup aggpop
+on pad kpbpad of _MSYSMENU activate popup kpbpop
+on pad kpApad of _MSYSMENU activate popup kpApop
+on pad indpad of _MSYSMENU activate popup indpop
+on Selection pad outpad of _MSYSMENU do lhjamt in menu
+*
+DEFINE POPUP stokpop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF stokpop PROMPT '\<Entry' mess'Memasukkan item baru dan edit 1 item'
+DEFINE BAR 2 OF stokpop PROMPT 'E\<dit Banyak' mess'Edit item banyak'
+DEFINE BAR 3 OF stokpop PROMPT 'Da\<ftar' mess'Melihat daftar barang dari kode / dari nama / dari jumlah'
+DEFINE BAR 4 OF stokpop PROMPT '\-' 
+DEFINE BAR 5 OF stokpop PROMPT '\<Entry / edit Barang \<Rusak' mess'Memasukkan data item yang rusak'
+DEFINE BAR 6 OF stokpop PROMPT '\<Laporan' mess'Melihat data item yang hilang'
+DEFINE BAR 7 OF stokpop PROMPT '\-' 
+DEFINE BAR 8 OF stokpop PROMPT '\<Entry / edit Barang \<hilang' mess'Memasukkan data item yang hilang'
+DEFINE BAR 9 OF stokpop PROMPT '\<Laporan' mess'Melihat data item yang hilang'
+DEFINE BAR 10 OF stokpop PROMPT '\-' 
+DEFINE BAR 11 OF stokpop PROMPT '\<Ganti Artikel' mess'Mengganti Barang yang bisa diganti namanya'
+DEFINE BAR 12 OF stokpop PROMPT 'Skoring \<Barang' mess'Melihat Skor Barang'
+DEFINE BAR 13 OF stokpop PROMPT '\-' 
+DEFINE BAR 14 OF stokpop PROMPT 'Laporan stok bulanan' mess'Melihat stok Barang tiap bulan'
+on selection bar 5 of stokpop do ebrok in menu
+on selection bar 6 of stokpop do lbrok in menu
+on selection bar 8 of stokpop do ehila in menu
+on selection bar 9 of stokpop do lhila in menu
+on bar 2 of stokpop activate popup stok2
+on bar 3 of stokpop activate popup stok3
+on selection bar 11 of stokpop do ganama in menu
+on selection bar 14 of stokpop do stobul in menu
+ON SELECTION POPUP stokpop;
+   do submenu1 in menu with bar()
+*
+DEFINE POPUP stok2 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF stok2 PROMPT '\<Kode' mess'Merubah/menghapus item, sekelompok item urut kode'
+DEFINE BAR 2 OF stok2 PROMPT '\<Nama' mess'Merubah/menghapus item, sekelompok item urut nama'
+DEFINE BAR 3 OF stok2 PROMPT '\<Bar Code' mess'Merubah/menghapus item, sekelompok item urut barcode'
+DEFINE BAR 4 OF stok2 PROMPT '\<4 dari kiri, 3 digit Bar Code' mess'Merubah/menghapus item, sekelompok item urut barcode 4 digit dari kiri'
+ON SELECTION POPUP stok2;
+   do ed2 in menu with bar()
+*
+DEFINE POPUP stok3 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF stok3 PROMPT 'K\<ode' mess'melihat data dari kode'
+DEFINE BAR 2 OF stok3 PROMPT '\<Nama' mess'melihat data dari nama'
+DEFINE BAR 3 OF stok3 PROMPT '\<Jumlah' mess'melihat data dari jumlah'
+ON SELECTION POPUP stok3;
+   do lstok in menu with bar()
+*   
+DEFINE POPUP stok6 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF stok6 PROMPT '\<Kode ' mess'urut Kode'
+DEFINE BAR 2 OF stok6 PROMPT '\<Nama ' mess'urut Nama'
+DEFINE BAR 3 OF stok6 PROMPT '\<Suplier' mess'urut Suplier'
+on bar 1 of stok6 activate popup stok61
+ON SELECTION POPUP stok6;
+   do substok6 in menu with bar()
+*
+DEFINE POPUP stok61 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF stok61 PROMPT '\<Kode' mess'urut Kode'
+DEFINE BAR 2 OF stok61 PROMPT '\<Nama' mess'urut Nama'
+ON SELECTION POPUP stok61;
+   do karst in menu with bar()
+*
+DEFINE POPUP stok7 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF stok7 PROMPT '\<Supplier' mess'urut Supplier'
+DEFINE BAR 2 OF stok7 PROMPT '\<Nama Brg.'mess'urut Nama'
+ON SELECTION POPUP stok7;
+   do priord in menu with bar()
+*
+DEFINE POPUP angpop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF angpop PROMPT '\<Supplier' mess 'Memasukkan data-data Supplier'
+DEFINE BAR 2 OF angpop PROMPT '\<Daftar Supplier' mess 'Melihat data-data Supplier'
+DEFINE BAR 3 OF angpop PROMPT '\-'
+DEFINE BAR 4 OF angpop PROMPT '\<Hutang yang Jatuh Tempo'mess'hutang yang telah jatuh tempo'
+DEFINE BAR 5 OF angpop PROMPT 's\<emua hutang supplier'mess'semua hutang yang belum lunas'
+DEFINE BAR 6 OF angpop PROMPT '\-'
+DEFINE BAR 7 OF angpop PROMPT 'Hutang \<yang sudah Lunas' mess'Hutang yang sudah lunas';
+Skip for ASMO #'BOS'
+on bar 2 of angpop activate popup angpop1
+on selection bar 4 of angpop do ejte in menu
+on bar 5 of angpop activate popup suppo
+on bar 7 of angpop activate popup suppop
+*
+ON SELECTION POPUP angpop;
+   do submenu2 in menu with bar()
+*   
+DEFINE POPUP angpop1 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF angpop1 PROMPT '\<Kode ' mess'urut Kode'
+DEFINE BAR 2 OF angpop1 PROMPT '\<Nama ' mess'urut Nama'
+ON SELECTION POPUP angpop1;
+   do lsup in menu with bar()
+*
+dime abj(26)
+abj(1)='A'
+abj(2)='B'
+abj(3)='C'
+abj(4)='D'
+abj(5)='E'
+abj(6)='F'
+abj(7)='G'
+abj(8)='H'
+abj(9)='I'
+abj(10)='J'
+abj(11)='K'
+abj(12)='L'
+abj(13)='M'
+abj(14)='N'
+abj(15)='O'
+abj(16)='P'
+abj(17)='Q'
+abj(18)='R'
+abj(19)='S'
+abj(20)='T'
+abj(21)='U'
+abj(22)='V'
+abj(23)='W'
+abj(24)='X'
+abj(25)='Y'
+abj(26)='Z'
+DEFINE POPUP suppo MARGIN RELATIVE SHADOW COLOR SCHEME 4
+for it=1 to 26
+    DEFINE BAR it OF suppo PROMPT abj(it)
+next
+DEFINE POPUP suppop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+for it=1 to 26
+    DEFINE BAR it OF suppop PROMPT abj(it)
+next
+on bar 1 of suppo activate popup suppo1
+on bar 2 of suppo activate popup suppo2
+on bar 3 of suppo activate popup suppo3
+on bar 4 of suppo activate popup suppo4
+on bar 5 of suppo activate popup suppo5
+on bar 6 of suppo activate popup suppo6
+on bar 7 of suppo activate popup suppo7
+on bar 8 of suppo activate popup suppo8
+on bar 9 of suppo activate popup suppo9
+on bar 10 of suppo activate popup suppo10
+on bar 11 of suppo activate popup suppo11
+on bar 12 of suppo activate popup suppo12
+on bar 13 of suppo activate popup suppo13
+on bar 14 of suppo activate popup suppo14
+on bar 15 of suppo activate popup suppo15
+on bar 16 of suppo activate popup suppo16
+on bar 17 of suppo activate popup suppo17
+on bar 18 of suppo activate popup suppo18
+on bar 19 of suppo activate popup suppo19
+on bar 20 of suppo activate popup suppo20
+on bar 21 of suppo activate popup suppo21
+on bar 22 of suppo activate popup suppo22
+on bar 23 of suppo activate popup suppo23
+on bar 24 of suppo activate popup suppo24
+on bar 25 of suppo activate popup suppo25
+on bar 26 of suppo activate popup suppo26
+*
+on bar 1 of suppop activate popup suppop1
+on bar 2 of suppop activate popup suppop2
+on bar 3 of suppop activate popup suppop3
+on bar 4 of suppop activate popup suppop4
+on bar 5 of suppop activate popup suppop5
+on bar 6 of suppop activate popup suppop6
+on bar 7 of suppop activate popup suppop7
+on bar 8 of suppop activate popup suppop8
+on bar 9 of suppop activate popup suppop9
+on bar 10 of suppop activate popup suppop10
+on bar 11 of suppop activate popup suppop11
+on bar 12 of suppop activate popup suppop12
+on bar 13 of suppop activate popup suppop13
+on bar 14 of suppop activate popup suppop14
+on bar 15 of suppop activate popup suppop15
+on bar 16 of suppop activate popup suppop16
+on bar 17 of suppop activate popup suppop17
+on bar 18 of suppop activate popup suppop18
+on bar 19 of suppop activate popup suppop19
+on bar 20 of suppop activate popup suppop20
+on bar 21 of suppop activate popup suppop21
+on bar 22 of suppop activate popup suppop22
+on bar 23 of suppop activate popup suppop23
+on bar 24 of suppop activate popup suppop24
+on bar 25 of suppop activate popup suppop25
+on bar 26 of suppop activate popup suppop26
+*
+use anggota inde anggota2
+DEFINE POPUP suppo1 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop1 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'A'
+ko=1
+if found()
+   do while left(nang,1)='A'.and.!eof()
+      DEFINE BAR ko OF suppo1 PROMPT nang
+      ON selection BAR ko OF suppo1 do ebay in menu with bar(), 'A'
+      DEFINE BAR ko OF suppop1 PROMPT nang
+      ON selection BAR ko OF suppop1 do husup in menu with bar(), 'A'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo1 PROMPT ' '
+   DEFINE BAR ko OF suppop1 PROMPT ' '
+endif
+DEFINE POPUP suppo2 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop2 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'B'
+ko=1
+if found()
+   do while left(nang,1)='B'.and.!eof()
+      DEFINE BAR ko OF suppo2 PROMPT nang
+      ON selection BAR ko OF suppo2 do ebay in menu with bar(), 'B'
+      DEFINE BAR ko OF suppop2 PROMPT nang
+      ON selection BAR ko OF suppop2 do husup in menu with bar(), 'B'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo2 PROMPT ' '
+   DEFINE BAR ko OF suppop2 PROMPT ' '
+endif
+DEFINE POPUP suppo3 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop3 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'C'
+ko=1
+if found()
+   do while left(nang,1)='C'.and.!eof()
+      DEFINE BAR ko OF suppo3 PROMPT nang
+      ON selection BAR ko OF suppo3 do ebay in menu with bar(), 'C'
+      DEFINE BAR ko OF suppop3 PROMPT nang
+      ON selection BAR ko OF suppop3 do husup in menu with bar(), 'C'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo3 PROMPT ' '
+   DEFINE BAR ko OF suppop3 PROMPT ' '
+endif
+DEFINE POPUP suppo4 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop4 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'D'
+ko=1
+if found()
+   do while left(nang,1)='D'.and.!eof()
+      DEFINE BAR ko OF suppo4 PROMPT nang
+      ON selection BAR ko OF suppo4 do ebay in menu with bar(), 'D'
+      DEFINE BAR ko OF suppop4 PROMPT nang
+      ON selection BAR ko OF suppop4 do husup in menu with bar(), 'D'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo4 PROMPT ' '
+   DEFINE BAR ko OF suppop4 PROMPT ' '
+endif
+DEFINE POPUP suppo5 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop5 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'E'
+ko=1
+if found()
+   do while left(nang,1)='E'.and.!eof()
+      DEFINE BAR ko OF suppo5 PROMPT nang
+      ON selection BAR ko OF suppo5 do ebay in menu with bar(), 'E'
+      DEFINE BAR ko OF suppop5 PROMPT nang
+      ON selection BAR ko OF suppop5 do husup in menu with bar(), 'E'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo5 PROMPT ' '
+   DEFINE BAR ko OF suppop5 PROMPT ' '
+endif
+DEFINE POPUP suppo6 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop6 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'F'
+ko=1
+if found()
+   do while left(nang,1)='F'.and.!eof()
+      DEFINE BAR ko OF suppo6 PROMPT nang
+      ON selection BAR ko OF suppo6 do ebay in menu with bar(), 'F'
+      DEFINE BAR ko OF suppop6 PROMPT nang
+      ON selection BAR ko OF suppop6 do husup in menu with bar(), 'F'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo6 PROMPT ' '
+   DEFINE BAR ko OF suppop6 PROMPT ' '
+endif
+DEFINE POPUP suppo7 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop7 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'G'
+ko=1
+if found()
+   do while left(nang,1)='G'.and.!eof()
+      DEFINE BAR ko OF suppo7 PROMPT nang
+      ON selection BAR ko OF suppo7 do ebay in menu with bar(), 'G'
+      DEFINE BAR ko OF suppop7 PROMPT nang
+      ON selection BAR ko OF suppop7 do husup in menu with bar(), 'G'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo7 PROMPT ' '
+   DEFINE BAR ko OF suppop7 PROMPT ' '
+endif
+DEFINE POPUP suppo8 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop8 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'H'
+ko=1
+if found()
+   do while left(nang,1)='H'.and.!eof()
+      DEFINE BAR ko OF suppo8 PROMPT nang
+      ON selection BAR ko OF suppo8 do ebay in menu with bar(), 'H'
+      DEFINE BAR ko OF suppop8 PROMPT nang
+      ON selection BAR ko OF suppop8 do husup in menu with bar(), 'H'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo8 PROMPT ' '
+   DEFINE BAR ko OF suppop8 PROMPT ' '
+endif
+DEFINE POPUP suppo9 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop9 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'I'
+ko=1
+if found()
+   do while left(nang,1)='I'.and.!eof()
+      DEFINE BAR ko OF suppo9 PROMPT nang
+      ON selection BAR ko OF suppo9 do ebay in menu with bar(), 'I'
+      DEFINE BAR ko OF suppop9 PROMPT nang
+      ON selection BAR ko OF suppop9 do husup in menu with bar(), 'I'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo9 PROMPT ' '
+   DEFINE BAR ko OF suppop9 PROMPT ' '
+endif
+DEFINE POPUP suppo10 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop10 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'J'
+ko=1
+if found()
+   do while left(nang,1)='J'.and.!eof()
+      DEFINE BAR ko OF suppo10 PROMPT nang
+      ON selection BAR ko OF suppo10 do ebay in menu with bar(), 'J'
+      DEFINE BAR ko OF suppop10 PROMPT nang
+      ON selection BAR ko OF suppop10 do husup in menu with bar(), 'J'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo10 PROMPT ' '
+   DEFINE BAR ko OF suppop10 PROMPT ' '
+endif
+DEFINE POPUP suppo11 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop11 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'K'
+ko=1
+if found()
+   do while left(nang,1)='K'.and.!eof()
+      DEFINE BAR ko OF suppo11 PROMPT nang
+      ON selection BAR ko OF suppo11 do ebay in menu with bar(), 'K'
+      DEFINE BAR ko OF suppop11 PROMPT nang
+      ON selection BAR ko OF suppop11 do husup in menu with bar(), 'K'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo11 PROMPT ' '
+   DEFINE BAR ko OF suppop11 PROMPT ' '
+endif
+DEFINE POPUP suppo12 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop12 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'L'
+ko=1
+if found()
+   do while left(nang,1)='L'.and.!eof()
+      DEFINE BAR ko OF suppo12 PROMPT nang
+      ON selection BAR ko OF suppo12 do ebay in menu with bar(), 'L'
+      DEFINE BAR ko OF suppop12 PROMPT nang
+      ON selection BAR ko OF suppop12 do husup in menu with bar(), 'L'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo12 PROMPT ' '
+   DEFINE BAR ko OF suppop12 PROMPT ' '
+endif
+DEFINE POPUP suppo13 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop13 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'M'
+ko=1
+if found()
+   do while left(nang,1)='M'.and.!eof()
+      DEFINE BAR ko OF suppo13 PROMPT nang
+      ON selection BAR ko OF suppo13 do ebay in menu with bar(), 'M'
+      DEFINE BAR ko OF suppop13 PROMPT nang
+      ON selection BAR ko OF suppop13 do husup in menu with bar(), 'M'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo13 PROMPT ' '
+   DEFINE BAR ko OF suppop13 PROMPT ' '
+endif
+DEFINE POPUP suppo14 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop14 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'N'
+ko=1
+if found()
+   do while left(nang,1)='N'.and.!eof()
+      DEFINE BAR ko OF suppo14 PROMPT nang
+      ON selection BAR ko OF suppo14 do ebay in menu with bar(), 'N'
+      DEFINE BAR ko OF suppop14 PROMPT nang
+      ON selection BAR ko OF suppop14 do husup in menu with bar(), 'N'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo14 PROMPT ' '
+   DEFINE BAR ko OF suppop14 PROMPT ' '
+endif
+DEFINE POPUP suppo15 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop15 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'O'
+ko=1
+if found()
+   do while left(nang,1)='O'.and.!eof()
+      DEFINE BAR ko OF suppo15 PROMPT nang
+      ON selection BAR ko OF suppo15 do ebay in menu with bar(), 'O'
+      DEFINE BAR ko OF suppop15 PROMPT nang
+      ON selection BAR ko OF suppop15 do husup in menu with bar(), 'O'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo15 PROMPT ' '
+   DEFINE BAR ko OF suppop15 PROMPT ' '
+endif
+DEFINE POPUP suppo16 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop16 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'P'
+ko=1
+if found()
+   do while left(nang,1)='P'.and.!eof()
+      DEFINE BAR ko OF suppo16 PROMPT nang
+      ON selection BAR ko OF suppo16 do ebay in menu with bar(), 'P'
+      DEFINE BAR ko OF suppop16 PROMPT nang
+      ON selection BAR ko OF suppop16 do husup in menu with bar(), 'P'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo16 PROMPT ' '
+   DEFINE BAR ko OF suppop16 PROMPT ' '
+endif
+DEFINE POPUP suppo17 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop17 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'Q'
+ko=1
+if found()
+   do while left(nang,1)='Q'.and.!eof()
+      DEFINE BAR ko OF suppo17 PROMPT nang
+      ON selection BAR ko OF suppo17 do ebay in menu with bar(), 'Q'
+      DEFINE BAR ko OF suppop17 PROMPT nang
+      ON selection BAR ko OF suppop17 do husup in menu with bar(), 'Q'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo17 PROMPT ' '
+   DEFINE BAR ko OF suppop17 PROMPT ' '
+endif
+DEFINE POPUP suppo18 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop18 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'R'
+ko=1
+if found()
+   do while left(nang,1)='R'.and.!eof()
+      DEFINE BAR ko OF suppo18 PROMPT nang
+      ON selection BAR ko OF suppo18 do ebay in menu with bar(), 'R'
+      DEFINE BAR ko OF suppop18 PROMPT nang
+      ON selection BAR ko OF suppop18 do husup in menu with bar(), 'R'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo18 PROMPT ' '
+   DEFINE BAR ko OF suppop18 PROMPT ' '
+endif
+DEFINE POPUP suppo19 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop19 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'S'
+ko=1
+if found()
+   do while left(nang,1)='S'.and.!eof()
+      DEFINE BAR ko OF suppo19 PROMPT nang
+      ON selection BAR ko OF suppo19 do ebay in menu with bar(), 'S'
+      DEFINE BAR ko OF suppop19 PROMPT nang
+      ON selection BAR ko OF suppop19 do husup in menu with bar(), 'S'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo19 PROMPT ' '
+   DEFINE BAR ko OF suppop19 PROMPT ' '
+endif
+DEFINE POPUP suppo20 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop20 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'T'
+ko=1
+if found()
+   do while left(nang,1)='T'.and.!eof()
+      DEFINE BAR ko OF suppo20 PROMPT nang
+      ON selection BAR ko OF suppo20 do ebay in menu with bar(), 'T'
+      DEFINE BAR ko OF suppop20 PROMPT nang
+      ON selection BAR ko OF suppop20 do husup in menu with bar(), 'T'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo20 PROMPT ' '
+   DEFINE BAR ko OF suppop20 PROMPT ' '
+endif
+DEFINE POPUP suppo21 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop21 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'U'
+ko=1
+if found()
+   do while left(nang,1)='U'.and.!eof()
+      DEFINE BAR ko OF suppo21 PROMPT nang
+      ON selection BAR ko OF suppo21 do ebay in menu with bar(), 'U'
+      DEFINE BAR ko OF suppop21 PROMPT nang
+      ON selection BAR ko OF suppop21 do husup in menu with bar(), 'U'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo21 PROMPT ' '
+   DEFINE BAR ko OF suppop21 PROMPT ' '
+endif
+DEFINE POPUP suppo22 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop22 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'V'
+ko=1
+if found()
+   do while left(nang,1)='V'.and.!eof()
+      DEFINE BAR ko OF suppo22 PROMPT nang
+      ON selection BAR ko OF suppo22 do ebay in menu with bar(), 'V'
+      DEFINE BAR ko OF suppop22 PROMPT nang
+      ON selection BAR ko OF suppop22 do husup in menu with bar(), 'V'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo22 PROMPT ' '
+   DEFINE BAR ko OF suppop22 PROMPT ' '
+endif
+DEFINE POPUP suppo23 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop23 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'W'
+ko=1
+if found()
+   do while left(nang,1)='W'.and.!eof()
+      DEFINE BAR ko OF suppo23 PROMPT nang
+      ON selection BAR ko OF suppo23 do ebay in menu with bar(), 'W'
+      DEFINE BAR ko OF suppop23 PROMPT nang
+      ON selection BAR ko OF suppop23 do husup in menu with bar(), 'W'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo23 PROMPT ' '
+   DEFINE BAR ko OF suppop23 PROMPT ' '
+endif
+DEFINE POPUP suppo24 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop24 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'X'
+ko=1
+if found()
+   do while left(nang,1)='X'.and.!eof()
+      DEFINE BAR ko OF suppo24 PROMPT nang
+      ON selection BAR ko OF suppo24 do ebay in menu with bar(), 'X'
+      DEFINE BAR ko OF suppop24 PROMPT nang
+      ON selection BAR ko OF suppop24 do husup in menu with bar(), 'X'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo24 PROMPT ' '
+   DEFINE BAR ko OF suppop24 PROMPT ' '
+endif
+DEFINE POPUP suppo25 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop25 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'Y'
+ko=1
+if found()
+   do while left(nang,1)='Y'.and.!eof()
+      DEFINE BAR ko OF suppo25 PROMPT nang
+      ON selection BAR ko OF suppo25 do ebay in menu with bar(), 'Y'
+      DEFINE BAR ko OF suppop25 PROMPT nang
+      ON selection BAR ko OF suppop25 do husup in menu with bar(), 'Y'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo25 PROMPT ' '
+   DEFINE BAR ko OF suppop25 PROMPT ' '
+endif
+DEFINE POPUP suppo26 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP suppop26 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'Z'
+ko=1
+if found()
+   do while left(nang,1)='Z'.and.!eof()
+      DEFINE BAR ko OF suppo26 PROMPT nang
+      ON selection BAR ko OF suppo26 do ebay in menu with bar(), 'Z'
+      DEFINE BAR ko OF suppop26 PROMPT nang
+      ON selection BAR ko OF suppop26 do husup in menu with bar(), 'Z'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF suppo26 PROMPT ' '
+   DEFINE BAR ko OF suppop26 PROMPT ' '
+endif
+clos data
+*
+DEFINE POPUP aggpop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF aggpop PROMPT 'Entry \<Customer'mess'Memasukkan data-data customer'
+DEFINE BAR 2 OF aggpop PROMPT 'Da\<ftar'mess'Melihat data-data customer'
+DEFINE BAR 3 OF aggpop PROMPT '\-'
+DEFINE BAR 4 OF aggpop PROMPT 'Entry An\<gsuran' mess 'angsuran piutang anggota'
+DEFINE BAR 5 OF aggpop PROMPT 'Edit An\<gsuran' mess 'merubah angsuran piutang anggota'
+on bar 2 of aggpop activate popup aggpop2
+on bar 4 of aggpop activate popup kpApop2
+on bar 5 of aggpop activate popup kpApop3
+*
+ON SELECTION POPUP aggpop;
+   do submenuagg in menu with bar()
+*   
+DEFINE POPUP aggpop1 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF aggpop1 PROMPT '\<Kode ' mess'urut Kode'
+DEFINE BAR 2 OF aggpop1 PROMPT '\<instansi' mess'urut nama Instansi'
+ON SELECTION POPUP aggpop1;
+   do lins in menu with bar()
+*
+DEFINE POPUP aggpop2 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF aggpop2 PROMPT '\<Kode ' mess'urut Kode'
+DEFINE BAR 2 OF aggpop2 PROMPT '\<Nama ' mess'urut Nama'
+DEFINE BAR 3 OF aggpop2 PROMPT '\<Kota ' mess'urut Kota'
+ON SELECTION POPUP aggpop2;
+   do lcus in menu with bar()
+*
+DEFINE POPUP kpbpop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR  1 OF kpbpop PROMPT '\<Entry' mess 'Memasukkan data-data per nota pembelian'
+DEFINE BAR  2 OF kpbpop PROMPT 'E\<dit' mess 'Merubah/menghapus data-data pembelian';
+	skip for left(ASMO,10)#'BOS'
+DEFINE BAR  3 OF kpbpop PROMPT '\-'
+DEFINE BAR  4 OF kpbpop PROMPT 'Da\<ftar Pembelian' mess 'Melihat data-data pembelian, dari nota / dari tanggal'
+DEFINE BAR  5 OF kpbpop PROMPT 'Daftar Pembelian Tun\<ai / Kredit' mess 'Melihat data-data pembelian tunai dan laba, dari nota/tanggal'
+DEFINE BAR  6 OF kpbpop PROMPT '\<Rekap Pembelian' mess 'Melihat rekap pembelian, dari tanggal'
+DEFINE BAR  7 OF kpbpop PROMPT 'Daf\<tar Pembelian / Suplier' mess 'Melihat pembelian, dari suplier'
+DEFINE BAR  8 OF kpbpop PROMPT 'Daftar Pembelian / \<item' mess 'Melihat pembelian, dari item'
+on bar 4 of kpbpop activate popup kpbpop1
+on bar 5 of kpbpop activate popup kpbpop2
+on bar 6 of kpbpop activate popup kpbpop4
+on bar 7 of kpbpop activate popup kpbpop3
+on selection bar 8 of kpbpop do lbeli5 in menu
+ON SELECTION POPUP kpbpop;
+	DO submenu3 in menu with bar()
+*
+DEFINE POPUP kpbpop3 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+for it=1 to 26
+    DEFINE BAR it OF kpbpop3 PROMPT abj(it)
+next
+on bar 1 of kpbpop3 activate popup kpbpop31
+on bar 2 of kpbpop3 activate popup kpbpop32
+on bar 3 of kpbpop3 activate popup kpbpop33
+on bar 4 of kpbpop3 activate popup kpbpop34
+on bar 5 of kpbpop3 activate popup kpbpop35
+on bar 6 of kpbpop3 activate popup kpbpop36
+on bar 7 of kpbpop3 activate popup kpbpop37
+on bar 8 of kpbpop3 activate popup kpbpop38
+on bar 9 of kpbpop3 activate popup kpbpop39
+on bar 10 of kpbpop3 activate popup kpbpop310
+on bar 11 of kpbpop3 activate popup kpbpop311
+on bar 12 of kpbpop3 activate popup kpbpop312
+on bar 13 of kpbpop3 activate popup kpbpop313
+on bar 14 of kpbpop3 activate popup kpbpop314
+on bar 15 of kpbpop3 activate popup kpbpop315
+on bar 16 of kpbpop3 activate popup kpbpop316
+on bar 17 of kpbpop3 activate popup kpbpop317
+on bar 18 of kpbpop3 activate popup kpbpop318
+on bar 19 of kpbpop3 activate popup kpbpop319
+on bar 20 of kpbpop3 activate popup kpbpop320
+on bar 21 of kpbpop3 activate popup kpbpop321
+on bar 22 of kpbpop3 activate popup kpbpop322
+on bar 23 of kpbpop3 activate popup kpbpop323
+on bar 24 of kpbpop3 activate popup kpbpop324
+on bar 25 of kpbpop3 activate popup kpbpop325
+on bar 26 of kpbpop3 activate popup kpbpop326
+*
+use anggota inde anggota2
+DEFINE POPUP kpbpop31 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'A'
+ko=1
+if found()
+   do while left(nang,1)='A'.and.!eof()
+      DEFINE BAR ko OF kpbpop31 PROMPT nang
+      ON selection BAR ko OF kpbpop31 do lbeli4 in menu with bar(), 'A'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop31 PROMPT ' '
+endif
+DEFINE POPUP kpbpop32 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'B'
+ko=1
+if found()
+   do while left(nang,1)='B'.and.!eof()
+      DEFINE BAR ko OF kpbpop32 PROMPT nang
+      ON selection BAR ko OF kpbpop32 do lbeli4 in menu with bar(), 'B'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop32 PROMPT ' '
+endif
+DEFINE POPUP kpbpop33 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'C'
+ko=1
+if found()
+   do while left(nang,1)='C'.and.!eof()
+      DEFINE BAR ko OF kpbpop33 PROMPT nang
+      ON selection BAR ko OF kpbpop33 do lbeli4 in menu with bar(), 'C'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop33 PROMPT ' '
+endif
+DEFINE POPUP kpbpop34 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'D'
+ko=1
+if found()
+   do while left(nang,1)='D'.and.!eof()
+      DEFINE BAR ko OF kpbpop34 PROMPT nang
+      ON selection BAR ko OF kpbpop34 do lbeli4 in menu with bar(), 'D'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop34 PROMPT ' '
+endif
+DEFINE POPUP kpbpop35 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'E'
+ko=1
+if found()
+   do while left(nang,1)='E'.and.!eof()
+      DEFINE BAR ko OF kpbpop35 PROMPT nang
+      ON selection BAR ko OF kpbpop35 do lbeli4 in menu with bar(), 'E'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop35 PROMPT ' '
+endif
+DEFINE POPUP kpbpop36 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'F'
+ko=1
+if found()
+   do while left(nang,1)='F'.and.!eof()
+      DEFINE BAR ko OF kpbpop36 PROMPT nang
+      ON selection BAR ko OF kpbpop36 do lbeli4 in menu with bar(), 'F'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop36 PROMPT ' '
+endif
+DEFINE POPUP kpbpop37 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'G'
+ko=1
+if found()
+   do while left(nang,1)='G'.and.!eof()
+      DEFINE BAR ko OF kpbpop37 PROMPT nang
+      ON selection BAR ko OF kpbpop37 do lbeli4 in menu with bar(), 'G'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop37 PROMPT ' '
+endif
+DEFINE POPUP kpbpop38 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'H'
+ko=1
+if found()
+   do while left(nang,1)='H'.and.!eof()
+      DEFINE BAR ko OF kpbpop38 PROMPT nang
+      ON selection BAR ko OF kpbpop38 do lbeli4 in menu with bar(), 'H'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop38 PROMPT ' '
+endif
+DEFINE POPUP kpbpop39 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'I'
+ko=1
+if found()
+   do while left(nang,1)='I'.and.!eof()
+      DEFINE BAR ko OF kpbpop39 PROMPT nang
+      ON selection BAR ko OF kpbpop39 do lbeli4 in menu with bar(), 'I'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop39 PROMPT ' '
+endif
+DEFINE POPUP kpbpop310 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'J'
+ko=1
+if found()
+   do while left(nang,1)='J'.and.!eof()
+      DEFINE BAR ko OF kpbpop310 PROMPT nang
+      ON selection BAR ko OF kpbpop310 do lbeli4 in menu with bar(), 'J'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop310 PROMPT ' '
+endif
+DEFINE POPUP kpbpop311 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'K'
+ko=1
+if found()
+   do while left(nang,1)='K'.and.!eof()
+      DEFINE BAR ko OF kpbpop311 PROMPT nang
+      ON selection BAR ko OF kpbpop311 do lbeli4 in menu with bar(), 'K'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop311 PROMPT ' '
+endif
+DEFINE POPUP kpbpop312 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'L'
+ko=1
+if found()
+   do while left(nang,1)='L'.and.!eof()
+      DEFINE BAR ko OF kpbpop312 PROMPT nang
+      ON selection BAR ko OF kpbpop312 do lbeli4 in menu with bar(), 'L'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop312 PROMPT ' '
+endif
+DEFINE POPUP kpbpop313 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'M'
+ko=1
+if found()
+   do while left(nang,1)='M'.and.!eof()
+      DEFINE BAR ko OF kpbpop313 PROMPT nang
+      ON selection BAR ko OF kpbpop313 do lbeli4 in menu with bar(), 'M'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop313 PROMPT ' '
+endif
+DEFINE POPUP kpbpop314 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'N'
+ko=1
+if found()
+   do while left(nang,1)='N'.and.!eof()
+      DEFINE BAR ko OF kpbpop314 PROMPT nang
+      ON selection BAR ko OF kpbpop314 do lbeli4 in menu with bar(), 'N'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop314 PROMPT ' '
+endif
+DEFINE POPUP kpbpop315 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'O'
+ko=1
+if found()
+   do while left(nang,1)='O'.and.!eof()
+      DEFINE BAR ko OF kpbpop315 PROMPT nang
+      ON selection BAR ko OF kpbpop315 do lbeli4 in menu with bar(), 'O'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop315 PROMPT ' '
+endif
+DEFINE POPUP kpbpop316 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'P'
+ko=1
+if found()
+   do while left(nang,1)='P'.and.!eof()
+      DEFINE BAR ko OF kpbpop316 PROMPT nang
+      ON selection BAR ko OF kpbpop316 do lbeli4 in menu with bar(), 'P'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop316 PROMPT ' '
+endif
+DEFINE POPUP kpbpop317 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'Q'
+ko=1
+if found()
+   do while left(nang,1)='Q'.and.!eof()
+      DEFINE BAR ko OF kpbpop317 PROMPT nang
+      ON selection BAR ko OF kpbpop317 do lbeli4 in menu with bar(), 'Q'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop317 PROMPT ' '
+endif
+DEFINE POPUP kpbpop318 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'R'
+ko=1
+if found()
+   do while left(nang,1)='R'.and.!eof()
+      DEFINE BAR ko OF kpbpop318 PROMPT nang
+      ON selection BAR ko OF kpbpop318 do lbeli4 in menu with bar(), 'R'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop318 PROMPT ' '
+endif
+DEFINE POPUP kpbpop319 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'S'
+ko=1
+if found()
+   do while left(nang,1)='S'.and.!eof()
+      DEFINE BAR ko OF kpbpop319 PROMPT nang
+      ON selection BAR ko OF kpbpop319 do lbeli4 in menu with bar(), 'S'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop319 PROMPT ' '
+endif
+DEFINE POPUP kpbpop320 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'T'
+ko=1
+if found()
+   do while left(nang,1)='T'.and.!eof()
+      DEFINE BAR ko OF kpbpop320 PROMPT nang
+      ON selection BAR ko OF kpbpop320 do lbeli4 in menu with bar(), 'T'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop320 PROMPT ' '
+endif
+DEFINE POPUP kpbpop321 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'U'
+ko=1
+if found()
+   do while left(nang,1)='U'.and.!eof()
+      DEFINE BAR ko OF kpbpop321 PROMPT nang
+      ON selection BAR ko OF kpbpop321 do lbeli4 in menu with bar(), 'U'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop321 PROMPT ' '
+endif
+DEFINE POPUP kpbpop322 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'V'
+ko=1
+if found()
+   do while left(nang,1)='V'.and.!eof()
+      DEFINE BAR ko OF kpbpop322 PROMPT nang
+      ON selection BAR ko OF kpbpop322 do lbeli4 in menu with bar(), 'V'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop322 PROMPT ' '
+endif
+DEFINE POPUP kpbpop323 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'W'
+ko=1
+if found()
+   do while left(nang,1)='W'.and.!eof()
+      DEFINE BAR ko OF kpbpop323 PROMPT nang
+      ON selection BAR ko OF kpbpop323 do lbeli4 in menu with bar(), 'W'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop323 PROMPT ' '
+endif
+DEFINE POPUP kpbpop324 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'X'
+ko=1
+if found()
+   do while left(nang,1)='X'.and.!eof()
+      DEFINE BAR ko OF kpbpop324 PROMPT nang
+      ON selection BAR ko OF kpbpop324 do lbeli4 in menu with bar(), 'X'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop324 PROMPT ' '
+endif
+DEFINE POPUP kpbpop325 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'Y'
+ko=1
+if found()
+   do while left(nang,1)='Y'.and.!eof()
+      DEFINE BAR ko OF kpbpop325 PROMPT nang
+      ON selection BAR ko OF kpbpop325 do lbeli4 in menu with bar(), 'Y'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop325 PROMPT ' '
+endif
+DEFINE POPUP kpbpop326 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+seek 'Z'
+ko=1
+if found()
+   do while left(nang,1)='Z'.and.!eof()
+      DEFINE BAR ko OF kpbpop326 PROMPT nang
+      ON selection BAR ko OF kpbpop326 do lbeli4 in menu with bar(), 'Z'
+      ko=ko+1
+      skip
+   enddo   
+else
+   DEFINE BAR ko OF kpbpop326 PROMPT ' '
+endif
+clos data
+*
+DEFINE POPUP kpbpop1 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF kpbpop1 PROMPT '\<Nota' mess'urut Nota'
+DEFINE BAR 2 OF kpbpop1 PROMPT '\<Tanggal' mess'urut Tanggal'
+ON SELECTION POPUP kpbpop1;
+   do lbeli1 in menu with bar()
+*
+DEFINE POPUP kpbpop2 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF kpbpop2 PROMPT '\<Nota' mess'urut Nota'
+DEFINE BAR 2 OF kpbpop2 PROMPT '\<Tanggal' mess'urut Tanggal'
+ON SELECTION POPUP kpbpop2;
+   do lbeli2 in menu with bar()
+*
+DEFINE POPUP kpbpop4 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF kpbpop4 PROMPT '\<Nota' mess'urut Nota'
+DEFINE BAR 2 OF kpbpop4 PROMPT '\<Tanggal' mess'urut Tanggal'
+ON SELECTION POPUP kpbpop4;
+   do lbeli3 in menu with bar()
+*
+DEFINE POPUP kpApop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR  1 OF kpApop PROMPT '\<Entry Penjualan' mess 'Memasukkan data-data per nota penjualan'
+DEFINE BAR  2 OF kpApop PROMPT 'E\<dit Penjualan' mess 'Merubah/menghapus data-data penjualan';
+	skip for left(ASMO,10)#'BOS'
+DEFINE BAR  3 OF kpApop PROMPT '\-'
+DEFINE BAR  4 OF kpApop PROMPT 'Da\<ftar Penjualan' mess'Melihat data penjualan secara global';
+   	skip for upper(left(ASMO,5))='KASIR'
+DEFINE BAR  5 OF kpApop PROMPT 'Daftar Penjualan \<Tunai / Kredit' mess'Melihat data penjualan tunai';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE BAR  6 OF kpApop PROMPT 'Daftar Penjualan / \<Customer' mess'Melihat data penjualan per customer';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE BAR  7 OF kpApop PROMPT 'Daftar Penjualan / \<Item' mess'Melihat data penjualan per item';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE BAR  8 OF kpApop PROMPT 'Daftar \<% Selling' mess 'Melihat data-data prosentase penjualan';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE BAR  9 OF kpApop PROMPT '\-'
+DEFINE BAR 10 OF kpApop PROMPT '\<Tagihan' mess 'penagihan piutang customer'
+on selection bar 1 of kpApop do ejual in menu
+on selection bar 2 of kpApop do edjual in menu
+on bar 4 of kpApop activate popup kpApop11
+on bar 5 of kpApop activate popup kpApop12
+on selection bar 6 of kpApop do ljual13 in menu
+on selection bar 7 of kpApop do ljual12 in menu
+on selection bar 8 of kpApop do persel in menu
+on bar 10 of kpApop activate popup kpApop1
+*
+DEFINE POPUP kpApop11 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF kpApop11 PROMPT '\<Nota' mess'urut Nota'
+DEFINE BAR 2 OF kpApop11 PROMPT '\<Tanggal' mess'urut Tanggal'
+ON SELECTION POPUP kpApop11;
+   do ljual11 in menu with bar()
+*
+DEFINE POPUP kpApop12 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF kpApop12 PROMPT '\<Nota' mess'urut Nota'
+DEFINE BAR 2 OF kpApop12 PROMPT '\<Tanggal' mess'urut Tanggal'
+ON SELECTION POPUP kpApop12;
+   do ljual14 in menu with bar()
+*
+DEFINE POPUP kpApop1 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP kpApop2 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP kpApop3 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP kpApop4 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP kpApop5 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+clos data
+sele 1
+use instansi inde inst1,inst2
+sele 2
+use cus inde cus3
+sele 1
+set orde to 1
+jmin=1
+go top
+do while !eof()
+   jmin=jmin+1
+   skip
+enddo
+plus=99-jmin
+dime instan(jmin+plus)
+tob=1
+go top
+do while !eof()
+   ninsw=nins
+   instan(tob)=ninsw
+   DEFINE BAR tob OF kpApop1 PROMPT ninsw
+   DEFINE BAR tob OF kpApop2 PROMPT ninsw
+   DEFINE BAR tob OF kpApop3 PROMPT ninsw
+   DEFINE BAR tob OF kpApop4 PROMPT ninsw
+   DEFINE BAR tob OF kpApop5 PROMPT ninsw
+   tob=tob+1
+   skip
+enddo
+for i=tob to 99
+    if i=99
+       DEFINE BAR i OF kpApop1 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+       DEFINE BAR i OF kpApop2 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+       DEFINE BAR i OF kpApop3 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+       DEFINE BAR i OF kpApop4 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+       DEFINE BAR i OF kpApop5 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+    else   
+       DEFINE BAR i OF kpApop1 PROMPT '-'
+       DEFINE BAR i OF kpApop2 PROMPT '-'
+       DEFINE BAR i OF kpApop3 PROMPT '-'
+       DEFINE BAR i OF kpApop4 PROMPT '-'
+       DEFINE BAR i OF kpApop5 PROMPT '-'
+       instan(i)='-'
+    endif
+next
+for i=1 to 99
+    if i=99
+       on selection bar i of kpApop1 do settgl in menu
+       on selection bar i of kpApop2 do settgl in menu
+       on selection bar i of kpApop3 do settgl in menu
+       on selection bar i of kpApop4 do settgl in menu
+       on selection bar i of kpApop5 do settgl in menu
+    else   
+       on selection bar i of kpApop1 do tagihan in menu with bar()
+       on selection bar i of kpApop2 do angsura in menu with bar()
+       on selection bar i of kpApop3 do dngsura in menu with bar()
+       on selection bar i of kpApop4 do sngsura in menu with bar()
+       on selection bar i of kpApop5 do dsgsura in menu with bar()
+    endif
+next
+clos data
+*
+DEFINE POPUP simpop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF simpop PROMPT '\<Tagihan' mess 'Tagihan simpanan'
+DEFINE BAR 2 OF simpop PROMPT 'E\<ntry' mess 'Mengisi simpanan'
+DEFINE BAR 3 OF simpop PROMPT 'E\<dit' mess'Merubah / menghapus simpanan'
+DEFINE BAR 4 OF simpop PROMPT 'D\<aftar Simpanan' mess'Melihat simpanan'
+on bar 1 of simpop activate popup simpop1
+on bar 2 of simpop activate popup simpop2
+on bar 3 of simpop activate popup simpop3
+on selection bar 4 of simpop do lsim in menu
+DEFINE POPUP simpop1 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP simpop2 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE POPUP simpop3 MARGIN RELATIVE SHADOW COLOR SCHEME 4
+clos data
+sele 1
+use instansi inde inst1,inst2
+sele 2
+use cus inde cus3
+sele 1
+set orde to 1
+jmin=1
+go top
+do while !eof()
+   jmin=jmin+1
+   skip
+enddo
+plus=99-jmin
+dime instan(jmin+plus)
+tob=1
+go top
+do while !eof()
+   ninsw=nins
+   instan(tob)=ninsw
+   DEFINE BAR tob OF simpop1 PROMPT ninsw
+   DEFINE BAR tob OF simpop2 PROMPT ninsw
+   DEFINE BAR tob OF simpop3 PROMPT ninsw
+   tob=tob+1
+   skip
+enddo
+for i=tob to 99
+    if i=99
+       DEFINE BAR i OF simpop1 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+       DEFINE BAR i OF simpop2 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+       DEFINE BAR i OF simpop3 PROMPT 'Atur tanggal untuk Bulan \<Tagihan'
+    else   
+       DEFINE BAR i OF simpop1 PROMPT '-'
+       DEFINE BAR i OF simpop2 PROMPT '-'
+       DEFINE BAR i OF simpop3 PROMPT '-'
+       instan(i)='-'
+    endif
+next
+for i=1 to 99
+    if i=99
+       on selection bar i of simpop1 do settgl in menu
+       on selection bar i of simpop2 do settgl in menu
+       on selection bar i of simpop3 do settgl in menu
+    else   
+       on selection bar i of simpop1 do stagiha in menu with bar()
+       on selection bar i of simpop2 do simpana in menu with bar()
+       on selection bar i of simpop3 do dimpana in menu with bar()
+    endif
+next
+clos data
+*
+DEFINE POPUP indpop MARGIN RELATIVE SHADOW COLOR SCHEME 4
+DEFINE BAR 1 OF indpop PROMPT '\<Reindex' mess'Proses pengurutan'
+DEFINE BAR 2 OF indpop PROMPT '\<Back up (Masukkan Flashdisk)' mess'Kirim data ke flashdisk';
+       skip for left(ASMO,10)#'BOS'
+DEFINE BAR 3 OF indpop PROMPT '\<Password Utility' mess'Menambah/menghapus/merubah password'
+DEFINE BAR 4 OF indpop PROMPT '\<Greeting' mess'Mengirim ucapan ke Nota'
+DEFINE BAR 5 OF indpop PROMPT '\<User Report' mess'Melihat Pemakaian'
+DEFINE BAR 6 OF indpop PROMPT '\-' 
+DEFINE BAR 7 OF indpop PROMPT 'Editing Rep\<ort Penjualan' mess'Melihat perubahan data Penjualan yang dilakukan BOS'
+DEFINE BAR 8 OF indpop PROMPT 'Edit\<ing Report Pembelian' mess'Melihat perubahan data Pembelian yang dilakukan BOS'
+on selection bar 1 of indpop do ind in menu
+on selection bar 2 of indpop do bkup in menu
+on selection bar 3 of indpop do rubpw in menu
+on selection bar 4 of indpop do gre in menu
+on selection bar 5 of indpop do absensi in menu
+on selection bar 7 of indpop do jedit in menu
+on selection bar 8 of indpop do bedit in menu
+*
+   DO WHILE.T.
+      ACTIVATE MENU  _MSYSMENU
+      ??sys(2002)
+   ENDDO   
+*        
+proced submenu1
+param mbar
+do dmn
+   do case
+   case mbar=1
+     do estok
+   case mbar=12
+     do skring
+   endcase
+do emn
+return
+*        
+procedure substok6
+param mbar
+do dmn
+   do case
+   case mbar=2
+        do karstn
+   case mbar=3
+        do karsts
+   endcase
+do emn
+retur        
+*        
+proced submenu2
+param mbar
+do dmn
+   do case
+   case mbar=1
+     do esup 
+   endcase
+do emn
+return
+*        
+proced submenuagg
+param mbar
+do dmn
+   do case
+   case mbar=1
+     do eagg
+   endcase
+do emn
+return
+*        
+proced submenu3
+param mbar
+do dmn
+   do case
+   case mbar=1
+     do ebeli
+   case mbar=2
+     do edbeli
+   endcase
+do emn
+return
+*        
+proced submenu5
+param mbar
+do dmn
+   do case
+   case mbar=1
+      do ekel
+   case mbar=2
+      do edkel
+   case mbar=3
+      do lkel
+   endcase
+do emn
+return
+*        
+PROC LHJAMB
+CLOS DATA
+USE AHA INDE AHA1
+APPE BLAN
+REPL TB WITH TGSAIKI, JB WITH JAMSAIKI, KET WITH ASMO
+MENGGABUNG=DTOC(TB,1)+JB+KET
+CLOS DATA
+RETU
+*
+PROC LHJAMT
+CLOS DATA
+USE AHA INDE AHA1
+seek MENGGABUNG
+IF FOUND()
+   REPL TT WITH DATE(), JT WITH TIME()
+ENDIF   
+CLOS DATA
+set sysm to defa
+QUIT
+***********************************************************************************************************************************************************************
+proc estok
+simp=.f.
+set dele on
+clos data
+sele 1
+use stok inde stok1,stok2,stok6
+DEFI WIND dokt;
+FROM 2,(wcols()-86)/2 to 28,((wcols()-86)/2)+86 system title'Entry / Edit Item' colo rgb(0,0,0,129,126,101) font'foxprint',9 
+defi wind konf in wind dokt from 5,15.5 to 16.5,59 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind dokt
+DO WHILE.T.
+   clea
+   kbrgw=spac(9)
+   nbrgw=spac(28)
+   ukecilw=0
+   hsatw=0
+   hjualw=0
+   hjua2w=0
+   hjua3w=0
+   barcodew=spac(13)
+   nbg=spac(28)
+   @0,0 say'hdr3.bmp'bitm
+   @6.5,0 say'hdr7a.bmp'bitm
+   @6.5,14.3 say'hdr7b.bmp'bitm
+   @23,0 say'crekam.bmp'bitm
+   ??SYS(2002,1)
+   kal3=.f.
+   do while.t.
+     tejo=0
+     @7,24 get kbrgw pict'@!' vali ckbrg() FONT'Book Antiqua',12 size 1,11
+     @8.8,24 GET nbrgw pict'@!' FONT'Book Antiqua',12 size 1,41
+     if asmo='BOS'
+        @10.5,24 GET ukecilw pict'@z 999,999.99' FONT'Book Antiqua',12 size 1,17
+     else
+        @10.5,24 GET ukecilw pict'@z 999,999.99' FONT'Book Antiqua',12 styl'b' disa
+     endif   
+     @12.3,24 GET hsatw pict'@z 999,999,999' FONT'Book Antiqua',12 size 1,17
+     @14.1,24 GET hjualw pict'@z 999,999,999' FONT'Book Antiqua',12 size 1,17
+     @15.8,24 GET hjua2w pict'@z 999,999,999' FONT'Book Antiqua',12 size 1,17
+     @17.5,24 GET hjua3w pict'@z 999,999,999' FONT'Book Antiqua',12 size 1,17
+     @19.2,24 GET barcodew pict '@J 999999999999999' FONT'Book Antiqua',12 size 1,17
+     @23.1,0 get nu5 PICTURE '@*IHT ;;' font 'Arial',9 size 2.3,18.8,0 default 0
+     read
+     IF READ()=12.or.nu5=3
+        kal3=.t.
+        EXIT
+     ENDIF 
+     do case
+     case nu5=1
+       sele 1
+       set orde to 1
+       seek left(kbrgw,6)
+       if !found()
+          sele 1
+          set orde to 2
+          seek nbrgw
+          if found()
+             wait'Data sudah ada'wind 
+             loop
+          endif
+          if nbrgw<>spac(30)
+             append blank
+          endi   
+       endi
+       repl kbrg with kbrgw, nbrg with nbrgw, ukecil with ukecilw, hsat with hsatw,;
+            hjual with hjualw, hjua2 with hjua2w, hjua3 with hjua3w, barcode with barcodew
+       exit
+     case nu5=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 1
+          set orde to 1
+          seek left(kbrgw,6)
+          if !found()
+             wait'Data tidak ada'wind
+             loop
+          endi
+          dele
+       endif   
+       exit
+     endcase
+   enddo
+   rele sera
+   if kal3
+      exit
+   endi   
+ENDDO  
+deac WIND dokt
+clos data
+rele sere
+RETURN
+*
+proc ckbrg
+kgb=spac(9)
+if cextr(kbrgw)
+   setri=''
+   for rq=1 to 6
+       if subs(kbrgw,rq,1) $ '0123456789'
+       else   
+          setri=setri+subs(kbrgw,rq,1)
+       endif
+   next    
+   do dftbor with setri
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbrgw=kbrg
+      nbrgw=nbrg
+      ukecilw=ukecil
+      hsatw=hsat
+      hjualw=hjual
+      hjua2w=hjua2
+      hjua3w=hjua3
+      barcodew=barcode
+   else   
+      nbrgw=spac(28)
+      ukecilw=0
+      hsatw=0
+      hjualw=0
+      hjua2w=0
+      hjua3w=0
+      barcodew=spac(13)
+   endif   
+else
+   if len(trim(kbrgw))=3
+      nom=0
+      tanya=kbrgw
+      sele 1
+      set orde to 1
+      seek left(tanya,3)
+      if eof()
+         nom=1
+      else
+        nor=recno()
+        go nor
+        do while left(kbrg,3)=left(tanya,3)
+           if left(kbrgw,6)>left(kbrg,6)
+              kbrgw=kbrgw
+           else
+              kbrgw=kbrg
+           endi      
+           skip
+        enddo
+        nom=val(subs(kbrgw,4,3))+1
+      endif    
+      nomor=str(nom)
+      pjnomor=len(ltrim(nomor))
+      jadi='000'
+      kbrgw=left(tanya,3)+left(jadi,len(jadi)-pjnomor)+ltrim(nomor)+righ(tanya,2)
+      nbrgw=spac(28)
+      ukecilw=0
+      hsatw=0
+      hjualw=0
+      hjua2w=0
+      hjua3w=0
+      barcodew=spac(13)
+   else
+      sele 1
+      set orde to 1
+      seek left(kbrgw,6)
+      if found()
+         nbrgw=nbrg
+         ukecilw=ukecil
+         hsatw=hsat
+         hjualw=hjual
+         hjua2w=hjua2
+         hjua3w=hjua3
+         barcodew=barcode
+      else   
+         nbrgw=spac(28)
+         ukecilw=0
+         hsatw=0
+         hjualw=0
+         hjua2w=0
+         hjua3w=0
+         barcodew=spac(13)
+      endif
+   endif
+endif
+show gets
+retu
+*
+proc ed2
+param gbar
+do dmn
+set talk off
+set cent on
+set dele on
+clos data
+sele 1
+use stok inde STOK1,stok2,stok6,stok7
+DEFI WIND dokt2;
+FROM 10,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Edit Multiple Stok';
+colo rgb(255,255,255,129,126,101) font'Book Antiqua',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-137)/2 to wrows()-1,((wcols()-137)/2)+137 system title'Edit Multiple Stok' font'arial' clos icon file 'guni.ico'
+acti wind dokt2
+tah=spac(7)
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr11.bmp'bitm
+   @7.5,0 say 'ok.bmp'bitm
+   do case
+   case gbar=1
+        sele 1
+        SET ORDE TO 1
+        store spac(9) to nota,nota1
+        ??SYS(2002,1)
+        @4.5,2 SAY'Kode'styl'b'
+        @5.7,2 SAY's.d'styl'b'
+        @4.5,10 get nota pict'@!' size 1,10
+        @5.7,10 get nota1 pict'@!' size 1,10
+        @7.5,0 get nu PICTURE '@*IHT ;' font 'Arial',9 size 2.3,16.4,0 default 0
+        read
+        if read()=12.or.nOTA=spac(9).OR.NOTA1=SPAC(9).or.nu=2
+           exit
+        endif  
+        IF NOTA>NOTA1
+           LOOP
+        ENDIF
+        kodi="kbrg>=trim(nota).and.kbrg<=trim(nota1).and.!eof()"
+   case gbar=2
+        sele 1
+        SET ORDE TO 2
+        store spac(28) to nota,nota1
+        ??SYS(2002,1)
+        @4.5,2 SAY'Nama'styl'b'
+        @5.7,2 SAY's.d'styl'b'
+        @4.5,10 get nota pict'@!' size 1,40
+        @5.7,10 get nota1 pict'@!' size 1,40
+        @7.5,0 get nu PICTURE '@*IHT ;' font 'Arial',9 size 2.3,16.4,0 default 0
+        read
+        if read()=12.or.nOTA=spac(28).OR.NOTA1=SPAC(28).or.nu=2
+           exit
+        endif  
+        IF NOTA>NOTA1
+           LOOP
+        ENDIF       
+        kodi="nbrg>=trim(nota).and.nbrg<=trim(nota1).and.!eof()"
+   case gbar=3
+        sele 1
+        SET ORDE TO 3
+        store spac(13) to nota,nota1
+        ??SYS(2002,1)
+        @4.5,2 SAY'Bar Code'styl'b'
+        @5.7,2 SAY's.d'styl'b'
+        @4.5,14 get nota pict'@!' size 1,16
+        @5.7,14 get nota1 pict'@!' size 1,16
+        @7.5,0 get nu PICTURE '@*IHT ;' font 'Arial',9 size 2.3,16.4,0 default 0
+        read
+        if read()=12.or.nOTA=spac(15).OR.NOTA1=SPAC(15).or.nu=2
+           exit
+        endif  
+        IF NOTA>NOTA1
+           LOOP
+        ENDIF       
+        kodi="barcode>=trim(nota).and.barcode<=trim(nota1).and.!eof()"
+   case gbar=4
+        sele 1
+        SET ORDE TO 4
+        store spac(3) to nota,nota1
+        ??SYS(2002,1)
+        @ 5,2 SAY'4 dari kiri '
+        @ 5,14 get nota pict'@!' size 1,5
+        @7.5,0 get nu PICTURE '@*IHT ;' font 'Arial',9 size 2.3,16.4,0 default 0
+        read
+        if read()=12.or.nOTA=spac(3).or.nu=2
+           exit
+        endif  
+        IF NOTA>NOTA1
+           nota1=nota
+        ENDIF       
+        kodi="kbrg>=trim(nota).and.kbrg<=trim(nota1).and.!eof()"
+   endcase
+   sele 1
+   set orde to gbar
+   seek trim(nota)
+   IF ASMO='BOS'
+      brow FIEL KBRG :H='KODE',;
+           barcode, NBRG :H='NAMA BARANG',;
+           UKECIL :H='PIECE' :P='@Z 99,999',;
+           HSAT :H='H. SATUAN' :P='@Z 99,999,999',;
+           HJUAL :H='H.JUAL 1' :P='@Z 99,999,999',;
+           HJUA2 :H='H.JUAL 2' :P='@Z 99,999,999',;
+           HJUA3 :H='H.JUAL 3' :P='@Z 99,999,999';
+           NOAPPE WIND DOKT3 for &kodi NOMENU
+   ELSE
+      brow FIEL KBRG :H='KODE',;
+           barcode, NBRG :H='NAMA BARANG',;
+           UKECIL :H='PIECE' :P='@Z 9,999,999':R,;
+           HSAT :H='H. SATUAN' :P='@Z 99,999,999',;
+           HJUAL :H='H. JUAL' :P='@Z 99,999,999';
+           NOAPPE WIND DOKT3 for &kodi nomenu
+   ENDIF
+enddo
+do emn
+deac wind dokt2
+clos data
+return
+*
+proc lstok
+param gbar
+do dmn
+set talk off
+set cent on
+set dele on
+CLOS DATa
+sele 1
+USE STOK INDE STOK1,stok2,STOK3 
+sele 2
+use lstok
+DEFI WIND dokt;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar Barang';
+colo rgb(255,255,255,129,126,101) font'Times New Roman',12
+DEFI WIND dokt1;
+FROM 0,(wcols()-130)/2 to wrows()-1,((wcols()-130)/2)+130 system title'Daftar Barang' font'arial' clos icon file 'guni.ico'
+acti wind dokt
+tah=spac(7)
+do while.t.
+    do case
+    case gbar=0
+     exit
+    case gbar=1
+     store spac(9) to nota,nota1
+     isian='Kode'
+     gambar='999999'
+     GAMBAR=LEFT(GAMBAR,6)	
+   case gbar=2
+     store spac(28) to nota,nota1
+     isian='Nama'
+     gambar='!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+   case gbar=3
+     store 0 to nota,nota1
+     isian='Jumlah'
+     gambar='@z 99,999.99'
+   endcas      
+   clear
+   @0,0 say 'hdr11.bmp'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   ??sys(2002,1)
+   @4.5,6 say isian styl'b'
+   @5.7,6 say 's/d' styl'b'
+   @4.5,15 get nota pict gambar
+   @5.7,15 get nota1 pict gambar
+   if gbar=3
+      store spac(6) to kd1,kd2
+      @4.5,30 say 'Kode  ' get kd1 pict'999999'
+      @5.7,30 say 'Kode  ' get kd2 pict'999999'
+   endif
+   @7.5,0.1 get nud PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nud=3
+      exit
+   endi
+   sele 2
+   dele all
+   sele 1
+   do case
+   case gbar=1
+     if nota1<nota.or.nota=spac(9).or.nota1=spac(9)
+        loop
+     endi
+     if nota=nota1
+        nota1=nota
+     endi      
+     NOTA=LEFT(NOTA,6)	 
+     SET ORDE TO 1
+     SEEK trim(NOTA)
+     IF.NOT.FOUN()
+        WAIT'DATA TIDAK ADA' WINDO
+        loop
+     ENDI
+     NOREK=RECNO()
+     kondi="kbrg>=trim(nota).and.kbrg<=trim(nota1).and.!eof()"
+     repl all th with hsat*ukecil for &kondi
+     sum th to tal for &kondi
+     GO NOREK
+   case gbar=2
+     if TRIM(nota1)<TRIM(nota).or.nota=spac(28).or.nota1=spac(28)
+        loop
+     endi
+     if TRIM(nota)=TRIM(nota1)
+        nota1=nota
+     endi      
+     SET ORDE TO 2
+     SEEK TRIM(NOTA)
+     IF.NOT.FOUN()
+        WAIT'DATA TIDAK ADA' WINDO
+        loop
+     ENDI
+     NOREK=RECNO()
+     kondi="left(nbrg,len(trim(nota)))>=trim(nota);
+     .and.left(nbrg,len(trim(nota)))<=trim(nota1).and.!eof()"
+     repl all th with hsat*ukecil for &kondi
+     sum th to tal for &kondi
+     GO NOREK
+   case gbar=3   
+     if nota1<nota
+        loop
+     endi
+     if nota=nota1
+        nota1=nota
+     endi      
+     if kd2>kd1
+        kd2=kd1
+     endif
+     SET ORDE TO 1
+     SEEK trim(kd1)
+     IF.NOT.FOUN()
+        WAIT'DATA TIDAK ADA' WINDO
+        loop
+     ENDI
+     NOREK=RECNO()
+     kondi="kbrg>=trim(kd1).and.kbrg<=trim(kd2).and.ukecil>=nota.and.ukecil<=nota1.and.!eof()"
+     repl all th with hsat*ukecil for &kondi
+     sum th to tal for &kondi
+     GO NOREK
+   endcase
+   do case
+   case nud=1
+     do case
+     case gbar=1
+       GO NOREK
+       brow FIEL barcode:r, KBRG :H='KODE':R,;
+       NBRG :H='NAMA BARANG':R,;
+       UKECIL :H='PIECES' :P='@Z 9,999,999':R,;
+       HSAT :H=' H.SATUAN' :P='@Z 999,999,999':R,;
+       HJUAL :H=' H.JUAL' :P='@Z 999,999,999':R,;
+       TH :H='TOTAL HRG.' :P='@Z 999,999,999':R;
+       NOAPPE title 'TOTAL PERSEDIAAN :'+tran(tal,'@z 99,999,999,999');
+       wind dokt1 FOR &kondi Nomenu
+     case gbar=2
+       GO norek
+       brow FIEL barcode:r, KBRG :H='KODE':R,;
+       NBRG :H='NAMA BARANG':R,;
+       UKECIL :H='PIECES' :P='@Z 9,999,999':R,;
+       HSAT :H=' H.SATUAN' :P='@Z 999,999,999':R,;
+       HJUAL :H=' H.JUAL' :P='@Z 999,999,999':R,;
+       TH :H='TOTAL HRG.' :P='@Z 999,999,999':R;
+       NOAPPE title 'TOTAL PERSEDIAAN :'+tran(tal,'@z 99,999,999,999');
+       wind dokt1 FOR &kondi Nomenu
+     case gbar=3
+       GO norek
+       brow FIEL barcode:r, KBRG :H='KODE':R,;
+       NBRG :H='NAMA BARANG':R,;
+       UKECIL :H='PIECES' :P='@Z 9,999,999':R,;
+       HSAT :H=' H.SATUAN' :P='@Z 999,999,999':R,;
+       HJUAL :H=' H.JUAL' :P='@Z 999,999,999':R,;
+       TH :H='TOTAL HRG.' :P='@Z 999,999,999':R;
+       NOAPPE title 'TOTAL PERSEDIAAN :'+tran(tal,'@z 99,999,999,999');
+       wind dokt1 FOR &kondi Nomenu
+     endcase       
+   case nud=2
+       sele 1
+       set orde to gbar
+       tot=0
+       if gbar<3
+          do while &kondi
+             nom=kbrg
+             namaw=nbrg
+             hrg_jualw=hjual
+             hrg_beliw=hsat
+             stokw=ukecil
+             totalw=stokw*hrg_beliw
+             tot=tot+totalw
+             sele 2
+             appe blan
+             repl no with nom, nama with namaw, hrg_jual with hrg_jualw, hrg_beli with hrg_beliw, stok with stokw, total with totalw
+             sele 1
+             set orde to gbar
+             skip
+          enddo 
+       else
+          sele 1
+          set orde to 1
+          do while kbrg>=trim(kd1).and.kbrg<=trim(kd2).and.!eof()
+             if ukecil>=nota.and.ukecil<=nota1
+                nom=kbrg
+                namaw=nbrg
+                hrg_jualw=hjual
+                hrg_beliw=hsat
+                stokw=ukecil
+                totalw=stokw*hrg_beliw
+                tot=tot+totalw
+                sele 2
+                appe blan
+                repl no with nom, nama with namaw, hrg_jual with hrg_jualw, hrg_beli with hrg_beliw, stok with stokw, total with totalw
+             endif
+             sele 1
+             set orde to 1
+             skip
+          enddo 
+       endif   
+       sele 2
+       appe blan
+       repl total with tot
+       go top
+       repo form lstox prev
+       repo form lstox to print prom
+   endcase
+enddo
+do emn
+deac wind dokt
+clos data
+return
+*
+proc stobul
+do dmn
+set talk off
+set cent on
+set dele on
+CLOS DATa
+sele 1
+USE STOK INDE STOK1
+sele 2
+use lstok
+sele 3
+use jual inde jualb
+sele 4
+use beli inde belib
+DEFI WIND dokt;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Rekap Stok';
+colo rgb(255,255,255,129,126,101) font'Times New Roman',12
+DEFI WIND dokt1;
+FROM 0,(wcols()-126)/2 to wrows()-1,((wcols()-126)/2)+126 system title'Daftar Barang' font'arial' clos icon file 'guni.ico'
+acti wind dokt
+tah=spac(7)
+karmont=spac(9)
+store spac(7) to bul
+bul=subs(dtoc(date(),1),5,2)+'-'+left(dtoc(date(),1),4)
+do while.t.
+   isian='Bulan'
+   gambar='99-9999'
+   clear
+   @0,0 say 'hdr11.bmp'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   ??sys(2002,1)
+   @4.5,6 say isian styl'b'
+   @4.5,15 get bul pict gambar size 1,9
+   @7.5,0.1 get nud PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nud=3
+      exit
+   endi
+   if bul=spac(7)
+      loop
+   endi
+   sele 2
+   dele all
+   sele 1
+   maxtgl=0
+   wumont=left(bul,2)
+   tayear=righ(bul,4)
+   do maxhari
+   tggl=str(maxtgl,2)
+   tglmula=ctod('01/'+wumont+'/'+tayear)
+   tglstop=ctod(tggl+'/'+wumont+'/'+tayear)
+   tglstar=date()
+   go top
+   do while !eof()
+      nom=kbrg
+      if nom<>'999999'
+      namaw=nbrg
+      hrg_beliw=hsat
+      stokstar=ukecil
+      qtyjual=0
+      qtybeli=0
+      sele 3
+      seek nom
+      if found()
+         do while kbrg=nom.and.!eof()
+            if tjual>tglstop.and.tjual<=tglstar
+               qtyjual=qtyjual+ukecil
+            endif
+            skip
+         enddo
+      endi
+      sele 4
+      seek nom
+      if found()
+         do while kbrg=nom.and.!eof()
+            if tbeli>tglstop.and.tbeli<=tglstar
+               qtybeli=qtybeli+ukecil
+            endif
+            skip
+         enddo
+      endi
+      stokw=stokstar+qtyjual-qtybeli
+      sele 2
+      appe blan
+      repl no with nom, nama with namaw, hrg_beli with hrg_beliw, stok with stokw, ket with bul
+      endif
+      sele 1
+      skip
+   enddo 
+*
+   tot=0
+   sele 2
+   go top
+   do while !eof()
+      nom=no
+      qtyjual=0
+      qtybeli=0
+      qtyawal=0
+      stokw=stok
+      totalw=stokw*hrg_beli
+      tot=tot+totalw
+      sele 3
+      seek nom
+      if found()
+         do while kbrg=nom.and.!eof()
+            if tjual>=tglmula.and.tjual<=tglstop
+               qtyjual=qtyjual+ukecil
+            endif
+            skip
+         enddo
+      endi
+      sele 4
+      seek nom
+      if found()
+         do while kbrg=nom.and.!eof()
+            if tbeli>tglmula.and.tbeli<=tglstop
+               qtybeli=qtybeli+ukecil
+            endif
+            skip
+         enddo
+      endi
+      qtyawal=stokw+qtyjual-qtybeli
+      sele 2
+      repl hrg_jual with qtyawal, hrg_telkom with qtybeli, hrg_askes with qtyjual, total with totalw
+      skip
+   enddo   
+   sele 2
+   appe blan
+   repl total with tot, ket with bul
+   go top
+   do case
+   case nud=1
+        brow fiel no:r,nama:r,hrg_jual:h='Awal':r:p='@z 999,999',hrg_telkom:h='Beli':r:p='@z 999,999',;
+                  hrg_askes:h='Jual':r:p='@z 999,999',stok:h='Akhir':r:p='@z 999,999',;
+                  hrg_beli:r:p='@z 999,999,999',total:r:p='@z 999,999,999,999' wind dokt1 title'Rekap Stok bulan :  '+uppe(trim(karmont))+' - '+righ(bul,4)
+   case nud=2
+        repo form stobul to print prom
+   endcase
+enddo
+do emn
+deac wind dokt
+clos data
+return
+*
+PROC ganama
+do dmn
+CLOS DATA
+sele 1
+use stok inde stok1,stok2
+sele 2
+use beli inde belib
+sele 3
+use brok inde brok2
+sele 4
+use hilang inde hilang2
+sele 5
+use jual inde jualb
+sele 6
+use btok
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-58)/2 to 24.7,((wcols()-58)/2)+58 system title'Ganti Artikel Item';
+colo rgb(255,255,255,129,126,101) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-110)/2 to wrows()-1,((wcols()-110)/2)+110 system title'Mengganti artikel item - isi dg artikel baru' font'arial' clos icon file 'guni.ico'
+tglx=date()-180
+ndo1=spac(28)
+ndo2=spac(28)
+acti wind dokt2
+clear
+??sys(2002,1)
+@0,0 say 'hdr11.bmp'bitm
+@7.5,0 say 'ok.bmp'bitm
+@4.5,3 say 'Artikel' styl'b'
+@5.7,3 say  's/d'styl'b'
+@4.5,12 get ndo1 pict'@!' font'Book Antiqua',12 size 1,31
+@5.7,12 get ndo2 pict'@!' font'Book Antiqua',12 size 1,31
+@7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+size 2.3,16.2,0 default 0 
+read
+if read()=12.or.nud=2
+   CLOS DATA
+   deac wind dokt2
+   do emn
+   RETU
+endi
+sele 6
+dele all
+sele 1
+set orde to 2
+seek trim(ndo1)
+if found()
+   do while nbrg>=trim(ndo1).and.nbrg<=trim(ndo2).and.!eof()
+      kbr=left(kbrg,6)
+      nbr=nbrg
+      uke=ukecil
+      if uke<1
+         sele 6
+         appe blan
+         repl kbrg with kbr, nbrg with nbr, ukecil with uke
+      endif
+      sele 1
+      set orde to 2
+      skip
+   enddo
+endif   
+sele 6
+go top
+do while !eof()
+   kbr=left(kbrg,6)
+   ono=.f.
+   tondo=' '
+   sele 2
+   seek trim(kbr)
+   if found()
+      do while kbrg=trim(kbr).and.!eof()
+         tondo=tanda
+         skip
+      enddo   
+   endif
+   sele 6
+   if tondo=' '
+      dele
+   endif
+   skip
+enddo
+sele 6
+go top
+do while !eof()
+   kbr=left(kbrg,6)
+   ono=.f.
+   sele 5
+   seek trim(kbr)
+   if found()
+      do while kbrg=trim(kbr).and.!eof()
+         if tjual>=tglx
+            ono=.t.
+            exit
+         endif        
+         skip
+      enddo   
+   endif
+   sele 6
+   if ono
+      dele
+   endif
+   skip
+enddo
+sele 6
+go top
+do while !eof()
+   kbr=left(kbrg,6)
+   ono=.f.
+   sele 3
+   seek trim(kbr)
+   if found()
+      ono=.t.
+   endif
+   sele 6
+   if ono
+      dele
+   endif
+   skip
+enddo
+sele 6
+go top
+do while !eof()
+   kbr=left(kbrg,6)
+   ono=.f.
+   sele 4
+   seek trim(kbr)
+   if found()
+      ono=.t.
+   endif
+   sele 6
+   if ono
+      dele
+   endif
+   skip
+enddo
+sele 6
+go top
+brow fiel kbrg:h='kode', nbrg:h='Artikel lama', baru:h='Artikel baru':p='@!', ukecil:h='Qty':p='@z 99999.99';
+     freez baru nomenu wind dokt3
+sele 6
+go top
+do while !eof()
+   kbr=left(kbrg,6)
+   baruw=baru
+   sele 1
+   set orde to 1
+   seek trim(kbr)
+   if found()
+      if baruw<>spac(28)
+         repl nbrg with baruw
+      endif
+   endif
+   sele 6
+   skip
+enddo
+CLOS DATA
+deac wind dokt2
+do emn
+RETU
+*
+proc skring
+set dele on
+DEFI WIND jen3;
+FROM 19,(wcols()-60)/2 to 33,((wcols()-60)/2)+60 system title'Daftar Klasemen Barang';
+colo rgb(255,255,255,129,126,101) font'Times New Roman',12
+DEFI WIND jen4;
+FROM 0,(wcols()-90)/2 to wrows(),((wcols()-90)/2)+90 system title'Daftar Klasemen Barang' font'arial',8 clos icon file 'guni.ico'
+acti wind jen3
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+mut1=tawal
+mut2=takhir
+do while.t.
+   clos data
+   sele 1
+   use stok inde stok2
+   sele 2
+   use beli inde belib
+   sele 3
+   use jual inde jualb
+   sele 4
+   use kots
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr11'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'dari Tgl.' font'Arial' styl'b'
+   @5.7,6 say 's/d.' font'Arial' styl'b'
+   @4.5,17 get mut1 pict'@!' font'Book Antiqua',12 size 1,12
+   @5.7,17 get mut2 pict'@!' font'Book Antiqua',12 size 1,12
+   @7.5,0.1 get nus pict'@*IHT ;;' font 'Arial',9 size 2.3,19.1,0 default 0
+   read
+   if read()=12.or.nus=3
+      exit
+   endi
+   m=1
+   kondi="!eof()"
+   sele 4
+   DELE ALL
+   SHR=0
+   IF M<>0
+       SELE 1
+       GO top
+       DO WHILE &KONDI
+          KKK=kbrg
+          NNN=NBRG
+          JJJ=UKECIL
+          HHH=HSAT
+          UUU=HJUAL
+          TAKH=CTOD('  /  /    ')
+          BELW=0
+          JULW=0
+          SKOW=0
+          sele 2
+          SEEK KKK
+          IF FOUND()
+             TAKH=TBELI         
+             DO WHILE KBRG=KKK.AND.!EOF()
+                TAKH=TBELI
+                BELW=UKECIL
+                SKIP
+             ENDDO
+          ENDIF   
+          SELE 3
+          SEEK KKK
+          IF FOUND()
+             DO WHILE KBRG=KKK.AND.!EOF()
+                if tjual>=mut1.AND.tjual<=mut2
+                   JULW=JULW+ukecil
+                endif
+                SKIP 
+             ENDDO   
+          ENDIF
+          SHR=DATE()-TAKH
+          IF SHR<>0
+             SKOW=ROUND(JULW/SHR,2)
+          ENDIF   
+          sele 4
+          APPE BLAN
+          REPL KBRG WITH KKK,NBRG WITH left(NNN,28), UKECIL WITH JJJ,;
+               HSAT WITH HHH,HJUAL WITH UUU,TBL WITH TAKH,; 
+               BEL WITH BELW,JUL WITH JULW, SKO WITH SKOW
+          SELE 1
+          SKIP
+       ENDDO
+    ENDI
+    clos data
+    use kots
+    sort on jul to kots1 desc
+    clos data
+    use kots1
+    go top
+    do case
+    case nus=1
+       brow fiel kbrg:h='Kode', nbrg:h='Item',;
+                 jul:p='@Z 999,999.99':h='Terjual',;
+                 hjual:p='@Z 99,999,999':h='Hrg.Jual',;
+                 ukecil:p='@Z 999,999.99':h='Stok' noedit nomenu titl dtoc(mut1)+' - '+dtoc(mut2) wind jen4
+    case nus=2
+       repo form kls prev
+       repo form kls to print prom
+    endcase             
+endd
+deac wind jen3, jen4
+retu
+*
+******************************************************************************************************************************
+proc esup
+simp=.f.
+set dele on
+clos data
+sele 1
+use anggota inde anggota1,anggota2
+DEFI WIND dokt;
+FROM 3,(wcols()-80)/2 to 24,((wcols()-80)/2)+80 system title'Entry / Edit Supplier';
+colo rgb(0,0,0,129,126,101) font'foxprint',9 
+defi wind konf in wind dokt from 5,15.5 to 16.5,59 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind dokt
+DO WHILE.T.
+   clea
+   kdokw=spac(5)
+   areaw=spac(15)
+   ndokw=spac(20)
+   aldokw=spac(30)
+   kotokw=spac(20)
+   tldokw=spac(20)
+   ar1=spac(1)
+   mol=1
+   @0,0 say'hdr3.bmp'bitm
+   @6.5,0 say'hdr6.bmp'bitm
+   @17,0 say'crekam.bmp'bitm
+   sele 1
+   set orde to 1
+   GO BOTTOM      
+   IF BOF()         
+      NO=RECNO()    
+   ELSE             
+      NO=VAL(RIGH(kang,5))+1
+   ENDIF            
+   kdokw=STUF('00000',;          
+               5-LEN(LTRIM(STR(NO)))+1 ,; 
+               LEN(LTRIM(STR(NO))) ,;
+               LTRIM(STR(NO)))
+   kdokl=kdokw
+   ??SYS(2002,1)
+   kal3=.f.
+   do while.t.
+     tejo=0
+     @7,27 get kdokw pict'!!!!!' vali ckdokw() FONT'Book Antiqua',12 size 1,6
+     @9.2,27 GET ndokw pict'@!' FONT'Book Antiqua',12 size 1,31
+     @11.4,27 GET aldokw pict'@!' FONT'Book Antiqua',12 size 1,31
+     @13.5,27 GET tldokw pict'@!' FONT'Book Antiqua',12 size 1,31
+     @17.1,0 get nu5 PICTURE '@*IHT ;;' font 'Arial',9 size 2.3,18.8,0 default 0
+     read
+     IF READ()=12.or.nu5=3
+        kal3=.t.
+        EXIT
+     ENDIF
+     do case
+     case nu5=1
+       sele 1
+       set orde to 1
+       seek kdokw
+       if !found()
+          set orde to 2
+          seek TRIM(ndokw)
+          if found()
+             wait'Data sudah ada'wind
+             loop
+          endi
+          if ndokw<>spac(20)
+             append blank
+          endi   
+       endi
+       repl nang with ndokw, kang with kdokw, alang with aldokw, tlang with tldokw
+       exit
+     case nu5=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 1
+          set orde to 1
+          seek kdokw
+          if !found()
+             wait'Data tidak ada'wind
+             loop
+          endi
+          dele
+       endif   
+       exit
+     endcase
+   enddo
+   rele sera
+   if kal3
+      exit
+   endi   
+ENDDO  
+deac WIND dokt
+clos data
+rele sera
+RETURN
+*
+proc ckdokw
+kgb=spac(5)
+if cextr(kdokw)
+   setri=''
+   for rq=1 to 5
+       if subs(kdokw,rq,1) $ '0123456789'
+       else   
+          setri=setri+subs(kdokw,rq,1)
+       endif
+   next    
+   do dftsup with setri
+   if last()=27
+      kdokw=kdokl
+      ndokw=spac(20)
+      aldokw=spac(20)
+      tldokw=spac(10)
+      show gets
+      retu
+   endi
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(5)
+      kdokw=kang
+      ndokw=nang
+      aldokw=alang
+      tldokw=tlang
+   else   
+      ndokw=spac(20)
+      aldokw=spac(20)
+      tldokw=spac(10)
+   endif   
+else
+   sele 1
+   set orde to 1
+   seek kdokw
+   if found()
+      ndokw=nang
+      aldokw=alang
+      tldokw=tlang
+   else   
+      ndokw=spac(20)
+      aldokw=spac(20)
+      tldokw=spac(10)
+   endif
+endif
+show gets
+retu
+*
+proc husup
+para mbar, abjad
+do dmn
+clos data
+sele 1
+use anggota inde anggota1,anggota2
+sele 2
+use konsumsi inde kons1
+sele 3
+use beli inde belid
+sele 4
+use kred inde kred1
+dele all
+DEFI WIND dokt;
+FROM 1,(wcols()-164)/2 to 40,((wcols()-164)/2)+164 system title'Hutang yang sudah Lunas';
+colo rgb(0,0,0,129,126,101) font'Book Antiqua',12 close icon file 'guni.ico'
+kangw=spac(5)
+nangw=spac(20)
+sele 1
+set orde to 2
+seek abjad
+ko=1
+if found()
+   do while left(nang,1)=abjad.and.!eof()
+      if ko=mbar
+         kangw=kang
+         nangw=nang
+         exit
+      endif
+      ko=ko+1
+      skip
+   enddo   
+endif
+remon=spac(7)
+tb=0
+sele 3
+seek 'K'+kangw
+if found()
+do while ket='K'.and.kang=kangw.and.!eof()
+   kangw=kang
+   nbeliw=nbeli
+   tb=0
+   sele 2
+   seek kangw+nbeliw
+   if found()
+      do while kang+nbeli=kangw+nbeliw.and.!eof()
+         tb=tb+angs
+         skip
+      enddo   
+   endif
+   sele 3
+   if tanda='L'
+      if remon=nbeli
+         remon=remon
+         kangw=kang
+         nbeliw=nbeli
+         tanggalw=tbeli
+         supplierw=spac(20)
+         jtempow=tbeli+tempe
+         hutangw=hutangw+totj
+         totw=totw+totj
+         sele 4
+         repl kang with kangw, nang with nangw, nbeli with nbeliw, jtempo with dtoc(jtempow),;
+               hutang with hutangw, terbayar with tb, total with totw
+      else
+         remon=nbeli
+         kangw=kang
+         nbeliw=nbeli
+         tanggalw=tbeli
+         supplierw=spac(20)
+         jtempow=tbeli+tempe
+         hutangw=totj-umuk-tb
+         totw=totj
+         tb=0
+         sele 4
+         appe blan
+         repl supplier with nangw, nota with nbeliw, tanggal with dtoc(tanggalw),;
+              kang with kangw, nang with nangw, nbeli with nbeliw, jtempo with dtoc(jtempow),;
+              hutang with hutangw, terbayar with tb, total with totw
+      endi  
+   endif
+   sele 3
+   skip
+enddo   
+sele 4
+go top
+brow fiel kang:h='No.':r, nota:r, tanggal:r, jtempo:r, total:h='Total':p='@z 9,999,999,999':r,;
+          terbayar:p='@z 99,999,999':r, hutang:p='9,999,999,999':r, diskon:p='@z 99,999,999',;
+          bayar:h='Pembatalan':p='@z 9,999,999,999' wind dokt title 'Hutang Lunas '+trim(nangw)+' ('+kangw+')';
+          +spac(2)+'Hutang yang Lunas bisa dibatalkan dengan mengisi kolom Pembatalan.' freez bayar nomenu
+go top
+do while !eof()
+   kangw=kang
+   nangw=nang
+   nbeliw=nbeli
+   angsw=bayar
+   dskw=diskon
+   if bayar>0
+      sele 3
+      seek 'K'+kangw+nbeliw
+      if found()
+         do while ket+kang+nbeli='K'+kangw+nbeliw.and.!eof()
+            repl tanda with ' '
+            skip
+         enddo
+     endif 
+   endif
+   if angsw>0.or.dskw>0
+      sele 2
+      seek kangw+nbeliw
+      if found()
+         repl tg with date(), angs with angs-angsw, dsk with dsk-dskw
+      endif   
+   endif   
+   sele 4
+   skip
+enddo     
+endif
+rele wind dokt
+do emn
+retu
+*
+proc ebay
+para mbar, abjad
+do dmn
+set dele on
+clos data
+sele 1
+use anggota inde anggota1,anggota2
+sele 2
+use konsumsi inde kons1
+sele 3
+use beli inde belid
+sele 4
+use kred inde kred1
+dele all
+DEFI WIND dokt;
+FROM 1,(wcols()-164)/2 to 40,((wcols()-164)/2)+164 system title'Hutang kepada Suplier';
+colo rgb(0,0,0,129,126,101) font'Book Antiqua',12 close icon file 'guni.ico'
+remon=spac(7)
+tb=0
+kangw=spac(5)
+nangw=spac(20)
+sele 1
+set orde to 2
+seek abjad
+ko=1
+if found()
+   do while left(nang,1)=abjad.and.!eof()
+      if ko=mbar
+         kangw=kang
+         nangw=nang
+         exit
+      endif
+      ko=ko+1
+      skip
+   enddo   
+endif
+sele 3
+seek 'K'+kangw
+if found()
+do while ket='K'.and.kang=kangw.and.!eof()
+   kangw=kang
+   nbeliw=nbeli
+   nangw=nang
+   tb=0
+   sele 2
+   seek kangw+nbeliw
+   if found()
+      do while kang+nbeli=kangw+nbeliw.and.!eof()
+         tb=tb+angs
+         skip
+      enddo   
+   endif
+   sele 3
+   if tanda=' '
+      if remon=nbeli
+         remon=remon
+         kangw=kang
+         nbeliw=nbeli
+         tanggalw=tbeli
+         supplierw=spac(20)
+         jtempow=tbeli+tempe
+         hutangw=hutangw+totj
+         totw=totw+totj
+         sele 1
+         seek kangw
+         if found()
+             supplierw=nang
+             nangw=nang
+         endif
+         sele 4
+         repl kang with kangw, nang with nangw, nbeli with nbeliw, jtempo with dtoc(jtempow),;
+               hutang with hutangw, terbayar with tb, total with totw
+      else
+         remon=nbeli
+         kangw=kang
+         nbeliw=nbeli
+         tanggalw=tbeli
+         supplierw=spac(20)
+         jtempow=tbeli+tempe
+         hutangw=totj-umuk-tb
+         totw=totj
+         tb=0
+         sele 1
+         seek kangw
+         if found()
+            supplierw=nang
+            nangw=nang
+         endif
+         sele 4
+         appe blan
+         repl supplier with supplierw, nota with nbeliw, tanggal with dtoc(tanggalw),;
+              kang with kangw, nang with nangw, nbeli with nbeliw, jtempo with dtoc(jtempow),;
+              hutang with hutangw, terbayar with tb, total with totw
+      endi  
+   endif
+   sele 3
+   skip
+enddo   
+sele 4
+go top
+brow fiel kang:h='No.':r, nota:r, tanggal:r, jtempo:r, total:h='Total':p='@z 9,999,999,999':r,;
+          terbayar:p='@z 99,999,999':r, hutang:p='@z 9,999,999,999':r,;
+          bayar:p='@z 99,999,999', diskon:p='@z 99,999,999' wind dokt nomenu;
+          title 'Hutang kepada '+trim(nangw)+' ('+kangw+')'
+go top
+do while !eof()
+   kangw=kang
+   nangw=nang
+   nbeliw=nbeli
+   angsw=bayar
+   dskw=diskon
+   if bayar+diskon-hutang=0
+      sele 3
+      seek 'K'+kangw+nbeliw
+      if found()
+         do while ket+kang+nbeli='K'+kangw+nbeliw.and.!eof()
+            repl tanda with 'L'
+            skip
+         enddo
+      endif 
+   endif
+   if angsw>0.or.dskw>0
+      sele 2
+      appe blan
+      repl kang with kangw, nbeli with nbeliw, tg with date(), angs with angsw, dsk with dskw
+   endif   
+   sele 4
+   skip
+enddo     
+endif
+rele wind dokt
+do emn
+retu
+*
+proc ejte
+do dmn
+set dele on
+clos data
+sele 1
+use anggota inde anggota1,anggota2
+sele 2
+use konsumsi inde kons1
+sele 3
+use beli inde belid
+sele 4
+use kred inde kred1
+dele all
+DEFI WIND dokt;
+FROM 1,(wcols()-164)/2 to 40,((wcols()-164)/2)+164 system title'Hutang yang Jatuh Tempo';
+colo rgb(0,0,0,129,126,101) font'Book Antiqua',12 close icon file 'guni.ico'
+remon=spac(7)
+tb=0
+sele 3
+seek 'K'
+if found()
+do while ket='K'.and.!eof()
+   kangw=kang
+   nbeliw=nbeli
+   nangw=nang
+   tb=0
+   sele 2
+   seek kangw+nbeliw
+   if found()
+      do while kang+nbeli=kangw+nbeliw.and.!eof()
+         tb=tb+angs
+         skip
+      enddo   
+   endif
+   sele 3
+   if tanda=' '
+      if remon=nbeli
+         remon=remon
+         kangw=kang
+         nbeliw=nbeli
+         tanggalw=tbeli
+         supplierw=spac(20)
+         jtempow=tbeli+tempe
+         hutangw=hutangw+totj
+         totw=totw+totj
+         sele 1
+          seek kangw
+         if found()
+             supplierw=nang
+             nangw=nang
+         endif
+         if jtempow<=date()
+            sele 4
+            repl kang with kangw, nang with nangw, nbeli with nbeliw, jtempo with dtoc(jtempow),;
+                  hutang with hutangw, terbayar with tb, total with totw
+         endif      
+      else
+         remon=nbeli
+         kangw=kang
+         nbeliw=nbeli
+         tanggalw=tbeli
+         supplierw=spac(20)
+         jtempow=tbeli+tempe
+         hutangw=totj-umuk-tb
+         totw=totj
+         tb=0
+         sele 1
+         seek kangw
+         if found()
+            supplierw=nang
+            nangw=nang
+         endif
+         if jtempow<=date()
+            sele 4
+            appe blan
+            repl supplier with supplierw, nota with nbeliw, tanggal with dtoc(tanggalw),;
+                 kang with kangw, nang with nangw, nbeli with nbeliw, jtempo with dtoc(jtempow),;
+                 hutang with hutangw, terbayar with tb, total with totw
+         endif        
+      endif
+   endif
+   sele 3
+   skip
+enddo   
+sele 4
+go top
+brow fiel kang:h='No.':r, supplier:r, nota:r, tanggal:r, jtempo:r, total:h='Total':p='@z 9,999,999,999':r,;
+          terbayar:p='@z 99,999,999':r, hutang:p='@z 9,999,999,999':r,;
+          bayar:p='@z 99,999,999', diskon:p='@z 99,999,999' wind dokt nomenu
+go top
+do while !eof()
+   kangw=kang
+   nangw=nang
+   nbeliw=nbeli
+   angsw=bayar
+   dskw=diskon
+   if bayar+diskon-hutang=0
+      sele 3
+      seek 'K'+kangw+nbeliw
+      if found()
+         do while ket+kang+nbeli='K'+kangw+nbeliw.and.!eof()
+            repl tanda with 'L'
+            skip
+         enddo
+      endif 
+   endif
+   if angsw>0.or.dskw>0
+      sele 2
+      appe blan
+      repl kang with kangw, nbeli with nbeliw, tg with date(), angs with angsw, dsk with dskw
+   endif   
+   sele 4
+   skip
+enddo     
+endif
+rele wind dokt
+do emn
+retu
+*
+proc lsup
+param mbad
+do dmn
+set talk off
+set cent on
+set dele on
+CLOS DATA
+USE ANGGOTA INDE ANGGOTA1,ANGGOTA2
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar Supplier';
+colo rgb(255,255,255,129,126,101) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-150)/2 to wrows()-1,((wcols()-150)/2)+150 system title'Daftar Supplier' font'arial' clos icon file 'guni.ico'
+acti wind dokt2
+tah=spac(7)
+do while.t.
+   do case
+   case mbad=1
+      urtw='Urut Kode Supp.'
+      tam1='Kode'
+      tam2='s/d'
+      store spac(5) to tdo1,tdo2
+   case mbad=2
+      urtw='Urut Nama Supp.'
+      tam1='Nama'
+      tam2='s/d'
+      store spac(30) to tdo1,tdo2
+   endcase   
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr11.bmp'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say tam1 styl'b'
+   @5.7,6 say tam2 styl'b'
+   @4.5,15 get tdo1 pict'@!' 
+   @5.7,15 get tdo2 pict'@!'
+   @7.5,0.1 get nud PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nud=3
+      exit
+   endi
+   if tdo1>tdo2
+      loop
+   endif
+   set orde to mbad
+   do case
+   case mbad=1
+      SEEK trim(tdo1)
+      IF.NOT.FOUN()
+         WAIT'DATA TIDAK ADA' WINDO
+         loop
+      ENDI
+      NOREK=RECNO()
+      kondi="kang>=trim(tdo1).and.kang<=trim(tdo2).and.!eof()"
+   case mbad=2
+      SEEK trim(tdo1)
+      IF.NOT.FOUN()
+         WAIT'DATA TIDAK ADA' WINDO
+         loop
+      ENDI
+      NOREK=RECNO()
+      kondi="nang>=trim(tdo1).and.nang<=trim(tdo2).and.!eof()"
+   endcase
+   go norek
+   do case
+   case nud=1
+        brow fiel kang:h='Kode':r, nang:h='Nama':r, alang:h='Alamat':r, tlang:h='Telepon':r wind dokt3;
+        for &kondi titl urtw noedit nomenu normal
+   case nud=2
+        repo form ldox prev for &kondi
+        repo form ldox to print prompt for &kondi
+   endcase     
+enddo
+do emn
+deac wind dokt2
+return
+*
+**********************************************************************************************************************************************************
+proc eagg
+simp=.f.
+set dele on
+clos data
+sele 1
+use cus inde cus1,cus2
+DEFI WIND dokt;
+FROM 3,(wcols()-80)/2 to 24,((wcols()-80)/2)+80 system title'Entry / Edit Customer';
+colo rgb(0,0,0,94,182,108) font'foxprint',9 
+defi wind konf in wind dokt from 5,15.5 to 16.5,59 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind dokt
+DO WHILE.T.
+   clea
+   kdokw=spac(5)
+   areaw=spac(15)
+   ndokw=spac(30)
+   aldokw=spac(30)
+   kotokw=spac(20)
+   tldokw=spac(20)
+   ninsw=spac(25)
+   @0,0 say'hdrc.bmp'bitm
+   @6.5,0 say'hdc1.bmp'bitm
+   @18,0 say'crekam.bmp'bitm
+   sele 1
+   set orde to 1
+   GO BOTTOM      
+   IF BOF()         
+      NO=RECNO()    
+   ELSE             
+      NO=VAL(RIGH(kang,5))+1
+   ENDIF            
+   kdokw=STUF('00000',;          
+               5-LEN(LTRIM(STR(NO)))+1 ,; 
+               LEN(LTRIM(STR(NO))) ,;
+               LTRIM(STR(NO)))
+   kdokl=kdokw
+   ??SYS(2002,1)
+   kal3=.f.
+   do while.t.
+     tejo=0
+     @7,27 get kdokw pict'!!!!!' vali kcusw() FONT'Book Antiqua',12 size 1,6
+     @9.2,27 GET ndokw pict'@!' FONT'Book Antiqua',12 size 1,31
+     @11.4,27 GET aldokw pict'@!' FONT'Book Antiqua',12 size 1,31
+     @13.5,27 GET ninsw pict'@!' FONT'Book Antiqua',12 size 1,31
+     @15.6,27 GET tldokw pict'@!' FONT'Book Antiqua',12 size 1,31
+     @18.1,0 get nu5 PICTURE '@*IHT ;;' font 'Arial',9 size 2.3,18.8,0 default 0
+     read
+     IF READ()=12.or.nu5=3
+        kal3=.t.
+        EXIT
+     ENDIF
+     do case
+     case nu5=1
+       sele 1
+       set orde to 1
+       seek kdokw
+       if !found()
+          set orde to 2
+          seek TRIM(ndokw)
+          if found()
+             wait'Data sudah ada'wind
+             loop
+          endi
+          if ndokw<>spac(30)
+             append blank
+          endi   
+       endi
+       repl nang with ndokw, kang with kdokw, alang with aldokw, tlang with tldokw, nins with ninsw
+       exit
+     case nu5=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 1
+          set orde to 1
+          seek kdokw
+          if !found()
+             wait'Data tidak ada'wind
+             loop
+          endi
+          dele
+       endif   
+       exit
+     endcase
+   enddo
+   rele sera
+   if kal3
+      exit
+   endi   
+ENDDO  
+deac WIND dokt
+clos data
+rele sera
+RETURN
+*
+proc kcusw
+kgb=spac(5)
+if cextr(kdokw)
+   setri=''
+   for rq=1 to 5
+       if subs(kdokw,rq,1) $ '0123456789'
+       else   
+          setri=setri+subs(kdokw,rq,1)
+       endif
+   next    
+   do dftcus with setri
+   if last()=27
+      kdokw=kdokl
+      ndokw=spac(30)
+      aldokw=spac(30)
+      tldokw=spac(20)
+      ninsw=spac(25)
+      show gets
+      retu
+   endi
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(5)
+      kdokw=kang
+      ndokw=nang
+      aldokw=alang
+      tldokw=tlang
+      ninsw=nins
+   else   
+      ndokw=spac(30)
+      aldokw=spac(30)
+      tldokw=spac(20)
+      ninsw=spac(25)
+   endif   
+else
+   sele 1
+   set orde to 1
+   seek kdokw
+   if found()
+      ndokw=nang
+      aldokw=alang
+      tldokw=tlang
+      ninsw=nins
+   else   
+      ndokw=spac(30)
+      aldokw=spac(30)
+      tldokw=spac(20)
+      ninsw=spac(25)
+   endif
+endif
+show gets
+retu
+*
+proc cks
+sele 2
+if mol>=0
+   seek sera(mol)
+   if found()
+      kinsw=kins
+      ninsw=nins
+   endif
+else
+   mol=0
+endif      
+sele 1
+set orde to 1
+show gets
+retu
+*
+proc lcus
+param mbar
+do dmn
+set talk off
+set cent on
+set dele on
+clos data
+DEFI WIND gla;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar Customer';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND kot;
+FROM 0,(wcols()-166)/2 to wrows()-1,((wcols()-166)/2)+166 system title'Daftar Customer' font'arial' clos icon file 'guni.ico'
+SELE 1
+use cus inde cus1,cus2,cus4
+SELE 2
+use cust
+dele all
+acti wind gla
+tah=spac(7)
+do while.t.
+   do case
+   case mbar=1
+      urtw='Urut No.'
+      tam1='dari No.'
+      tam2='s/d No.'
+      gamb='99999'
+      store spac(5) to tg1,tg2
+   case mbar=2
+      urtw='Urut Nama'
+      tam1='dari Nama'
+      tam2='s/d Nama'
+      gamb='@!'
+      store spac(30) to tg1,tg2
+   case mbar=3
+      urtw='Urut Kota'
+      tam1='dari Kota'
+      tam2='s/d kota'
+      gamb='@!'
+      store spac(25) to tg1,tg2
+   endcase   
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say tam1
+   @5.7,6 say tam2
+   @4.5,21 get tg1 pict gamb
+   @5.7,21 get tg2 pict gamb
+   @7.5,0.1 get nu PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nu=3
+      exit
+   endi
+   if tg1>tg2
+      loop
+   endif
+   sele 2
+   dele all
+   sele 1
+   set orde to mbar
+   do case
+   case mbar=1
+      SEEK trim(tg1)
+      IF.NOT.FOUN()
+         WAIT'DATA TIDAK ADA' WINDO
+         loop
+      ENDI
+      NOREK=RECNO()
+      kondi="kang>=trim(tg1).and.kang<=trim(tg2).and..not.eof()"
+   case mbar=2
+      SEEK trim(tg1)
+      IF.NOT.FOUN()
+         WAIT'DATA TIDAK ADA' WINDO
+         loop
+      ENDI
+      NOREK=RECNO()
+      kondi="nang>=trim(tg1).and.nang<=trim(tg2).and..not.eof()"
+   case mbar=3
+      SEEK trim(tg1)
+      IF.NOT.FOUN()
+         WAIT'DATA TIDAK ADA' WINDO
+         loop
+      ENDI
+      NOREK=RECNO()
+      kondi="nins>=trim(tg1).and.nins<=trim(tg2).and..not.eof()"
+   endcase
+   do while &kondi
+      kodew=kang
+      materiw=nang
+      jenisw=alang
+      tarifw=tlang
+      kotaw=nins
+      sele 2
+      appe blan
+      repl kode with kodew, nama with materiw, alamat with jenisw, kota with kotaw,;
+           telp with tarifw, k1 with tg1, k2 with tg2, urt with urtw
+      sele 1
+      set orde to mbar
+      skip
+   enddo
+   sele 2
+   go top   
+   do case
+   case nu=1
+        brow fiel kode, nama, alamat, kota:h='Kota/Kec.',telp wind kot noedit
+   case nu=2
+        repo form lcus prev
+        repo form lcus to print prompt
+   endcase     
+enddo
+deac wind gla
+clos data
+do emn
+return
+*
+**********************************************************************************************************************************************************
+proc ebeli
+simp=.f.
+set dele on
+KSR=SPAC(3)
+VASMO=SPAC(3)
+VASMO=ASMO
+VASMO=RTRIM(VASMO)
+VASMO=RIGHT(VASMO,1)
+KSR='K-'+VASMO
+SPGW=SPAC(3)
+dime ki(95)
+dime di(95)
+dime ji(95)
+dime serd(4)
+serd(1)=' '
+serd(2)='D'
+serd(3)='Q'
+serd(4)='R'
+CLOS DATA
+use anggota inde anggota2
+jek=0
+go top
+do while !eof()
+   jek=jek+1
+   skip   
+enddo
+dime sera(jek)
+j=0
+go top
+do while !eof()
+   j=j+1
+   sera(j)=nang
+   skip   
+enddo
+*
+CLOS DATA
+SELE 1 
+USE STOK INDE STOK1,STOK2,stok6
+SELE 2
+USE beli INDE beli1
+sele 3
+USE ANGGOTA INDE ANGGOTA1,ANGGOTA2
+sele 4
+use trans inde trans5
+DEFI WIND jual;
+FROM 0,(wcols()-168)/2 to 42,((wcols()-168)/2)+168 system title'Nota pembelian' font'foxprint',9;
+colo rgb(0,0,0,40,54,40)
+DEFI WIND jadi in wind jual FROM 12,15 to 20,70 system titl'Print' colo rgb(0,0,0,40,54,40) font'arial',9 
+defi wind konf in wind jual from 10,28.5 to 21.5,72 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Info'
+acti wind jual
+kdokw=spac(5)
+do while.t.
+  her=1
+  store 0 to umw,lkew,hjualw,tot1,cekup,scekup,apem
+  kangw=spac(5) 
+  mol=0
+  tbeliw=date()
+  nbeliw=spac(7)
+  membara=spac(1)
+  store.f. to ono,moleh,teesc,wis
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19
+  store 0 to hju1,hju2,hju3,hju4,hju5,hju6,hju7,hju8,hju9,hju10,hju11,hju12,hju13,hju14,hju15,hju16,hju17,hju18,hju19
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19
+  store 0 to upe1,upe2,upe3,upe4,upe5,upe6,upe7,upe8,upe9,upe10,upe11,upe12,upe13,upe14,upe15,upe16,upe17,upe18,upe19
+  store 0 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19
+  nangw=spac(20)
+  alam=spac(30)
+  arema=spac(15)
+  kgb=spac(9)
+  bares=1
+  phju=1
+  clear
+  ??sys(2002,1)
+  for ti=1 to 95
+    ki(ti)=spac(28)+ spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)=spac(2)+spac(10)
+  next
+  for ti=1 to 95
+    ji(ti)='      .  '
+  next
+  sele 2
+  if bof()
+      no=1
+      nrsp=1
+  else
+      GO BOTT
+      no=val(righ(nbeli,6))+1
+      if no>150000
+         wait'NOMOR NOTA SUDAH HABIS'wind
+         clos data
+         deac wind jual
+         retu
+      endi
+  endif
+  nomor=str(no)
+  pjnomor=len(ltrim(nomor))
+  nbeliw=left('B000000',len('B000000')-pjnomor)+ltrim(nomor)
+  tot1=0
+  mula=1
+  hl=1 
+  neks=1
+  nd='1'
+  gne='nex1.bmp'
+  gno='bd1.bmp'
+  do while.t.
+     clear
+     kbrgw=spac(9)
+     nbrgw=spac(28)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     jur1=0
+     ??sys(2002,1)
+     @0,0 say gno bitm
+     @0,7.2 say'be01.bmp'bitm
+     @0,14.3 say'be02.bmp'bitm
+     @0,21.4 say'be03.bmp'bitm
+     @0,28.6 say'be04.bmp'bitm
+     @0,35.7 say'be05.bmp'bitm
+     @0,42.9 say'be06.bmp'bitm
+     @0,50.0 say'be07.bmp'bitm
+     @0,57.2 say'be08.bmp'bitm
+     @0,64.3 say'be09.bmp'bitm
+     @0,71.4 say'be10.bmp'bitm
+     @0,78.6 say'be11.bmp'bitm
+     @0,85.7 say'be12.bmp'bitm
+     @0,92.9 say'be13.bmp'bitm
+     @0,100 say'be14.bmp'bitm
+     @0,107.2  say'be15.bmp'bitm
+     @0,114.3 say'be16.bmp'bitm
+     @0,121.4 say'be17.bmp'bitm
+     @0,128.6 say'be18.bmp'bitm
+     @0,135.7 say'be19.bmp'bitm
+     @41,0 say'menlob.bmp'bitm
+     @41,57.2 say'bawah.bmp'bitm
+     @39.7,127 say gne bitm
+     tot1=0
+     do botal           
+     @0.5,9 say nbeliw colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 styl'b'
+     @0.5,41.8 GET tbeliw size 0.9,14 FONT'Book Antiqua',14 
+     @0.5,103 GET mol vali cksup() PICTURE '@^' from sera size 0.9,40 font 'Times New Roman' defa 0
+     @6.0,4 GET kbn1 vali bcbc1() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @6.0,25 get kbg1 vali bkbc1()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @6.0,37 GET nbg1 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @6.0,73.5 GET jmp1 PICT'@Jz 999,999.99' vali bkjm1() font'book antiqua',14 size 0.95,10
+     @6.0,86.2 get trf1 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @6.0,104.3 GET upe1 vali bup1() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @6.0,109 GET hju1 vali bkjm1() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @6.0,124 GET sto1 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @7.5,4 GET kbn2 vali bcbc2() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @7.5,25 get kbg2 vali bkbc2()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @7.5,37 GET nbg2 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @7.5,73.5 GET jmp2 PICT'@Jz 999,999.99' vali bkjm2() font'book antiqua',14 size 0.9,10
+     @7.5,86.2 get trf2 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @7.5,104.3 GET upe2 vali bup2() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @7.5,109 GET hju2 vali bkjm2() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @7.5,124 GET sto2 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @9.0,4 GET kbn3 vali bcbc3() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @9.0,25 get kbg3 vali bkbc3()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @9.0,37 GET nbg3 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @9.0,73.5 GET jmp3 PICT'@Jz 999,999.99' vali bkjm3() font'book antiqua',14 size 0.95,10
+     @9.0,86.2 get trf3 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @9.0,104.3 GET upe3 vali bup3() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @9.0,109 GET hju3 vali bkjm3() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @9.0,124 GET sto3 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @10.5,4 GET kbn4 vali bcbc4() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @10.5,25 get kbg4 vali bkbc4()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @10.5,37 GET nbg4 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @10.5,73.5 GET jmp4 PICT'@Jz 999,999.99' vali bkjm4() font'book antiqua',14 size 0.9,10
+     @10.5,86.2 get trf4 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @10.5,104.3 GET upe4 vali bup4() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @10.5,109 GET hju4 vali bkjm4() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @10.5,124 GET sto4 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @12.0,4 GET kbn5 vali bcbc5() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @12.0,25 get kbg5 vali bkbc5()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @12.0,37 GET nbg5 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @12.0,73.5 GET jmp5 PICT'@Jz 999,999.99' vali bkjm5() font'book antiqua',14 size 0.95,10
+     @12.0,86.2 get trf5 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @12.0,104.3 GET upe5 vali bup5() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @12.0,109 GET hju5 vali bkjm5() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @12.0,124 GET sto5 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @13.5,4 GET kbn6 vali bcbc6() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @13.5,25 get kbg6 vali bkbc6()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @13.5,37 GET nbg6 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @13.5,73.5 GET jmp6 PICT'@Jz 999,999.99' vali bkjm6() font'book antiqua',14 size 0.9,10
+     @13.5,86.2 get trf6 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @13.5,104.3 GET upe6 vali bup6() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @13.5,109 GET hju6 vali bkjm6() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @13.5,124 GET sto6 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @15.0,4 GET kbn7 vali bcbc7() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @15.0,25 get kbg7 vali bkbc7()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @15.0,37 GET nbg7 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @15.0,73.5 GET jmp7 PICT'@Jz 999,999.99' vali bkjm7() font'book antiqua',14 size 0.95,10
+     @15.0,86.2 get trf7 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @15.0,104.3 GET upe7 vali bup7() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @15.0,109 GET hju7 vali bkjm7() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @15.0,124 GET sto7 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @16.5,4 GET kbn8 vali bcbc8() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @16.5,25 get kbg8 vali bkbc8()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @16.5,37 GET nbg8 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @16.5,73.5 GET jmp8 PICT'@Jz 999,999.99' vali bkjm8() font'book antiqua',14 size 0.9,10
+     @16.5,86.2 get trf8 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @16.5,104.3 GET upe8 vali bup8() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @16.5,109 GET hju8 vali bkjm8() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @16.5,124 GET sto8 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @18.0,4 GET kbn9 vali bcbc9() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @18.0,25 get kbg9 vali bkbc9()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @18.0,37 GET nbg9 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @18.0,73.5 GET jmp9 PICT'@Jz 999,999.99' vali bkjm10() font'book antiqua',14 size 0.95,10
+     @18.0,86.2 get trf9 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @18.0,104.3 GET upe9 vali bup9() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @18.0,109 GET hju9 vali bkjm9() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @18.0,124 GET sto9 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @19.5,4 GET kbn10 vali bcbc10() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @19.5,25 get kbg10 vali bkbc10()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @19.5,37 GET nbg10 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @19.5,73.5 GET jmp10 PICT'@Jz 999,999.99' vali bkjm10() font'book antiqua',14 size 0.9,10
+     @19.5,86.2 get trf10 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @19.5,104.3 GET upe10 vali bup10() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @19.5,109 GET hju10 vali bkjm10() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @19.5,124 GET sto10 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @21.0,4 GET kbn11 vali bcbc11() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @21.0,25 get kbg11 vali bkbc11()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @21.0,37 GET nbg11 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @21.0,73.5 GET jmp11 PICT'@Jz 999,999.99' vali bkjm11() font'book antiqua',14 size 0.95,10
+     @21.0,86.2 get trf11 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @21.0,104.3 GET upe11 vali bup11() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @21.0,109 GET hju11 vali bkjm11() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @21.0,124 GET sto11 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @22.5,4 GET kbn12 vali bcbc12() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @22.5,25 get kbg12 vali bkbc12()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @22.5,37 GET nbg12 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @22.5,73.5 GET jmp12 PICT'@Jz 999,999.99' vali bkjm12() font'book antiqua',14 size 0.9,10
+     @22.5,86.2 get trf12 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @22.5,104.3 GET upe12 vali bup12() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @22.5,109 GET hju12 vali bkjm12() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @22.5,124 GET sto12 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @24.0,4 GET kbn13 vali bcbc13() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @24.0,25 get kbg13 vali bkbc13()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @24.0,37 GET nbg13 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @24.0,73.5 GET jmp13 PICT'@Jz 999,999.99' vali bkjm13() font'book antiqua',14 size 0.95,10
+     @24.0,86.2 get trf13 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @24.0,104.3 GET upe13 vali bup13() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @24.0,109 GET hju13 vali bkjm13() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @24.0,124 GET sto13 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @25.5,4 GET kbn14 vali bcbc14() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @25.5,25 get kbg14 vali bkbc14()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @25.5,37 GET nbg14 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @25.5,73.5 GET jmp14 PICT'@Jz 999,999.99' vali bkjm14() font'book antiqua',14 size 0.9,10
+     @25.5,86.2 get trf14 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @25.5,104.3 GET upe14 vali bup14() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @25.5,109 GET hju14 vali bkjm14() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @25.5,124 GET sto14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @27.0,4 GET kbn15 vali bcbc15() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @27.0,25 get kbg15 vali bkbc15()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @27.0,37 GET nbg15 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @27.0,73.5 GET jmp15 PICT'@Jz 999,999.99' vali bkjm15() font'book antiqua',14 size 0.95,10
+     @27.0,86.2 get trf15 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @27.0,104.3 GET upe15 vali bup15() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @27.0,109 GET hju15 vali bkjm15() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @27.0,124 GET sto15 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @28.5,4 GET kbn16 vali bcbc16() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @28.5,25 get kbg16 vali bkbc16()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @28.5,37 GET nbg16 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @28.5,73.5 GET jmp16 PICT'@Jz 999,999.99' vali bkjm16() font'book antiqua',14 size 0.9,10
+     @28.5,86.2 get trf16 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @28.5,104.3 GET upe16 vali bup16() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @28.5,109 GET hju16 vali bkjm16() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @28.5,124 GET sto16 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @30.0,4 GET kbn17 vali bcbc17() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @30.0,25 get kbg17 vali bkbc17()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @30.0,37 GET nbg17 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @30.0,73.5 GET jmp17 PICT'@Jz 999,999.99' vali bkjm17() font'book antiqua',14 size 0.95,10
+     @30.0,86.2 get trf17 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @30.0,104.3 GET upe17 vali bup17() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @30.0,109 GET hju17 vali bkjm17() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @30.0,124 GET sto17 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @31.5,4 GET kbn18 vali bcbc18() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @31.5,25 get kbg18 vali bkbc18()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @31.5,37 GET nbg18 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @31.5,73.5 GET jmp18 PICT'@Jz 999,999.99' vali bkjm18() font'book antiqua',14 size 0.9,10
+     @31.5,86.2 get trf18 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @31.5,104.3 GET upe18 vali bup18() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @31.5,109 GET hju18 vali bkjm18() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @31.5,124 GET sto18 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @33.0,4 GET kbn19 vali bcbc19() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @33.0,25 get kbg19 vali bkbc19()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @33.0,37 GET nbg19 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @33.0,73.5 GET jmp19 PICT'@Jz 999,999.99' vali bkjm19() font'book antiqua',14 size 0.95,10
+     @33.0,86.2 get trf19 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @33.0,104.3 GET upe19 vali bup19() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @33.0,109 GET hju19 vali bkjm19() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @33.0,124 GET sto19 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @5.8,100.7 GET cekup vali ccekup() PICTURE '@*IV ;;;;;;;;;;;;;;;;;;' size 1.5,3,0
+     @39.9,64.1 get apem func'*C' vali ceum() font'Arial',8 ;
+      COLOR ,,,,,rgb(255,255,255,237,239,234),rgb(255,255,255,237,239,234),,rgb(255,255,255,237,239,234),rgb(255,255,255,237,239,234) defa 0
+     @39.8,127.1 get neks PICTURE '@*IHT ;' font 'Arial',9 size 2.6,8,3.4
+     @35,0 get jur1 PICTURE '@*IHT ;;;' font 'Arial',9 size 5,16,2 default 0 
+     read
+     if read()=12.or.jur1=3
+        teesc=.t.
+        exit
+     endif
+     if jur1=2
+       acti wind konf
+       @0,0 say 'free.bmp'bitm
+       @0,30 say 'free1.bmp'bitm
+       @7.6,24 get hpz PICTURE '@*HT OK' font'Arial' size 1.8,12,1 default 0
+       read
+       deac wind konf
+     endif
+     do case
+     case neks=1
+        if hl>1
+           do baveki
+           hl=hl-1
+           do slmula
+           do braik
+           nd=str(hl,1)   
+           gne='nex'+nd+'.bmp'
+           gno='bd'+nd+'.bmp'
+           cekup=0
+        endif
+     case neks=2
+        if hl<5
+           do baveki
+           hl=hl+1
+           do slmula
+           do braik
+           nd=str(hl,1)   
+           gne='nex'+nd+'.bmp'
+           gno='bd'+nd+'.bmp'
+           cekup=0
+        endif
+     endcase
+     if jur1=1
+       sele 2
+       seek nbeliw
+       if found()
+          go bott
+          no=val(righ(nbeli,6))+1
+          nomor=str(no)
+          pjnomor=len(ltrim(nomor))
+          nbeliw=left('B000000',len('B000000')-pjnomor)+ltrim(nomor)
+       endif
+       mlo=.f.
+       tot1=0
+       for mi=1 to 95
+         mmr=0
+         if left(ki(mi),28)<>spac(28)
+           mlo=.t.
+           lem=left(ki(mi),28)
+           brc=subs(ki(mi),7,13)
+           kode=subs(ki(mi),42,9)
+           jum=val(left(ji(mi),9))
+           upw=val(left(di(mi),2))
+           hrgj=val(righ(di(mi),10))
+           harga=val(righ(ki(mi),10))
+           tot=harga*jum
+           tot1=tot1+tot
+           nabar=lem
+           edok=left(kode,6)
+           sele 1
+           set orde to 1
+           seek edok
+           IF FOUN()
+              REPL ukecil WITH ukecil+JUM,HSAT WITH HARGA,;
+                   HJUAL WITH HRGJ,NBRG WITH NABAR
+                ELSE
+                   APPE BLAN
+                   REPL KBRG WITH KODE,NBRG WITH NABAR,;
+                   UKECIL WITH JUM,HSAT WITH HARGA,;
+                   HJUAL WITH HRGJ   
+                ENDI   
+           mmr=mmr+1
+           sele 2
+           appe blan
+           REPL NBELI WITH Nbeliw,TBELI WITH Tbeliw,KANG WITH KANGW,;
+                Kbrg WITH KODE,ukecil WITH JUM,;
+                HBELI WITH HARGA,TOTJ WITH TOT,tempe with LKEW,;
+                KET WITH IIF(apem=0,'T',IIF(apem=1,'K',' ')),;
+                UMUK WITH UMw,TLUNAS WITH Tbeliw+LKEW, tanda with iif(apem=0,'L',' ')
+         endif       
+       next
+       if mlo
+          sele 4
+          bukw=righ(nbeliw,6)
+          seek bukw
+          if !found()
+             if apem=0
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '5001', perkiraan with 'Pembelian Barang',;
+                    uraian with nangw, debet with tot1, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '1111', perkiraan with 'Kas',;
+                    uraian with nangw, kredit with tot1, ttrans with tbeliw
+             else       
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '5001', perkiraan with 'Pembelian Barang',;
+                    uraian with nangw, debet with tot1, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '2153', perkiraan with 'Hutang Konsinyasi',;
+                    uraian with nangw, kredit with tot1, ttrans with tbeliw
+             endi       
+          endif
+          sele 2
+          acti wind jadi
+          @0,0 say'prnt.bmp'bitm
+          @0,25.4 say'prnt1.bmp'bitm
+          @0,50.8 say'prnt2.bmp'bitm
+          @0.2,27 get jok PICTURE '@*IHT ;' font 'Arial',9 size 5.7,24,0 default 0 
+          read
+          deac wind jadi
+          if jok=1
+             do prbeli             
+          endif
+       endif   
+       exit
+     endif  
+  enddo
+  if teesc
+     exit
+  endif
+enddo
+set readb off
+clos data
+deac wind jual
+rele ki
+rele di
+rele ji
+rele serd
+retu
+*
+proc edbeli
+set dele on
+simp=.f.
+KSR=SPAC(3)
+VASMO=SPAC(3)
+VASMO=ASMO
+VASMO=RTRIM(VASMO)
+VASMO=RIGHT(VASMO,1)
+KSR='K-'+VASMO
+SPGW=SPAC(3)
+dime ki(95)
+dime di(95)
+dime ji(95)
+dime oq(95)
+dime serd(4)
+serd(1)=' '
+serd(2)='D'
+serd(3)='Q'
+serd(4)='R'
+CLOS DATA
+use anggota inde anggota2
+jek=0
+go top
+do while !eof()
+   jek=jek+1
+   skip   
+enddo
+dime sera(jek)
+j=0
+go top
+do while !eof()
+   j=j+1
+   sera(j)=nang
+   skip   
+enddo
+*
+CLOS DATA
+SELE 1 
+USE STOK INDE STOK1,STOK2,stok6
+SELE 2
+USE beli INDE beli1
+sele 3
+USE ANGGOTA INDE ANGGOTA1,ANGGOTA2
+sele 4
+use trans inde trans5
+DEFI WIND jual;
+FROM 0,(wcols()-168)/2 to 42,((wcols()-168)/2)+168 system title'Edit Pembelian' font'foxprint',9;
+colo rgb(0,0,0,40,54,40)
+DEFI WIND jadi in wind jual FROM 12,15 to 20,70 system titl'Print' colo rgb(0,0,0,40,54,40) font'arial',9 
+defi wind konf in wind jual from 10,28.5 to 21.5,72 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind jual
+kdokw=spac(5)
+do while.t.
+  her=2
+  store 0 to umw,lkew,hjualw,tot1,cekup,scekup,apem
+  kangw=spac(5) 
+  mol=0
+  tbeliw=date()
+  nbeliw=spac(7)
+  membara=spac(1)
+  store.f. to ono,moleh,teesc,wis
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19
+  store 0 to hju1,hju2,hju3,hju4,hju5,hju6,hju7,hju8,hju9,hju10,hju11,hju12,hju13,hju14,hju15,hju16,hju17,hju18,hju19
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19
+  store 0 to upe1,upe2,upe3,upe4,upe5,upe6,upe7,upe8,upe9,upe10,upe11,upe12,upe13,upe14,upe15,upe16,upe17,upe18,upe19
+  store 0 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19
+  nangw=spac(20)
+  alam=spac(30)
+  arema=spac(15)
+  kgb=spac(9)
+  bares=1
+  phju=1
+  clear
+  ??sys(2002,1)
+  for ti=1 to 95
+    ki(ti)=spac(28)+ spac(13)+spac(10)
+    oq(ti)=' '
+  next
+  for ti=1 to 95
+    di(ti)=spac(2)+spac(10)
+  next
+  for ti=1 to 95
+    ji(ti)='      .  '
+  next
+  tot1=0
+  mula=1
+  hl=1 
+  neks=1
+  nd='1'
+  gne='nex1.bmp'
+  gno='bd1.bmp'
+  snma=spac(7)
+  do while.t.
+     jur1=0
+     clear
+     kbrgw=spac(9)
+     nbrgw=spac(28)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     ??sys(2002,1)
+     @0,0 say gno bitm
+     @0,7.2 say'be01.bmp'bitm
+     @0,14.3 say'be02.bmp'bitm
+     @0,21.4 say'be03.bmp'bitm
+     @0,28.6 say'be04.bmp'bitm
+     @0,35.7 say'be05.bmp'bitm
+     @0,42.9 say'be06.bmp'bitm
+     @0,50.0 say'be07.bmp'bitm
+     @0,57.2 say'be08.bmp'bitm
+     @0,64.3 say'be09.bmp'bitm
+     @0,71.4 say'be10.bmp'bitm
+     @0,78.6 say'be11.bmp'bitm
+     @0,85.7 say'be12.bmp'bitm
+     @0,92.9 say'be13.bmp'bitm
+     @0,100 say'be14.bmp'bitm
+     @0,107.2  say'be15.bmp'bitm
+     @0,114.3 say'be16.bmp'bitm
+     @0,121.4 say'be17.bmp'bitm
+     @0,128.6 say'be18.bmp'bitm
+     @0,135.7 say'be19.bmp'bitm
+     @41,0 say'menlob.bmp'bitm
+     @41,57.2 say'bawah.bmp'bitm
+     @39.7,127 say gne bitm
+     tot1=0
+     do botal           
+     IF ASMO<>'BOS'
+     @0.5,9 get nbeliw pict'!999999' vali cabeli() colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 1,9
+     @0.5,41.8 get tbeliw colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 1,14
+     @0.5,103 GET mol vali cksup() PICTURE '@^' from sera size 1,40 font 'Times New Roman' defa 0
+     @6.0,4 GET kbn1 vali bcbc1() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @6.0,25 get kbg1 vali bkbc1()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @6.0,37 GET nbg1 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @6.0,73.5 GET jmp1 PICT'@Jz 999,999.99' vali bkjm1() font'book antiqua',14 size 0.95,10 disa
+     @6.0,86.2 get trf1 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @6.0,104.3 GET upe1 vali bup1() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @6.0,109 GET hju1 vali bkjm1() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @6.0,124 GET sto1 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @7.5,4 GET kbn2 vali bcbc2() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @7.5,25 get kbg2 vali bkbc2()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @7.5,37 GET nbg2 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @7.5,73.5 GET jmp2 PICT'@Jz 999,999.99' vali bkjm2() font'book antiqua',14 size 0.9,10 disa
+     @7.5,86.2 get trf2 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @7.5,104.3 GET upe2 vali bup2() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @7.5,109 GET hju2 vali bkjm2() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @7.5,124 GET sto2 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @9.0,4 GET kbn3 vali bcbc3() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @9.0,25 get kbg3 vali bkbc3()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @9.0,37 GET nbg3 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @9.0,73.5 GET jmp3 PICT'@Jz 999,999.99' vali bkjm3() font'book antiqua',14 size 0.95,10 disa
+     @9.0,86.2 get trf3 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @9.0,104.3 GET upe3 vali bup3() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @9.0,109 GET hju3 vali bkjm3() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @9.0,124 GET sto3 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @10.5,4 GET kbn4 vali bcbc4() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @10.5,25 get kbg4 vali bkbc4()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @10.5,37 GET nbg4 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @10.5,73.5 GET jmp4 PICT'@Jz 999,999.99' vali bkjm4() font'book antiqua',14 size 0.9,10 disa
+     @10.5,86.2 get trf4 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @10.5,104.3 GET upe4 vali bup4() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @10.5,109 GET hju4 vali bkjm4() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @10.5,124 GET sto4 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @12.0,4 GET kbn5 vali bcbc5() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @12.0,25 get kbg5 vali bkbc5()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @12.0,37 GET nbg5 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @12.0,73.5 GET jmp5 PICT'@Jz 999,999.99' vali bkjm5() font'book antiqua',14 size 0.95,10 disa
+     @12.0,86.2 get trf5 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @12.0,104.3 GET upe5 vali bup5() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @12.0,109 GET hju5 vali bkjm5() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @12.0,124 GET sto5 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @13.5,4 GET kbn6 vali bcbc6() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @13.5,25 get kbg6 vali bkbc6()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @13.5,37 GET nbg6 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @13.5,73.5 GET jmp6 PICT'@Jz 999,999.99' vali bkjm6() font'book antiqua',14 size 0.9,10 disa
+     @13.5,86.2 get trf6 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @13.5,104.3 GET upe6 vali bup6() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @13.5,109 GET hju6 vali bkjm6() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @13.5,124 GET sto6 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @15.0,4 GET kbn7 vali bcbc7() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @15.0,25 get kbg7 vali bkbc7()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @15.0,37 GET nbg7 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @15.0,73.5 GET jmp7 PICT'@Jz 999,999.99' vali bkjm7() font'book antiqua',14 size 0.95,10 disa
+     @15.0,86.2 get trf7 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @15.0,104.3 GET upe7 vali bup7() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @15.0,109 GET hju7 vali bkjm7() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @15.0,124 GET sto7 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @16.5,4 GET kbn8 vali bcbc8() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @16.5,25 get kbg8 vali bkbc8()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @16.5,37 GET nbg8 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @16.5,73.5 GET jmp8 PICT'@Jz 999,999.99' vali bkjm8() font'book antiqua',14 size 0.9,10 disa
+     @16.5,86.2 get trf8 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @16.5,104.3 GET upe8 vali bup8() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @16.5,109 GET hju8 vali bkjm8() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @16.5,124 GET sto8 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @18.0,4 GET kbn9 vali bcbc9() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @18.0,25 get kbg9 vali bkbc9()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @18.0,37 GET nbg9 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @18.0,73.5 GET jmp9 PICT'@Jz 999,999.99' vali bkjm10() font'book antiqua',14 size 0.95,10 disa
+     @18.0,86.2 get trf9 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @18.0,104.3 GET upe9 vali bup9() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @18.0,109 GET hju9 vali bkjm9() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @18.0,124 GET sto9 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @19.5,4 GET kbn10 vali bcbc10() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @19.5,25 get kbg10 vali bkbc10()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @19.5,37 GET nbg10 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @19.5,73.5 GET jmp10 PICT'@Jz 999,999.99' vali bkjm10() font'book antiqua',14 size 0.9,10 disa
+     @19.5,86.2 get trf10 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @19.5,104.3 GET upe10 vali bup10() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @19.5,109 GET hju10 vali bkjm10() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @19.5,124 GET sto10 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @21.0,4 GET kbn11 vali bcbc11() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @21.0,25 get kbg11 vali bkbc11()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @21.0,37 GET nbg11 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @21.0,73.5 GET jmp11 PICT'@Jz 999,999.99' vali bkjm11() font'book antiqua',14 size 0.95,10 disa
+     @21.0,86.2 get trf11 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @21.0,104.3 GET upe11 vali bup11() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @21.0,109 GET hju11 vali bkjm11() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @21.0,124 GET sto11 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @22.5,4 GET kbn12 vali bcbc12() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @22.5,25 get kbg12 vali bkbc12()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @22.5,37 GET nbg12 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @22.5,73.5 GET jmp12 PICT'@Jz 999,999.99' vali bkjm12() font'book antiqua',14 size 0.9,10 disa
+     @22.5,86.2 get trf12 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @22.5,104.3 GET upe12 vali bup12() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @22.5,109 GET hju12 vali bkjm12() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @22.5,124 GET sto12 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @24.0,4 GET kbn13 vali bcbc13() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @24.0,25 get kbg13 vali bkbc13()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @24.0,37 GET nbg13 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @24.0,73.5 GET jmp13 PICT'@Jz 999,999.99' vali bkjm13() font'book antiqua',14 size 0.95,10 disa
+     @24.0,86.2 get trf13 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @24.0,104.3 GET upe13 vali bup13() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @24.0,109 GET hju13 vali bkjm13() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @24.0,124 GET sto13 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @25.5,4 GET kbn14 vali bcbc14() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @25.5,25 get kbg14 vali bkbc14()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @25.5,37 GET nbg14 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @25.5,73.5 GET jmp14 PICT'@Jz 999,999.99' vali bkjm14() font'book antiqua',14 size 0.9,10 disa
+     @25.5,86.2 get trf14 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @25.5,104.3 GET upe14 vali bup14() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @25.5,109 GET hju14 vali bkjm14() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @25.5,124 GET sto14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @27.0,4 GET kbn15 vali bcbc15() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @27.0,25 get kbg15 vali bkbc15()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @27.0,37 GET nbg15 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @27.0,73.5 GET jmp15 PICT'@Jz 999,999.99' vali bkjm15() font'book antiqua',14 size 0.95,10 disa
+     @27.0,86.2 get trf15 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @27.0,104.3 GET upe15 vali bup15() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @27.0,109 GET hju15 vali bkjm15() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @27.0,124 GET sto15 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @28.5,4 GET kbn16 vali bcbc16() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @28.5,25 get kbg16 vali bkbc16()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @28.5,37 GET nbg16 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @28.5,73.5 GET jmp16 PICT'@Jz 999,999.99' vali bkjm16() font'book antiqua',14 size 0.9,10 disa
+     @28.5,86.2 get trf16 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @28.5,104.3 GET upe16 vali bup16() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @28.5,109 GET hju16 vali bkjm16() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @28.5,124 GET sto16 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @30.0,4 GET kbn17 vali bcbc17() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @30.0,25 get kbg17 vali bkbc17()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @30.0,37 GET nbg17 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @30.0,73.5 GET jmp17 PICT'@Jz 999,999.99' vali bkjm17() font'book antiqua',14 size 0.95,10 disa
+     @30.0,86.2 get trf17 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @30.0,104.3 GET upe17 vali bup17() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @30.0,109 GET hju17 vali bkjm17() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @30.0,124 GET sto17 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @31.5,4 GET kbn18 vali bcbc18() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @31.5,25 get kbg18 vali bkbc18()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @31.5,37 GET nbg18 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @31.5,73.5 GET jmp18 PICT'@Jz 999,999.99' vali bkjm18() font'book antiqua',14 size 0.9,10 disa
+     @31.5,86.2 get trf18 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @31.5,104.3 GET upe18 vali bup18() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @31.5,109 GET hju18 vali bkjm18() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @31.5,124 GET sto18 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @33.0,4 GET kbn19 vali bcbc19() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @33.0,25 get kbg19 vali bkbc19()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @33.0,37 GET nbg19 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @33.0,73.5 GET jmp19 PICT'@Jz 999,999.99' vali bkjm19() font'book antiqua',14 size 0.95,10 disa
+     @33.0,86.2 get trf19 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @33.0,104.3 GET upe19 vali bup19() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @33.0,109 GET hju19 vali bkjm19() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @33.0,124 GET sto19 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @5.8,100.7 GET cekup vali ccekup() PICTURE '@*IV ;;;;;;;;;;;;;;;;;;' size 1.5,3,0
+     @39.9,64.1 get apem func'*C' vali ceum() font'Arial',8 ;
+      COLOR ,,,,,rgb(255,255,255,237,239,234),rgb(255,255,255,237,239,234),,rgb(255,255,255,237,239,234),rgb(255,255,255,237,239,234) defa 0
+     @39.8,127.1 get neks PICTURE '@*IHT ;' font 'Arial',9 size 2.6,8,3.4
+     @35,0 get jur1 PICTURE '@*IHT ;;;' font 'Arial',9 size 5,16,2 default 0 
+     ELSE
+     @0.5,9 get nbeliw pict'!999999' vali cabeli() colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 1,9
+     @0.5,41.8 get tbeliw colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 1,14
+     @0.5,103 GET mol vali cksup() PICTURE '@^' from sera size 1,40 font 'Times New Roman' defa 0
+     @6.0,4 GET kbn1 vali bcbc1() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @6.0,25 get kbg1 vali bkbc1()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @6.0,37 GET nbg1 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @6.0,73.5 GET jmp1 PICT'@Jz 999,999.99' vali bkjm1() font'book antiqua',14 size 0.95,10
+     @6.0,86.2 get trf1 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @6.0,104.3 GET upe1 vali bup1() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @6.0,109 GET hju1 vali bkjm1() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @6.0,124 GET sto1 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @7.5,4 GET kbn2 vali bcbc2() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @7.5,25 get kbg2 vali bkbc2()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @7.5,37 GET nbg2 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @7.5,73.5 GET jmp2 PICT'@Jz 999,999.99' vali bkjm2() font'book antiqua',14 size 0.9,10
+     @7.5,86.2 get trf2 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @7.5,104.3 GET upe2 vali bup2() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @7.5,109 GET hju2 vali bkjm2() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @7.5,124 GET sto2 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @9.0,4 GET kbn3 vali bcbc3() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @9.0,25 get kbg3 vali bkbc3()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @9.0,37 GET nbg3 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @9.0,73.5 GET jmp3 PICT'@Jz 999,999.99' vali bkjm3() font'book antiqua',14 size 0.95,10
+     @9.0,86.2 get trf3 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @9.0,104.3 GET upe3 vali bup3() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @9.0,109 GET hju3 vali bkjm3() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @9.0,124 GET sto3 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @10.5,4 GET kbn4 vali bcbc4() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @10.5,25 get kbg4 vali bkbc4()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @10.5,37 GET nbg4 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @10.5,73.5 GET jmp4 PICT'@Jz 999,999.99' vali bkjm4() font'book antiqua',14 size 0.9,10
+     @10.5,86.2 get trf4 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @10.5,104.3 GET upe4 vali bup4() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @10.5,109 GET hju4 vali bkjm4() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @10.5,124 GET sto4 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @12.0,4 GET kbn5 vali bcbc5() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @12.0,25 get kbg5 vali bkbc5()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @12.0,37 GET nbg5 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @12.0,73.5 GET jmp5 PICT'@Jz 999,999.99' vali bkjm5() font'book antiqua',14 size 0.95,10
+     @12.0,86.2 get trf5 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @12.0,104.3 GET upe5 vali bup5() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @12.0,109 GET hju5 vali bkjm5() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @12.0,124 GET sto5 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @13.5,4 GET kbn6 vali bcbc6() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @13.5,25 get kbg6 vali bkbc6()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @13.5,37 GET nbg6 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @13.5,73.5 GET jmp6 PICT'@Jz 999,999.99' vali bkjm6() font'book antiqua',14 size 0.9,10
+     @13.5,86.2 get trf6 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @13.5,104.3 GET upe6 vali bup6() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @13.5,109 GET hju6 vali bkjm6() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @13.5,124 GET sto6 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @15.0,4 GET kbn7 vali bcbc7() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @15.0,25 get kbg7 vali bkbc7()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @15.0,37 GET nbg7 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @15.0,73.5 GET jmp7 PICT'@Jz 999,999.99' vali bkjm7() font'book antiqua',14 size 0.95,10
+     @15.0,86.2 get trf7 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @15.0,104.3 GET upe7 vali bup7() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @15.0,109 GET hju7 vali bkjm7() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @15.0,124 GET sto7 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @16.5,4 GET kbn8 vali bcbc8() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @16.5,25 get kbg8 vali bkbc8()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @16.5,37 GET nbg8 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @16.5,73.5 GET jmp8 PICT'@Jz 999,999.99' vali bkjm8() font'book antiqua',14 size 0.9,10
+     @16.5,86.2 get trf8 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @16.5,104.3 GET upe8 vali bup8() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @16.5,109 GET hju8 vali bkjm8() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @16.5,124 GET sto8 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @18.0,4 GET kbn9 vali bcbc9() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @18.0,25 get kbg9 vali bkbc9()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @18.0,37 GET nbg9 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @18.0,73.5 GET jmp9 PICT'@Jz 999,999.99' vali bkjm10() font'book antiqua',14 size 0.95,10
+     @18.0,86.2 get trf9 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @18.0,104.3 GET upe9 vali bup9() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @18.0,109 GET hju9 vali bkjm9() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @18.0,124 GET sto9 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @19.5,4 GET kbn10 vali bcbc10() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @19.5,25 get kbg10 vali bkbc10()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @19.5,37 GET nbg10 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @19.5,73.5 GET jmp10 PICT'@Jz 999,999.99' vali bkjm10() font'book antiqua',14 size 0.9,10
+     @19.5,86.2 get trf10 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @19.5,104.3 GET upe10 vali bup10() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @19.5,109 GET hju10 vali bkjm10() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @19.5,124 GET sto10 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @21.0,4 GET kbn11 vali bcbc11() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @21.0,25 get kbg11 vali bkbc11()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @21.0,37 GET nbg11 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @21.0,73.5 GET jmp11 PICT'@Jz 999,999.99' vali bkjm11() font'book antiqua',14 size 0.95,10
+     @21.0,86.2 get trf11 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @21.0,104.3 GET upe11 vali bup11() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @21.0,109 GET hju11 vali bkjm11() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @21.0,124 GET sto11 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @22.5,4 GET kbn12 vali bcbc12() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @22.5,25 get kbg12 vali bkbc12()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @22.5,37 GET nbg12 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @22.5,73.5 GET jmp12 PICT'@Jz 999,999.99' vali bkjm12() font'book antiqua',14 size 0.9,10
+     @22.5,86.2 get trf12 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @22.5,104.3 GET upe12 vali bup12() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @22.5,109 GET hju12 vali bkjm12() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @22.5,124 GET sto12 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @24.0,4 GET kbn13 vali bcbc13() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @24.0,25 get kbg13 vali bkbc13()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @24.0,37 GET nbg13 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @24.0,73.5 GET jmp13 PICT'@Jz 999,999.99' vali bkjm13() font'book antiqua',14 size 0.95,10
+     @24.0,86.2 get trf13 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @24.0,104.3 GET upe13 vali bup13() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @24.0,109 GET hju13 vali bkjm13() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @24.0,124 GET sto13 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @25.5,4 GET kbn14 vali bcbc14() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @25.5,25 get kbg14 vali bkbc14()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @25.5,37 GET nbg14 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @25.5,73.5 GET jmp14 PICT'@Jz 999,999.99' vali bkjm14() font'book antiqua',14 size 0.9,10
+     @25.5,86.2 get trf14 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @25.5,104.3 GET upe14 vali bup14() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @25.5,109 GET hju14 vali bkjm14() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @25.5,124 GET sto14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @27.0,4 GET kbn15 vali bcbc15() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @27.0,25 get kbg15 vali bkbc15()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @27.0,37 GET nbg15 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @27.0,73.5 GET jmp15 PICT'@Jz 999,999.99' vali bkjm15() font'book antiqua',14 size 0.95,10
+     @27.0,86.2 get trf15 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @27.0,104.3 GET upe15 vali bup15() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @27.0,109 GET hju15 vali bkjm15() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @27.0,124 GET sto15 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @28.5,4 GET kbn16 vali bcbc16() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @28.5,25 get kbg16 vali bkbc16()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @28.5,37 GET nbg16 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @28.5,73.5 GET jmp16 PICT'@Jz 999,999.99' vali bkjm16() font'book antiqua',14 size 0.9,10
+     @28.5,86.2 get trf16 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @28.5,104.3 GET upe16 vali bup16() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @28.5,109 GET hju16 vali bkjm16() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @28.5,124 GET sto16 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @30.0,4 GET kbn17 vali bcbc17() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @30.0,25 get kbg17 vali bkbc17()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @30.0,37 GET nbg17 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @30.0,73.5 GET jmp17 PICT'@Jz 999,999.99' vali bkjm17() font'book antiqua',14 size 0.95,10
+     @30.0,86.2 get trf17 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @30.0,104.3 GET upe17 vali bup17() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @30.0,109 GET hju17 vali bkjm17() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @30.0,124 GET sto17 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @31.5,4 GET kbn18 vali bcbc18() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @31.5,25 get kbg18 vali bkbc18()pict'@!' font 'Book Antiqua',14 size 0.9,9.5
+     @31.5,37 GET nbg18 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @31.5,73.5 GET jmp18 PICT'@Jz 999,999.99' vali bkjm18() font'book antiqua',14 size 0.9,10
+     @31.5,86.2 get trf18 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.9,12
+     @31.5,104.3 GET upe18 vali bup18() pict '@Jz 99' font 'Book Antiqua',14 size 0.9,3
+     @31.5,109 GET hju18 vali bkjm18() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.9,12
+     @31.5,124 GET sto18 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.9,14 disa
+     @33.0,4 GET kbn19 vali bcbc19() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @33.0,25 get kbg19 vali bkbc19()pict'@!' font 'Book Antiqua',14 size 0.95,9.5
+     @33.0,37 GET nbg19 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @33.0,73.5 GET jmp19 PICT'@Jz 999,999.99' vali bkjm19() font'book antiqua',14 size 0.95,10
+     @33.0,86.2 get trf19 PICTURE '@z 999,999,999' font'Book Antiqua',14 size 0.95,12
+     @33.0,104.3 GET upe19 vali bup19() pict '@Jz 99' font 'Book Antiqua',14 size 0.95,3
+     @33.0,109 GET hju19 vali bkjm19() PICTURE '@Jz 999,999,999' font'Book antiqua',14 size 0.95,12
+     @33.0,124 GET sto19 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' size 0.95,14 disa
+     @5.8,100.7 GET cekup vali ccekup() PICTURE '@*IV ;;;;;;;;;;;;;;;;;;' size 1.5,3,0
+     @39.9,64.1 get apem func'*C' vali ceum() font'Arial',8 ;
+      COLOR ,,,,,rgb(255,255,255,237,239,234),rgb(255,255,255,237,239,234),,rgb(255,255,255,237,239,234),rgb(255,255,255,237,239,234) defa 0
+     @39.8,127.1 get neks PICTURE '@*IHT ;' font 'Arial',9 size 2.6,8,3.4
+     @35,0 get jur1 PICTURE '@*IHT ;;;' font 'Arial',9 size 5,16,2 default 0 
+     ENDIF
+     read
+     if read()=12.or.jur1=3
+        teesc=.t.
+        exit
+     endif
+     do case
+     case neks=1
+        if hl>1
+           do baveki
+           hl=hl-1
+           do slmula
+           do braik
+           nd=str(hl,1)   
+           gne='nex'+nd+'.bmp'
+           gno='bd'+nd+'.bmp'
+           cekup=0
+        endif
+     case neks=2
+        if hl<5
+           do baveki
+           hl=hl+1
+           do slmula
+           do braik
+           nd=str(hl,1)   
+           gne='nex'+nd+'.bmp'
+           gno='bd'+nd+'.bmp'
+           cekup=0
+        endif
+     endcase
+     if jur1=1
+       bukw=righ(nbeliw,6)
+       sele 4
+       seek bukw
+       if found()
+          do while bukti=bukw.and.!eof()
+             dele
+             skip
+          enddo
+       endif
+       jq=0
+       sele 2
+       seek nbeliw
+       norek=recno()
+       go norek
+       do whil nbeli=nbeliw.and.!eof()
+          kodew=kbrg
+          kurang=ukecil
+          hbel=hbeli
+          hju=0
+          jq=jq+1
+          sele 1
+          set orde to 1
+          seek left(kodew,6)
+          if found()
+             hju=hjual
+             repl ukecil with ukecil-kurang
+          endif   
+          oq(jq)=left(kodew,6)+str(kurang,9,2)+str(hbel,10)+str(hju,10)
+          sele 2
+          dele
+          skip
+       enddo
+       mlo=.f.
+       tot1=0
+       for mi=1 to 95
+         mmr=0
+         if left(ki(mi),28)<>spac(28)
+           mlo=.t.
+           lem=left(ki(mi),28)
+           brc=subs(ki(mi),7,13)
+           kode=subs(ki(mi),42,9)
+           jum=val(left(ji(mi),9))
+           upw=val(left(di(mi),2))
+           hrgj=val(righ(di(mi),10))
+           harga=val(righ(ki(mi),10))
+           tot=harga*jum
+           tot1=tot1+tot
+           nabar=lem
+           edok=left(kode,6)
+           ton=spac(1)
+           CARI=ASCAN(oq,edok)
+           IF CARI !=0
+              if edok+str(jum,9,2)+str(harga,10)+str(hrgj,10)<>oq(cari)
+                 ton='E'
+              endif
+           endi
+           sele 1
+           set orde to 1
+           seek edok
+           IF FOUN()
+              REPL ukecil WITH ukecil+JUM,HSAT WITH HARGA,;
+                   HJUAL WITH HRGJ,NBRG WITH NABAR
+                ELSE
+                   APPE BLAN
+                   REPL KBRG WITH KODE,NBRG WITH NABAR,;
+                   UKECIL WITH JUM,HSAT WITH HARGA,;
+                   HJUAL WITH HRGJ   
+                ENDI   
+           mmr=mmr+1
+           sele 2
+           appe blan
+           REPL NBELI WITH iif(jum<0,'R'+righ(Nbeliw,6),Nbeliw),;
+                TBELI WITH Tbeliw,KANG WITH KANGW,Kbrg WITH KODE,ukecil WITH JUM,;
+                HBELI WITH HARGA,TOTJ WITH TOT,tempe with LKEW,;
+                KET WITH IIF(apem=0,'T',IIF(apem=1,'K',' ')),;
+                UMUK WITH UMw,TLUNAS WITH Tbeliw+LKEW, tanda with iif(apem=0,'L',' '),;
+                EDIT WITH ton, TEDIT WITH DATE(), oleh with asmo
+         endif       
+       next
+       if mlo
+          sele 4
+          bukw=righ(nbeliw,6)
+          seek bukw
+          if !found()
+             if apem=0
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '5001', perkiraan with 'Pembelian Barang',;
+                    uraian with nangw, debet with tot1, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '1111', perkiraan with 'Kas',;
+                    uraian with nangw, kredit with tot1, ttrans with tbeliw
+             else       
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '5001', perkiraan with 'Pembelian Barang',;
+                    uraian with nangw, debet with tot1, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '2153', perkiraan with 'Hutang Konsinyasi',;
+                    uraian with nangw, kredit with tot1, ttrans with tbeliw
+             endi       
+          endif
+          sele 2
+          acti wind jadi
+          @0,0 say'prnt.bmp'bitm
+          @0,25.4 say'prnt1.bmp'bitm
+          @0,50.8 say'prnt2.bmp'bitm
+          @0.2,27 get jok PICTURE '@*IHT ;' font 'Arial',9 size 5.7,24,0 default 0 
+           read
+          deac wind jadi
+          if jok=1
+             do prbeli             
+          endif
+       endif   
+       exit
+     endif  
+     if jur1=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 1.8,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          bukw=righ(nbeliw,6)
+          sele 4
+          seek bukw
+          if found()
+             do while bukti=bukw.and.!eof()
+                dele
+                skip
+             enddo
+          endif
+          sele 2
+          seek nbeliw
+          norek=recno()
+          go norek
+          do whil nbeli=nbeliw.and.!eof()
+             kodew=kbrg
+             kurang=ukecil
+             sele 1
+             set orde to 1
+             seek left(kodew,6)
+             if found()
+                repl ukecil with ukecil-kurang
+             endif   
+             sele 2
+             dele
+             skip
+          enddo
+       endif
+       exit
+     endif  
+  enddo
+  if teesc
+     exit
+  endif
+enddo
+set readb off
+clos data
+deac wind jual
+rele ki
+rele di
+rele ji
+rele oq
+rele serd
+retu
+*
+proc cabeli
+if snma=nbeliw
+   snma=snma
+else  
+  snma=nbeliw
+  kangw=spac(5) 
+  membara=spac(1)
+  store.f. to ono,moleh,teesc,wis
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19
+  store 0 to hju1,hju2,hju3,hju4,hju5,hju6,hju7,hju8,hju9,hju10,hju11,hju12,hju13,hju14,hju15,hju16,hju17,hju18,hju19
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19
+  store 0 to upe1,upe2,upe3,upe4,upe5,upe6,upe7,upe8,upe9,upe10,upe11,upe12,upe13,upe14,upe15,upe16,upe17,upe18,upe19
+  store 0 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19
+  nangw=spac(20)
+  alam=spac(30)
+  arema=spac(15)
+  bares=1
+  phju=1
+  for ti=1 to 95
+    ki(ti)=spac(28)+ spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)=spac(2)+spac(10)
+  next
+  for ti=1 to 95
+    ji(ti)='      .  '
+  next
+  sele 2
+  set orde to 1
+  seek nbeliw
+  if found()
+     i=0
+     tbeliw=tbeli
+     kangw=kang
+     lkew=tempe
+     umw=umuk
+     apem=iif(ket='K',1,0)
+     If ket='K'.and.tanda='L'
+        kangw=spac(5) 
+        membara=spac(1)
+        store.f. to ono,moleh,teesc,wis
+        store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19
+        store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19
+        store 0 to hju1,hju2,hju3,hju4,hju5,hju6,hju7,hju8,hju9,hju10,hju11,hju12,hju13,hju14,hju15,hju16,hju17,hju18,hju19
+        store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19
+        store 0 to upe1,upe2,upe3,upe4,upe5,upe6,upe7,upe8,upe9,upe10,upe11,upe12,upe13,upe14,upe15,upe16,upe17,upe18,upe19
+        store 0 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19
+        store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19
+        store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19
+        store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19
+        nangw=spac(20)
+        alam=spac(30)
+        arema=spac(15)
+        bares=1
+        phju=1
+        for ti=1 to 95
+            ki(ti)=spac(28)+ spac(13)+spac(10)
+        next
+        for ti=1 to 95
+            di(ti)=spac(2)+spac(10)
+        next
+        for ti=1 to 95
+            ji(ti)='      .  '
+        next
+        wait'SUDAH LUNAS' wind
+        SHOW GETS
+        Return
+     endif
+     sele 3
+     set orde to 1
+     seek kangw
+     if found()
+        nangw=nang
+        mol=ascan(sera,nangw)
+     endif
+     kbrgw=spac(9)
+     sele 2
+     set orde to 1
+     do while nbeli=nbeliw.and.!eof()
+        i=i+1
+        kbrgw=kbrg
+        trf=hbeli
+        jmp=ukecil
+        upe=0
+        hju=0
+        nbrgw=spac(28)
+        mil=0
+        kbn=spac(13)
+        sele 1
+        set orde to 1
+        seek left(kbrgw,6)
+        if found()
+           nbrgw=nbrg
+           kbn=left(barcode,13)
+           hju=hjual
+        endif
+        ki(i)=nbrgw+ kbn + kbrgw + str(trf,10)
+        di(i)=str(upe,2) + str(hju,10)
+        ji(i)=str(jmp,9,2)
+        sele 2
+        set orde to 1
+        skip
+     enddo
+     do braik
+  endif
+endif  
+show gets
+retu
+*
+proc cksup
+sele 3
+set orde to 2
+seek sera(mol)
+if found()
+   kangw=kang
+   nangw=nang
+endif
+show gets
+retu
+*
+proc ceum
+  if  apem=0
+      @39.5,76 clea to 43,110
+  endif
+  if  apem=1
+      @39.5,77 say 'J.T    :'font'Book Antiqua',14 colo rgb(255,255,255,40,54,40)
+      @39.5,94 say 'hari'font'Book Antiqua',14 colo rgb(255,255,255,40,54,40)
+      @39.5,86 get lkew pict'@JZ 999'font'Book Antiqua',14 size 1,5
+      @41.2,77 say 'U.M :'font'Book Antiqua',14 colo rgb(255,255,255,40,54,40)
+      @41.2,86 get umw pict'@JZ 999,999,999'font'Book Antiqua',14 size 1,17
+      read
+  endif
+show gets  
+retu
+*
+proc lbeli1
+para mbar
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE ANGGOTA INDE ANGGOTA1
+SELE 3
+USE BELI INDE BELI1,BELI9
+sele 4
+use lbeli1
+sele 5
+use lbeli2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar pembelian';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,0 to wrows(),wcols() system title'Laporan pembelian' font'arial' clos icon file 'guni.ico'
+acti wind jual4
+store spac(7) to kjua3,kjua4
+if mbar=2
+   store ctod('  /  /  ') to tawal,takhir
+   do cartang
+   kjua3=tawal
+   kjua4=takhir
+endif
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   do case
+   case mbar=1
+      @4.5,6 say 'dari Nota' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'!999999' FONT'Book Antiqua',12 size 1,8
+      @5.7,19 get kjua4 pict'!999999' FONT'Book Antiqua',12 size 1,8
+      urtw='Urut Nota'
+      kond="nbeli>=trim(kjua3).and.nbeli<=trim(kjua4).and.!eof()"
+   case mbar=2
+      @4.5,6 say 'dari Tgl.' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+      @5.7,19 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+      urtw='Urut Tanggal'
+      kond="tbeli>=kjua3.and.tbeli<=kjua4.and.!eof()"
+   endcase
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   tot=0
+   sele 3
+   set orde to mbar
+   if mbar=1
+      seek trim(kjua3)
+      if !found()
+         loop
+      endif
+   else
+      seek left(dtoc(kjua3,1),6)
+      if !found()
+         loop
+      endif
+   endif
+   do while &kond
+      nom=nbeli
+      tanggalw=dtoc(tbeli)
+      kdokw=kang
+      dokterw=spac(20)
+      kodew=left(kbrg,6)
+      obatw=spac(28)
+      hargaw=hbeli
+      jmlw=ukecil
+      totalw=jmlw*hargaw
+      tot=tot+totalw
+      ketw=ket
+      sele 2
+      seek kdokw
+      if found()
+         dokterw=nang 
+      endif
+      sele 1
+      seek kodew
+      if found()
+         obatw=nbrg         
+      endif
+      sele 4
+      appe blan
+      repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+           jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+           tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4)
+      sele 3
+      set orde to mbar
+      skip
+   enddo
+   nord=spac(7)
+   nyar=.t.
+   toja=0
+   tord=0
+   tobe=0
+   tola=0
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      dokterw=dokter
+      kodew=kode
+      obatw=obat
+      jmlw=jml
+      hargaw=harga
+      totalw=total
+      ketw=ket
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+         nyar=.f.
+      else
+         nord=no
+         if !nyar
+            sele 5
+            appe blan
+            repl total with tord, obat with spac(10)+'SUB.TOTAL'
+            appe blan
+         endi
+         tord=totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tord, obat with spac(10)+'SUB.TOTAL'
+   appe blan
+   appe blan
+   repl total with tot, obat with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel dokter:h='Supplier', tanggal, no , kode, obat:h='Item',;
+              jml:p='@Z 99,999.99', harga:p='@Z 99,999,999.9',;
+              total:p='@Z 9,999,999,999.9', ket:h='T/K' wind jual5 noedit nomenu ;
+              title urtw+' '+iif(mbar=2,dtoc(kjua3),trim(kjua3))+' s/d '+iif(mbar=2,dtoc(kjua4),trim(kjua4))
+   case nujl1=2
+        repo form lbelix to print prompt
+   endcase     
+enddo
+deac wind jual4
+do emn
+return
+*
+proc lbeli2
+para mbar
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE ANGGOTA INDE ANGGOTA1
+SELE 3
+USE BELI INDE BELI1,BELI9
+sele 4
+use lbeli1
+sele 5
+use lbeli2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar pembelian tunai / kredit';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,0 to wrows(),wcols() system title'Laporan pembelian' font'arial' clos icon file 'guni.ico'
+acti wind jual4
+store spac(7) to kjua3,kjua4
+if mbar=2
+   store ctod('  /  /  ') to tawal,takhir
+   do cartang
+   kjua3=tawal
+   kjua4=takhir
+endif
+do while.t.
+   clear
+   ??sys(2002,1)
+   tun=0
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   do case
+   case mbar=1
+      @4.5,6 say 'dari Nota' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'B999999' FONT'Book Antiqua',12 size 1,8
+      @5.7,19 get kjua4 pict'B999999' FONT'Book Antiqua',12 size 1,8
+      urtw='Urut Nota'
+      kond="nbeli>=trim(kjua3).and.nbeli<=trim(kjua4).and.!eof()"
+   case mbar=2
+      @4.5,6 say 'dari Tgl.' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+      @5.7,19 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+      urtw='Urut Tanggal'
+      kond="tbeli>=kjua3.and.tbeli<=kjua4.and.!eof()"
+   endcase
+   @4.5,38 get tun func'*C Tunai' font'Arial',12 styl'bi' ;
+    COLOR ,,,,,rgb(0,0,0,166,205,167),rgb(0,0,0,166,205,167),,rgb(0,0,0,166,205,167),rgb(0,0,0,166,205,167)
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   tot=0
+   if tun=1
+      sele 3
+      set orde to mbar
+      if mbar=1
+         seek trim(kjua3)
+         if !found()
+            loop
+         endif
+      else
+         seek left(dtoc(kjua3,1),6)
+         if !found()
+            loop
+         endif
+      endif
+      do while &kond
+         if ket='T'
+            nom=nbeli
+            tanggalw=dtoc(tbeli)
+            kdokw=kang
+            dokterw=spac(20)
+            kodew=left(kbrg,6)
+            obatw=spac(28)
+            hargaw=hbeli
+            jmlw=ukecil
+            totalw=jmlw*hargaw
+            tot=tot+totalw
+            ketw=ket
+            sele 2
+            seek kdokw
+            if found()
+               dokterw=nang 
+            endif
+            sele 1
+            seek kodew
+            if found()
+               obatw=nbrg         
+            endif
+            sele 4
+            appe blan
+            repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+                 jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+                 tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4)
+         endif
+         sele 3
+         set orde to mbar
+         skip
+      enddo
+   else
+      sele 3
+      set orde to mbar
+      if mbar=1
+         seek trim(kjua3)
+         if !found()
+            loop
+         endif
+      else
+         seek left(dtoc(kjua3,1),6)
+         if !found()
+            loop
+         endif
+      endif
+      do while &kond
+         if ket='K'
+            nom=nbeli
+            tanggalw=dtoc(tbeli)
+            kdokw=kang
+            dokterw=spac(20)
+            kodew=left(kbrg,6)
+            obatw=spac(28)
+            hargaw=hbeli
+            jmlw=ukecil
+            totalw=jmlw*hargaw
+            tot=tot+totalw
+            ketw=ket
+            sele 2
+            seek kdokw
+            if found()
+               dokterw=nang 
+            endif
+            sele 1
+            seek kodew
+            if found()
+               obatw=nbrg         
+            endif
+            sele 4
+            appe blan
+            repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+                 jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+                 tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4)
+         endif
+         sele 3
+         set orde to mbar
+         skip
+      enddo
+   endif   
+   nord=spac(7)
+   nyar=.t.
+   toja=0
+   tord=0
+   tobe=0
+   tola=0
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      dokterw=dokter
+      kodew=kode
+      obatw=obat
+      jmlw=jml
+      hargaw=harga
+      totalw=total
+      ketw=ket
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+         nyar=.f.
+      else
+         nord=no
+         if !nyar
+            sele 5
+            appe blan
+            repl total with tord, obat with spac(10)+'SUB.TOTAL'
+            appe blan
+         endi
+         tord=totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tord, obat with spac(10)+'SUB.TOTAL'
+   appe blan
+   appe blan
+   repl total with tot, obat with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel dokter:h='Supplier', tanggal, no , kode, obat:h='Item',;
+              jml:p='@Z 99,999.99', harga:p='@Z 99,999,999.9',;
+              total:p='@Z 9,999,999,999.9', ket:h='T/K' wind jual5 noedit nomenu ;
+              title urtw+' '+iif(mbar=2,dtoc(kjua3),trim(kjua3))+' s/d '+iif(mbar=2,dtoc(kjua4),trim(kjua4))
+   case nujl1=2
+        repo form lbelix to print prompt
+   endcase     
+enddo
+deac wind jual4
+do emn
+return
+*
+proc lbeli3
+para mbar
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE ANGGOTA INDE ANGGOTA1
+SELE 3
+USE BELI INDE BELI1,BELI9
+sele 4
+use lbeli1
+sele 5
+use lbeli2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Rekap pembelian';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,(wcols()-120)/2 to wrows(),((wcols()-120)/2)+120 system title'Rekap pembelian' font'arial' clos icon file 'guni.ico'
+acti wind jual4
+store spac(7) to kjua3,kjua4
+if mbar=2
+   store ctod('  /  /  ') to tawal,takhir
+   do cartang
+   kjua3=tawal
+   kjua4=takhir
+endif
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   do case
+   case mbar=1
+      @4.5,6 say 'dari Nota' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'B999999' FONT'Book Antiqua',12 size 1,8
+      @5.7,19 get kjua4 pict'B999999' FONT'Book Antiqua',12 size 1,8
+      urtw='Urut Nota'
+      kond="nbeli>=trim(kjua3).and.nbeli<=trim(kjua4).and.!eof()"
+   case mbar=2
+      @4.5,6 say 'dari Tgl.' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+      @5.7,19 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+      urtw='Urut Tanggal'
+      kond="dtoc(tbeli,1)>=dtoc(kjua3,1).and.dtoc(tbeli,1)<=dtoc(kjua4,1).and.!eof()"
+   endcase
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   tot=0
+   sele 3
+   set orde to mbar
+   if mbar=1
+      seek trim(kjua3)
+      if !found()
+         loop
+      endif
+   else
+      seek left(dtoc(kjua3,1),6)
+      if !found()
+         loop
+      endif
+   endif
+   do while &kond
+      nom=nbeli
+      tanggalw=dtoc(tbeli)
+      kdokw=kang
+      dokterw=spac(20)
+      kodew=left(kbrg,6)
+      obatw=spac(28)
+      hargaw=hbeli
+      jmlw=ukecil
+      totalw=jmlw*hargaw
+      tot=tot+totalw
+      ketw=ket
+      sele 2
+      seek kdokw
+      if found()
+         dokterw=nang 
+      endif
+      sele 1
+      seek kodew
+      if found()
+         obatw=nbrg         
+      endif
+      sele 4
+      appe blan
+      repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+           jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+           tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4)
+      sele 3
+      set orde to mbar
+      skip
+   enddo
+   nord=spac(7)
+   nyar=.t.
+   tord=0
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      dokterw=dokter
+      kodew=kode
+      obatw=obat
+      jmlw=jml
+      hargaw=harga
+      totalw=total
+      ketw=ket
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         sele 5
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, total with tord,;
+              ket with ketw, tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+      else
+         nord=no
+         tord=totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, total with tord,;
+              ket with ketw, tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tord, obat with spac(10)+'SUB.TOTAL'
+   appe blan
+   appe blan
+   repl total with tot, obat with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel dokter:h='Supplier', tanggal, no ,;
+              total:p='@Z 9,999,999,999.9', ket:h='T/K' wind jual5 noedit nomenu ;
+              title urtw+' '+iif(mbar=2,dtoc(kjua3),trim(kjua3))+' s/d '+iif(mbar=2,dtoc(kjua4),trim(kjua4))
+   case nujl1=2
+        repo form lbelix2 to print prompt
+   endcase     
+enddo
+deac wind jual4
+do emn
+return
+*
+proc lbeli4
+para mbar, abjad
+do dmn
+set cent on
+set dele on
+clos data
+use anggota inde anggota2
+seek abjad
+ko=1
+if found()
+   do while left(nang,1)=abjad.and.!eof()
+      if ko=mbar
+         kangw=kang
+         nangw=nang
+         exit
+      endif
+      ko=ko+1
+      skip
+   enddo   
+endif
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE ANGGOTA INDE ANGGOTA1
+SELE 3
+USE BELI INDE BELI11
+sele 4
+use lbeli1
+sele 5
+use lbeli2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar pembelian / supplier';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,(wcols()-136)/2 to wrows(),((wcols()-136)/2)+136 system title'Laporan pembelian' font'arial' clos icon file 'guni.ico'
+acti wind jual4
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+kjua3=tawal
+kjua4=takhir
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'dari Tgl.' styl'b'
+   @5.7,6 say 's/d.' styl'b'
+   @4.5,19 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @5.7,19 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   tot=0
+   sele 3
+   seek kangw
+   if !found()
+      loop
+   endif   
+   do while kang=kangw.and.!eof()
+      if tbeli>=kjua3.and.tbeli<=kjua4
+         nom=nbeli
+         tanggalw=dtoc(tbeli)
+         kdokw=kang
+         dokterw=spac(20)
+         kodew=left(kbrg,6)
+         obatw=spac(28)
+         hargaw=hbeli
+         jmlw=ukecil
+         totalw=jmlw*hargaw
+         tot=tot+totalw
+         ketw=ket
+         sele 2
+         seek kdokw
+         if found()
+            dokterw=nang 
+         endif
+         sele 1
+         seek kodew
+         if found()
+            obatw=nbrg         
+         endif
+         sele 4
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+      endif
+      sele 3
+      skip
+   enddo
+   nord=spac(7)
+   nyar=.t.
+   tord=0
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      dokterw=dokter
+      kodew=kode
+      obatw=obat
+      jmlw=jml
+      hargaw=harga
+      totalw=total
+      ketw=ket
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+         nyar=.f.
+      else
+         nord=no
+         if !nyar
+            sele 5
+            appe blan
+            repl total with tord, obat with spac(10)+'SUB.TOTAL'
+            appe blan
+         endi
+         tord=totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tord, obat with spac(10)+'SUB.TOTAL'
+   appe blan
+   appe blan
+   repl total with tot, obat with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel tanggal, no , kode, obat:h='Item',;
+              jml:p='@Z 99,999.99', harga:p='@Z 99,999,999.9',;
+              total:p='@Z 9,999,999,999.9', ket:h='T/K' wind jual5 noedit nomenu ;
+              title dokter+' '+dtoc(kjua3)+' - '+dtoc(kjua4)
+   case nujl1=2
+        repo form lbelix1 to print prompt
+   endcase     
+enddo
+deac wind jual4
+do emn
+return
+*
+proc lbeli5
+do dmn
+set cent on
+set dele on
+clos data
+use stok inde stok2
+juk=0
+go top
+do while !eof()
+   juk=juk+1
+   skip   
+enddo
+juk=juk+1
+dime sere(juk)
+j=1
+sere(j)=spac(1)
+go top
+do while !eof()
+   j=j+1
+   sere(j)=nbrg
+   skip   
+enddo
+*
+clos data
+SELE 1
+USE STOK INDE stok1,STOK2
+SELE 2
+USE ANGGOTA INDE ANGGOTA1
+SELE 3
+USE BELI INDE BELIb
+sele 4
+use lbeli1
+sele 5
+use lbeli2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar pembelian / item';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,(wcols()-136)/2 to wrows(),((wcols()-136)/2)+136 system title'Laporan pembelian' font'arial' clos icon file 'guni.ico'
+acti wind jual4
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+kjua3=tawal
+kjua4=takhir
+mel=1
+nbr=spac(28)
+kbr=spac(6)
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'Barang' styl'b'
+   @6.0,6 say 'dari Tgl.' styl'b'
+   @6.0,35 say 's/d.' styl'b'
+   @4.5,17 GET mel PICTURE '@^' from sere vali lb5() size 1,50 font 'Times New Roman'
+   @6.0,17 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @6.0,41 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   sele 3
+   seek kbr
+   if !found()
+      loop
+   endif   
+   hor=recno()
+   go hor
+   do while left(kbrg,6)=kbr.and.!eof()
+      if tbeli>=kjua3.and.tbeli<=kjua4
+         nom=nbeli
+         tanggalw=dtoc(tbeli)
+         kdokw=kang
+         dokterw=spac(20)
+         kodew=left(kbrg,6)
+         obatw=spac(28)
+         hargaw=hbeli
+         jmlw=ukecil
+         totalw=jmlw*hargaw
+         ketw=ket
+         sele 2
+         seek kdokw
+         if found()
+            dokterw=nang 
+         endif
+         sele 1
+         set orde to 1
+         seek trim(kodew)
+         if found()
+            obatw=nbrg         
+         endif
+         sele 4
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+      endif
+      sele 3
+      skip
+   enddo
+*
+   tot=0
+   tot1=0
+   odek=spac(6)
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      dokterw=dokter
+      kodew=left(kode,6)
+      odek=left(kode,6)
+      obatw=obat
+      jmlw=jml
+      hargaw=harga
+      totalw=total
+      ketw=ket
+      if odek=kbr
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, obat with obatw,;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+         tot=tot+total
+         tot1=tot1+jml
+      endif   
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tot, jml with tot1, dokter with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel tanggal, no , dokter:h='Supplier', jml:p='@Z 99,999.99', harga:p='@Z 99,999,999.9',;
+              total:p='@Z 9,999,999,999.9', ket:h='T/K' wind jual5 noedit nomenu ;
+              title kbr+' '+trim(nbr)+' '+dtoc(kjua3)+' - '+dtoc(kjua4)
+   case nujl1=2
+        repo form lbelix3 to print prompt
+   endcase     
+enddo
+deac wind jual4
+rele sere
+do emn
+return
+*
+proc lb5
+   nbr=sere(mel)
+   sele 1
+   seek nbr
+   set orde to 2
+   if found()
+      kbr=left(kbrg,6)
+   else   
+      kbr=spac(6)
+   endif
+show gets
+retu
+*
+*******************************************************************************************************************************
+proc ejual
+do dmn
+set dele on
+KSR=SPAC(3)
+VASMO=SPAC(3)
+VASMO=ASMO
+VASMO=RTRIM(VASMO)
+VASMO=RIGHT(VASMO,1)
+KSR='K-'+VASMO
+SPGW=SPAC(3)
+dime ki(95)
+dime di(95)
+dime ji(95)
+dime serd(4)
+serd(1)=' '
+serd(2)='D'
+serd(3)='Q'
+serd(4)='R'
+clos data
+SELE 1 
+USE STOK INDE STOK1,STOK2,stok6
+SELE 2
+USE JUAL INDE JUAL9,jualg,jualj,juala
+sele 3
+use greet
+sele 4
+use nota
+sele 5
+use cus inde cus1,cus2
+sele 6
+use trans inde trans5
+sele 7
+use pno
+DEFI WIND jual;
+FROM 0,(wcols()-168)/2 to 42,((wcols()-168)/2)+168 system title'Nota penjualan' font'foxprint',9;
+colo rgb(0,0,0,115,110,88)
+DEFI WIND jadi in wind jual FROM 12,15 to 20,70 system titl'Print' colo rgb(0,0,0,40,54,40) font'arial',9 
+defi wind konf in wind jual from 10,28.5 to 21.5,72 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Info'
+acti wind jual
+kdokw=spac(5)
+do while.t.
+  tbeliw=date()
+  nbeliw=spac(7)
+  membara=spac(1)
+  brkl=spac(1)
+  her=1
+  penyu=1
+  store.f. to ono,moleh,teesc,simp
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14,dsc15,dsc16,dsc17,dsc18,dsc19
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19
+  store 1 to dqr1,dqr2,dqr3,dqr4,dqr5,dqr6,dqr7,dqr8,dqr9,dqr10,dqr11,dqr12,dqr13,dqr14,dqr15,dqr16,dqr17,dqr18,dqr19
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19
+  nangw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  kangw=spac(5)
+  kgb=spac(9)
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtem
+  clear
+  ??sys(2002,1)
+  for ti=1 to 95
+    ki(ti)=spac(28)+ spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)='1'+'    .  '
+  next
+  for ti=1 to 95
+    ji(ti)='     1.00'
+  next
+  sele 2
+  set orde to 1
+  if bof()
+      no=750001
+      nrsp=750001
+  else
+      GO BOTT
+      no=val(righ(njual,6))+1
+      if no>999999
+         wait'NOMOR NOTA SUDAH HABIS'wind
+         clos data
+         deac wind jual
+         retu
+      endi
+  endif    
+  nomor=str(no)
+  pjnomor=len(ltrim(nomor))
+  nbeliw=left('J000000',len('J000000')-pjnomor)+ltrim(nomor)
+  tot1=0
+  mula=1
+  hl=1 
+  neks=1
+  nd='1'
+  gne='neks1.bmp'
+  gno='hd1.bmp'
+  do while.t.
+     on key label F10 do simp
+     clear
+     kbrgw=spac(9)
+     nbrgw=spac(28)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     jur1=0
+     ??sys(2002,1)
+     @0,0 say gno bitm
+     @0,7.2 say'he01.bmp'bitm
+     @0,14.3 say'he02.bmp'bitm
+     @0,21.4 say'he03.bmp'bitm
+     @0,28.6 say'he04.bmp'bitm
+     @0,35.7 say'he05.bmp'bitm
+     @0,42.9 say'he06.bmp'bitm
+     @0,50.0 say'he07.bmp'bitm
+     @0,57.2 say'he08.bmp'bitm
+     @0,64.3 say'he09.bmp'bitm
+     @0,71.4 say'he10.bmp'bitm
+     @0,78.6 say'he11.bmp'bitm
+     @0,85.7 say'he12.bmp'bitm
+     @0,92.9 say'he13.bmp'bitm
+     @0,100  say'he14.bmp'bitm
+     @0,107.2 say'he15.bmp'bitm
+     @0,114.3 say'he16.bmp'bitm
+     @0,121.4 say'he17.bmp'bitm
+     @0,128.6 say'he18.bmp'bitm
+     @0,135.7 say'he19.bmp'bitm
+     @41,0 say'menlog.bmp'bitm
+     @41,78.6 say'nisor.bmp'bitm
+     @39.7,127 say gne bitm
+     tot1=0
+     do notal           
+     @0.5,14 GET kangw vali ckcus() PICTURE '!!!!!' size 0.9,7 font 'Book Antiqua',14
+     @0.5,23 get nangw pict'@!' FONT'Book Antiqua',14 size 0.9,38 disa
+     @0.5,80 say nbeliw colo rgb(255,234,58,54,52,42) FONT'Book Antiqua',14 styl'b'
+     @0.5,105 say tbeliw colo rgb(255,234,58,54,52,42)FONT'Book Antiqua',14 styl'b'
+     @0.5,128.4 GET jtem spinner 1,0,200 font'Book Antiqua',12 size 0.9,5 defa 0
+     @6.0,4 GET kbn1 vali cbc1() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @6.0,25 GET kbg1 vali kbc1() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @6.0,37 GET nbg1 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @6.0,74 GET jmp1 PICT'@Jz 999,999.99' vali ckjm1() font'book antiqua',14 size 0.95,10
+     @6.0,87 get trf1 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @6.0,104 GET dqr1 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @6.0,110.5 GET dsc1 vali ckjm1() PICTURE '@Jz 999,999.99' font'Book antiqua',14 size 0.95,10
+     @6.0,124 GET sto1 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @7.5,4 GET kbn2 vali cbc2() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @7.5,25 GET kbg2 vali kbc2() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @7.5,37 GET nbg2 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @7.5,74 GET jmp2 PICT'@Jz 999,999.99' vali ckjm2() font'book antiqua',14 size 0.9,10
+     @7.5,87 get trf2 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @7.5,104 GET dqr2 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @7.5,110.5 GET dsc2 vali ckjm2() PICTURE '@Jz 999,999.99' font'Book antiqua',14 size 0.9,10
+     @7.5,124 GET sto2 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @9.0,4 GET kbn3 vali cbc3() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @9.0,25 GET kbg3 vali kbc3() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @9.0,37 GET nbg3 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @9.0,74 GET jmp3 PICT'@Jz 999,999.99' vali ckjm3() font'Book Antiqua',14 size 0.95,10
+     @9.0,87 get trf3 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @9.0,104 GET dqr3 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @9.0,110.5 GET dsc3 vali ckjm3() PICTURE '@Jz 999,999.99' font 'Book Antiqua',14  size 0.95,10
+     @9.0,124 GET sto3 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @10.5,4 GET kbn4 vali cbc4() picture '!!!!!!!!!!!!!'  font 'Book Antiqua',14 size 0.9,17
+     @10.5,25 GET kbg4 vali kbc4() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @10.5,37 GET nbg4 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @10.5,74 GET jmp4 PICT'@Jz 999,999.99' vali ckjm4() font'Book Antiqua',14 size 0.9,10
+     @10.5,87 get trf4 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @10.5,104 GET dqr4 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @10.5,110.5 GET dsc4 vali ckjm4() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.9,10
+     @10.5,124 GET sto4 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @12.0,4 GET kbn5 vali cbc5() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @12.0,25 GET kbg5 vali kbc5() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @12.0,37 GET nbg5 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @12.0,74 GET jmp5 PICT'@Jz 999,999.99' vali ckjm5() font'Book Antiqua',14 size 0.95,10
+     @12.0,87 get trf5 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @12.0,104 GET dqr5 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @12.0,110.5 GET dsc5 vali ckjm5() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.95,10
+     @12.0,124 GET sto5 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @13.5,4 GET kbn6 vali cbc6() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @13.5,25 GET kbg6 vali kbc6() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @13.5,37 GET nbg6 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @13.5,74 GET jmp6 PICT'@Jz 999,999.99' vali ckjm6() font'Book Antiqua',14 size 0.9,10
+     @13.5,87 get trf6 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @13.5,104 GET dqr6 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @13.5,110.5 GET dsc6 vali ckjm6() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.9,10
+     @13.5,124 GET sto6 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @15.0,4 GET kbn7 vali cbc7() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @15.0,25 GET kbg7 vali kbc7() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @15.0,37 GET nbg7 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @15.0,74 GET jmp7 PICT'@Jz 999,999.99' vali ckjm7() font'Book Antiqua',14 size 0.95,10
+     @15.0,87 get trf7 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @15.0,104 GET dqr7 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @15.0,110.5 GET dsc7 vali ckjm7() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @15.0,124 GET sto7 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @16.5,4 GET kbn8 vali cbc8() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @16.5,25 GET kbg8 vali kbc8() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @16.5,37 GET nbg8 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @16.5,74 GET jmp8 PICT'@Jz 999,999.99' vali ckjm8() font'Book Antiqua',14 size 0.9,10
+     @16.5,87 get trf8 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @16.5,104 GET dqr8 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @16.5,110.5 GET dsc8 vali ckjm8() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @16.5,124 GET sto8 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @18.0,4 GET kbn9 vali cbc9() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @18.0,25 GET kbg9 vali kbc9() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @18.0,37 GET nbg9 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @18.0,74 GET jmp9 PICT'@Jz 999,999.99' vali ckjm9() font'Book Antiqua',14 size 0.95,10
+     @18.0,87 get trf9 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @18.0,104 GET dqr9 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @18.0,110.5 GET dsc9 vali ckjm9() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.95,10
+     @18.0,124 GET sto9 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @19.5,4 GET kbn10 vali cbc10() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @19.5,25 GET kbg10 vali kbc10() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @19.5,37 GET nbg10 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @19.5,74 GET jmp10 PICT'@Jz 999,999.99' vali ckjm10() font'Book Antiqua',14 size 0.9,10
+     @19.5,87 get trf10 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @19.5,104 GET dqr10 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @19.5,110.5 GET dsc10 vali ckjm10() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @19.5,124 GET sto10 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @21.0,4 GET kbn11 vali cbc11() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @21.0,25 GET kbg11 vali kbc11() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @21.0,37 GET nbg11 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @21.0,74 GET jmp11 PICT'@Jz 999,999.99' vali ckjm11() font'Book Antiqua',14 size 0.95,10
+     @21.0,87 get trf11 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @21.0,104 GET dqr11 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @21.0,110.5 GET dsc11 vali ckjm11() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @21.0,124 GET sto11 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @22.5,4 GET kbn12 vali cbc12() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @22.5,25 GET kbg12 vali kbc12() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @22.5,37 GET nbg12 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @22.5,74 GET jmp12 PICT'@Jz 999,999.99' vali ckjm12() font'Book Antiqua',14 size 0.9,10
+     @22.5,87 get trf12 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @22.5,104 GET dqr12 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @22.5,110.5 GET dsc12 vali ckjm12() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @22.5,124 GET sto12 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @24.0,4 GET kbn13 vali cbc13() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @24.0,25 GET kbg13 vali kbc13() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @24.0,37 GET nbg13 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @24.0,74 GET jmp13 PICT'@Jz 999,999.99' vali ckjm13() font'Book Antiqua',14 size 0.95,10
+     @24.0,87 get trf13 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @24.0,104 GET dqr13 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @24.0,110.5 GET dsc13 vali ckjm13() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @24.0,124 GET sto13 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @25.5,4 GET kbn14 vali cbc14() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @25.5,25 GET kbg14 vali kbc14() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @25.5,37 GET nbg14 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @25.5,74 GET jmp14 PICT'@Jz 999,999.99' vali ckjm14() font'Book Antiqua',14 size 0.9,10
+     @25.5,87 get trf14 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @25.5,104 GET dqr14 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @25.5,110.5 GET dsc14 vali ckjm14() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @25.5,124 GET sto14 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @27.0,4 GET kbn15 vali cbc15() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @27.0,25 GET kbg15 vali kbc15() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @27.0,37 GET nbg15 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @27.0,74 GET jmp15 PICT'@Jz 999,999.99' vali ckjm15() font'Book Antiqua',14 size 0.95,10
+     @27.0,87 get trf15 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @27.0,104 GET dqr15 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @27.0,110.5 GET dsc15 vali ckjm15() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @27.0,124 GET sto15 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @28.5,4 GET kbn16 vali cbc16() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @28.5,25 GET kbg16 vali kbc16() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @28.5,37 GET nbg16 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @28.5,74 GET jmp16 PICT'@Jz 999,999.99' vali ckjm16() font'Book Antiqua',14 size 0.9,10
+     @28.5,87 get trf16 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @28.5,104 GET dqr16 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @28.5,110.5 GET dsc16 vali ckjm16() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @28.5,124 GET sto16 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @30.0,4 GET kbn17 vali cbc17() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @30.0,25 GET kbg17 vali kbc17() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @30.0,37 GET nbg17 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @30.0,74 GET jmp17 PICT'@Jz 999,999.99' vali ckjm17() font'Book Antiqua',14 size 0.95,10
+     @30.0,87 get trf17 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @30.0,104 GET dqr17 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @30.0,110.5 GET dsc17 vali ckjm17() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @30.0,124 GET sto17 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @31.5,4 GET kbn18 vali cbc18() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @31.5,25 GET kbg18 vali kbc18() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+     @31.5,37 GET nbg18 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+     @31.5,74 GET jmp18 PICT'@Jz 999,999.99' vali ckjm18() font'Book Antiqua',14 size 0.9,10
+     @31.5,87 get trf18 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @31.5,104 GET dqr18 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @31.5,110.5 GET dsc18 vali ckjm18() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @31.5,124 GET sto18 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @33.0,4 GET kbn19 vali cbc19() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @33.0,25 GET kbg19 vali kbc19() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+     @33.0,37 GET nbg19 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+     @33.0,74 GET jmp19 PICT'@Jz 999,999.99' vali ckjm19() font'Book Antiqua',14 size 0.95,10
+     @33.0,87 get trf19 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+     @33.0,104 GET dqr19 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @33.0,110.5 GET dsc19 vali ckjm19() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @33.0,124 GET sto19 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @39.8,127.1 get neks PICTURE '@*IHT ;' font 'Arial',9 size 2.6,8,3.4
+     @35,0 get jur1 PICTURE '@*IHT ;;' font 'Arial',9 size 5,16,2 default 0 
+     read cycl
+     if read()=12.or.jur1=3
+        if simp
+           exit
+        endi
+        teesc=.t.
+        exit
+     endif
+     if jur1=2
+       acti wind konf
+       @0,0 say 'free.bmp'bitm
+       @0,30 say 'free1.bmp'bitm
+       @7.6,24 get hpz PICTURE '@*HT OK' font'Arial' size 1.8,12,1 default 0
+       read
+       deac wind konf
+     endif
+     do case
+     case neks=1
+        if hl>1
+           do saveki
+           hl=hl-1
+           do slmula
+           do uraiki
+           nd=str(hl,1)   
+           gne='neks'+nd+'.bmp'
+           gno='hd'+nd+'.bmp'
+        endif
+     case neks=2
+        if hl<5
+           do saveki
+           hl=hl+1
+           do slmula
+           do uraiki
+           nd=str(hl,1)   
+           gne='neks'+nd+'.bmp'
+           gno='hd'+nd+'.bmp'
+        endif
+     endcase
+     if jur1=1
+       boyor=tot1
+       @39.6,103 get boyor pict'@z 99,999,999' font'foxprint',14
+       read
+       sele 7
+       dele all
+       sele 2
+       set orde to 1
+       seek nbeliw
+       if found()
+          go bott
+          no=val(righ(njual,6))+1
+          nomor=str(no)
+          pjnomor=len(ltrim(nomor))
+          nbeliw=left('J000000',len('J000000')-pjnomor)+ltrim(nomor)
+       endif
+       tot1=0
+       mlo=.f.
+       for mi=1 to 95
+         mmr=0
+         if left(ki(mi),28)<>spac(28)
+           mlo=.t.
+           lem=left(ki(mi),28)
+           brc=subs(ki(mi),7,13)
+           ukecilw=val(left(ji(mi),9))
+           rqd=val(left(di(mi),1))
+           jasaw=val(righ(di(mi),7))
+           hbeliw=val(righ(ki(mi),10))
+           jose=0
+           do case
+           case rqd=0
+                totbw=hbeliw*ukecilw
+           case rqd=1
+                totbw=hbeliw*ukecilw
+           case rqd=2
+                jose=jasaw/100 
+                totbw=hbeliw*ukecilw
+                totbw=totbw-(totbw*jose)
+           case rqd=3
+                totbw=(ukecilw-jasaw)*hbeliw
+           case rqd=4
+                totbw=(hbeliw-jasaw)*ukecilw
+           endcase
+           tot1=tot1+totbw
+           barang=lem
+           tdw=serd(rqd)
+           kbrgw=spac(9)
+           nmacus=' '
+           alacus=' '
+           sele 1
+           set orde to 2
+           seek barang
+           if found()
+              kbrgw=kbrg
+           endif
+           sele 1
+           set orde to 1
+           seek kbrgw
+           if found()
+              repl ukecil with ukecil-ukecilw
+           endif
+           sele 5
+           set orde to 1
+           seek kangw
+           if found()
+              nmacus=nang
+              alacus=alang
+           endif
+           mmr=mmr+1
+           sele 2
+           set orde to 1
+           appe blan
+           REPL NJUAL WITH Nbeliw,TJUAL WITH Tbeliw,;
+                Kbrg WITH Kbrgw,ukecil WITH Ukecilw, op with iif(jtem=0,'T','K'),;
+                HJUAL WITH Hbeliw,TOTB WITH TOTBW,SPG WITH SPGW, kang with kangw,;
+                DS WITH jasaw,KS WITH KSR,TD WITH tdw,period with wayah, ke with jtem
+           sele 7
+           appe blan
+           REPL nota WITH Nbeliw,tanggal WITH dtoc(tbeliw), kode WITH Kbrgw, barang with lem, qty WITH Ukecilw, harga WITH Hbeliw,;
+                total WITH TOTBW, id with kangw, nama with nmacus, alamat with alacus, DSc WITH jasaw
+         endif       
+       next
+       susuke=0
+       if boyor-tot1>-1.and.boyor-tot1<0
+          susuke=0
+       else   
+          susuke=boyor-tot1
+       endif
+       @41,107 say susuke pict'@z 99,999,999' font'Book Antiqua',14 styl'b' colo rgb(255,255,255,115,110,88)
+       if mlo
+          sele 7
+          appe blan
+          REPL kode WITH '*', total WITH TOT1, barang with SPAC(10)+'T O T A L'
+          appe blan
+          REPL kode WITH '*'
+          sele 6
+          bukw=righ(nbeliw,6)
+          seek bukw
+          if !found()
+             if jtem=0
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '4101', perkiraan with 'Penjualan Barang',;
+                    uraian with nangw, kredit with totbw, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '1111', perkiraan with 'Kas',;
+                    uraian with nangw, debet with totbw, ttrans with tbeliw
+             else       
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '4101', perkiraan with 'Penjualan Barang',;
+                    uraian with nangw, kredit with totbw, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '1131', perkiraan with 'Piutang Barang pada anggota',;
+                    uraian with nangw, debet with totbw, ttrans with tbeliw
+             endi       
+          endif
+          sele 2
+          set orde to 1
+*          acti wind jadi
+*          @0,0 say'prnt.bmp'bitm
+*          @0,25.4 say'prnt1.bmp'bitm
+*          @0,50.8 say'prnt2.bmp'bitm
+*          @0.2,27 get jek PICTURE '@*IHT ;' font 'Arial',9 size 5.7,24,0 default 0 
+*           read
+*          deac wind jadi
+*          if jek=1
+             sele 7
+             go top
+             repo form pno to prin prom
+*          endif
+       endif   
+       exit
+     endif  
+  enddo
+  on key label F10
+  if teesc
+     exit
+  endif
+enddo
+clos data
+set readb off
+deac wind jual
+rele ki
+rele di
+rele ji
+rele serd
+do emn
+retu
+*
+proc simp
+retu
+*
+proc edjual
+do dmn
+set dele on
+simp=.f.
+dime ki(95)
+dime di(95)
+dime ji(95)
+dime serd(4)
+dime oq(95)
+serd(1)=' '
+serd(2)='D'
+serd(3)='Q'
+serd(4)='R'
+CLOS DATA
+SELE 1 
+USE STOK INDE STOK1,STOK2,stok6
+SELE 2
+USE JUAL INDE JUAL9,jualg,jualj,juala
+sele 3
+use greet
+sele 4
+use nota
+sele 5
+use cus inde cus1,cus2
+sele 6
+use trans inde trans5
+SELE 7
+USE PNO
+DEFI WIND jual;
+FROM 0,(wcols()-168)/2 to 42,((wcols()-168)/2)+168 system title'Edit Penjualan' font'foxprint',9;
+colo rgb(0,0,0,115,110,88)
+DEFI WIND jadi in wind jual FROM 12,15 to 20,70 system titl'Print' colo rgb(0,0,0,40,54,40) font'arial',9 
+defi wind konf in wind jual from 10,28.5 to 21.5,72 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind jual
+kdokw=spac(5)
+do while.t.
+  her=2
+  kangw=spac(5)
+  nangw=spac(28)
+  tbeliw=date()
+  nbeliw=spac(7)
+  membara=spac(1)
+  brkl=spac(1)
+  store.f. to ono,moleh,teesc
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14,dsc15,dsc16,dsc17,dsc18,dsc19
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19
+  store 1 to dqr1,dqr2,dqr3,dqr4,dqr5,dqr6,dqr7,dqr8,dqr9,dqr10,dqr11,dqr12,dqr13,dqr14,dqr15,dqr16,dqr17,dqr18,dqr19
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19
+  ndokw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  bares=1
+  phju=1
+  penyu=2
+  ksr=SPAC(3)
+  spgw=SPAC(3)
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo,jtem
+  clear
+  ??sys(2002,1)
+  for ti=1 to 95
+    ki(ti)=spac(28)+ spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)='1'+'    .  '
+  next
+  for ti=1 to 95
+    ji(ti)='     1.00'
+  next
+  kgb=spac(9)
+  nsama=spac(7)
+  tot1=0
+  mula=1
+  hl=1 
+  neks=1
+  nd='1'
+  gne='neks1.bmp'
+  gno='hd1.bmp'
+  do while.t.
+     clear
+     kbrgw=spac(9)
+     nbrgw=spac(28)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     jur1=0
+     ??sys(2002,1)
+     @0,0 say gno bitm
+     @0,7.2 say'he01.bmp'bitm
+     @0,14.3 say'he02.bmp'bitm
+     @0,21.4 say'he03.bmp'bitm
+     @0,28.6 say'he04.bmp'bitm
+     @0,35.7 say'he05.bmp'bitm
+     @0,42.9 say'he06.bmp'bitm
+     @0,50.0 say'he07.bmp'bitm
+     @0,57.2 say'he08.bmp'bitm
+     @0,64.3 say'he09.bmp'bitm
+     @0,71.4 say'he10.bmp'bitm
+     @0,78.6 say'he11.bmp'bitm
+     @0,85.7 say'he12.bmp'bitm
+     @0,92.9 say'he13.bmp'bitm
+     @0,100  say'he14.bmp'bitm
+     @0,107.2 say'he15.bmp'bitm
+     @0,114.3 say'he16.bmp'bitm
+     @0,121.4 say'he17.bmp'bitm
+     @0,128.6 say'he18.bmp'bitm
+     @0,135.7 say'he19.bmp'bitm
+     @41,0 say'menlog.bmp'bitm
+     @41,78.6 say'nisor.bmp'bitm
+     @39.7,127 say gne bitm
+     tot1=0
+     do notal           
+     IF ASMO<>'BOS'
+        @0.5,14 GET kangw vali ckcus() PICTURE '!!!!!' size 0.9,7 font 'Book Antiqua',14
+        @0.5,23 get nangw pict'@!' FONT'Book Antiqua',14 size 0.9,38 disa
+        @0.5,80 get nbeliw pict'!!!!!!!' vali cajual() colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 0.97,9
+        @0.5,104 get tbeliw colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 0.9,13.5
+        @0.5,128.4 GET jtem spinner 1,0,200 font'Book Antiqua',12 size 0.9,5 defa 0
+        @6.0,4 GET kbn1 vali cbc1() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @6.0,25 GET kbg1 vali kbc1() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @6.0,37 GET nbg1 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @6.0,74 GET jmp1 PICT'@Jz 999,999.99' vali ckjm1() font'book antiqua',14 size 0.95,10 disa
+        @6.0,87 get trf1 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @6.0,104 GET dqr1 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @6.0,110.5 GET dsc1 vali ckjm1() PICTURE '@Jz 999,999.99' font'Book antiqua',14 size 0.95,10
+        @6.0,124 GET sto1 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @7.5,4 GET kbn2 vali cbc2() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @7.5,25 GET kbg2 vali kbc2() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @7.5,37 GET nbg2 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @7.5,74 GET jmp2 PICT'@Jz 999,999.99' vali ckjm2() font'book antiqua',14 size 0.9,10 disa
+        @7.5,87 get trf2 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @7.5,104 GET dqr2 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @7.5,110.5 GET dsc2 vali ckjm2() PICTURE '@Jz 999,999.99' font'Book antiqua',14 size 0.9,10
+        @7.5,124 GET sto2 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @9.0,4 GET kbn3 vali cbc3() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @9.0,25 GET kbg3 vali kbc3() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @9.0,37 GET nbg3 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @9.0,74 GET jmp3 PICT'@Jz 999,999.99' vali ckjm3() font'Book Antiqua',14 size 0.95,10 disa
+        @9.0,87 get trf3 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @9.0,104 GET dqr3 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @9.0,110.5 GET dsc3 vali ckjm3() PICTURE '@Jz 999,999.99' font 'Book Antiqua',14  size 0.95,10
+        @9.0,124 GET sto3 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @10.5,4 GET kbn4 vali cbc4() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @10.5,25 GET kbg4 vali kbc4() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @10.5,37 GET nbg4 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @10.5,74 GET jmp4 PICT'@Jz 999,999.99' vali ckjm4() font'Book Antiqua',14 size 0.9,10 disa
+        @10.5,87 get trf4 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @10.5,104 GET dqr4 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @10.5,110.5 GET dsc4 vali ckjm4() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.9,10
+        @10.5,124 GET sto4 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @12.0,4 GET kbn5 vali cbc5() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @12.0,25 GET kbg5 vali kbc5() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @12.0,37 GET nbg5 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @12.0,74 GET jmp5 PICT'@Jz 999,999.99' vali ckjm5() font'Book Antiqua',14 size 0.95,10 disa
+        @12.0,87 get trf5 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @12.0,104 GET dqr5 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @12.0,110.5 GET dsc5 vali ckjm5() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.95,10
+        @12.0,124 GET sto5 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @13.5,4 GET kbn6 vali cbc6() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @13.5,25 GET kbg6 vali kbc6() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @13.5,37 GET nbg6 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @13.5,74 GET jmp6 PICT'@Jz 999,999.99' vali ckjm6() font'Book Antiqua',14 size 0.9,10 disa
+        @13.5,87 get trf6 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @13.5,104 GET dqr6 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @13.5,110.5 GET dsc6 vali ckjm6() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.9,10
+        @13.5,124 GET sto6 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @15.0,4 GET kbn7 vali cbc7() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @15.0,25 GET kbg7 vali kbc7() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @15.0,37 GET nbg7 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @15.0,74 GET jmp7 PICT'@Jz 999,999.99' vali ckjm7() font'Book Antiqua',14 size 0.95,10 disa
+        @15.0,87 get trf7 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @15.0,104 GET dqr7 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @15.0,110.5 GET dsc7 vali ckjm7() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @15.0,124 GET sto7 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @16.5,4 GET kbn8 vali cbc8() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @16.5,25 GET kbg8 vali kbc8() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @16.5,37 GET nbg8 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @16.5,74 GET jmp8 PICT'@Jz 999,999.99' vali ckjm8() font'Book Antiqua',14 size 0.9,10 disa
+        @16.5,87 get trf8 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @16.5,104 GET dqr8 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @16.5,110.5 GET dsc8 vali ckjm8() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @16.5,124 GET sto8 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @18.0,4 GET kbn9 vali cbc9() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @18.0,25 GET kbg9 vali kbc9() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @18.0,37 GET nbg9 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @18.0,74 GET jmp9 PICT'@Jz 999,999.99' vali ckjm9() font'Book Antiqua',14 size 0.95,10 disa
+        @18.0,87 get trf9 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @18.0,104 GET dqr9 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @18.0,110.5 GET dsc9 vali ckjm9() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.95,10
+        @18.0,124 GET sto9 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @19.5,4 GET kbn10 vali cbc10() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @19.5,25 GET kbg10 vali kbc10() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @19.5,37 GET nbg10 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @19.5,74 GET jmp10 PICT'@Jz 999,999.99' vali ckjm10() font'Book Antiqua',14 size 0.9,10 disa
+        @19.5,87 get trf10 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @19.5,104 GET dqr10 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @19.5,110.5 GET dsc10 vali ckjm10() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @19.5,124 GET sto10 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @21.0,4 GET kbn11 vali cbc11() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @21.0,25 GET kbg11 vali kbc11() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @21.0,37 GET nbg11 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @21.0,74 GET jmp11 PICT'@Jz 999,999.99' vali ckjm11() font'Book Antiqua',14 size 0.95,10 disa
+        @21.0,87 get trf11 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @21.0,104 GET dqr11 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @21.0,110.5 GET dsc11 vali ckjm11() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @21.0,124 GET sto11 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @22.5,4 GET kbn12 vali cbc12() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @22.5,25 GET kbg12 vali kbc12() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @22.5,37 GET nbg12 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @22.5,74 GET jmp12 PICT'@Jz 999,999.99' vali ckjm12() font'Book Antiqua',14 size 0.9,10 disa
+        @22.5,87 get trf12 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @22.5,104 GET dqr12 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @22.5,110.5 GET dsc12 vali ckjm12() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @22.5,124 GET sto12 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @24.0,4 GET kbn13 vali cbc13() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @24.0,25 GET kbg13 vali kbc13() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @24.0,37 GET nbg13 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @24.0,74 GET jmp13 PICT'@Jz 999,999.99' vali ckjm13() font'Book Antiqua',14 size 0.95,10 disa
+        @24.0,87 get trf13 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @24.0,104 GET dqr13 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @24.0,110.5 GET dsc13 vali ckjm13() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @24.0,124 GET sto13 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @25.5,4 GET kbn14 vali cbc14() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @25.5,25 GET kbg14 vali kbc14() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @25.5,37 GET nbg14 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @25.5,74 GET jmp14 PICT'@Jz 999,999.99' vali ckjm14() font'Book Antiqua',14 size 0.9,10 disa
+        @25.5,87 get trf14 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @25.5,104 GET dqr14 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @25.5,110.5 GET dsc14 vali ckjm14() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @25.5,124 GET sto14 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @27.0,4 GET kbn15 vali cbc15() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @27.0,25 GET kbg15 vali kbc15() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @27.0,37 GET nbg15 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @27.0,74 GET jmp15 PICT'@Jz 999,999.99' vali ckjm15() font'Book Antiqua',14 size 0.95,10 disa
+        @27.0,87 get trf15 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @27.0,104 GET dqr15 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @27.0,110.5 GET dsc15 vali ckjm15() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @27.0,124 GET sto15 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @28.5,4 GET kbn16 vali cbc16() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @28.5,25 GET kbg16 vali kbc16() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @28.5,37 GET nbg16 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @28.5,74 GET jmp16 PICT'@Jz 999,999.99' vali ckjm16() font'Book Antiqua',14 size 0.9,10 disa
+        @28.5,87 get trf16 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @28.5,104 GET dqr16 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @28.5,110.5 GET dsc16 vali ckjm16() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @28.5,124 GET sto16 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @30.0,4 GET kbn17 vali cbc17() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @30.0,25 GET kbg17 vali kbc17() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @30.0,37 GET nbg17 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @30.0,74 GET jmp17 PICT'@Jz 999,999.99' vali ckjm17() font'Book Antiqua',14 size 0.95,10 disa
+        @30.0,87 get trf17 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @30.0,104 GET dqr17 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @30.0,110.5 GET dsc17 vali ckjm17() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @30.0,124 GET sto17 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @31.5,4 GET kbn18 vali cbc18() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @31.5,25 GET kbg18 vali kbc18() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @31.5,37 GET nbg18 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @31.5,74 GET jmp18 PICT'@Jz 999,999.99' vali ckjm18() font'Book Antiqua',14 size 0.9,10 disa
+        @31.5,87 get trf18 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @31.5,104 GET dqr18 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @31.5,110.5 GET dsc18 vali ckjm18() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @31.5,124 GET sto18 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @33.0,4 GET kbn19 vali cbc19() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @33.0,25 GET kbg19 vali kbc19() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @33.0,37 GET nbg19 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @33.0,74 GET jmp19 PICT'@Jz 999,999.99' vali ckjm19() font'Book Antiqua',14 size 0.95,10 disa
+        @33.0,87 get trf19 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @33.0,104 GET dqr19 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @33.0,110.5 GET dsc19 vali ckjm19() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @33.0,124 GET sto19 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @39.8,127.1 get neks PICTURE '@*IHT ;' font 'Arial',9 size 2.6,8,3.4
+        @35,0 get jur1 PICTURE '@*IHT ;;' font 'Arial',9 size 5,16,2 default 0 
+     ELSE
+        @0.5,14 GET kangw vali ckcus() PICTURE '!!!!!' size 0.9,7 font 'Book Antiqua',14
+        @0.5,23 get nangw pict'@!' FONT'Book Antiqua',14 size 0.9,38 disa
+        @0.5,80 get nbeliw pict'!!!!!!!' vali cajual() colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 0.97,9
+        @0.5,104 get tbeliw colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 0.9,13.5
+        @0.5,128.4 GET jtem spinner 1,0,200 font'Book Antiqua',12 size 0.9,5 defa 0
+        @6.0,4 GET kbn1 vali cbc1() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @6.0,25 GET kbg1 vali kbc1() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @6.0,37 GET nbg1 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @6.0,74 GET jmp1 PICT'@Jz 999,999.99' vali ckjm1() font'book antiqua',14 size 0.95,10
+        @6.0,87 get trf1 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @6.0,104 GET dqr1 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @6.0,110.5 GET dsc1 vali ckjm1() PICTURE '@Jz 999,999.99' font'Book antiqua',14 size 0.95,10
+        @6.0,124 GET sto1 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @7.5,4 GET kbn2 vali cbc2() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @7.5,25 GET kbg2 vali kbc2() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @7.5,37 GET nbg2 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @7.5,74 GET jmp2 PICT'@Jz 999,999.99' vali ckjm2() font'book antiqua',14 size 0.9,10
+        @7.5,87 get trf2 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @7.5,104 GET dqr2 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @7.5,110.5 GET dsc2 vali ckjm2() PICTURE '@Jz 999,999.99' font'Book antiqua',14 size 0.9,10
+        @7.5,124 GET sto2 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @9.0,4 GET kbn3 vali cbc3() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @9.0,25 GET kbg3 vali kbc3() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @9.0,37 GET nbg3 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @9.0,74 GET jmp3 PICT'@Jz 999,999.99' vali ckjm3() font'Book Antiqua',14 size 0.95,10
+        @9.0,87 get trf3 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @9.0,104 GET dqr3 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @9.0,110.5 GET dsc3 vali ckjm3() PICTURE '@Jz 999,999.99' font 'Book Antiqua',14  size 0.95,10
+        @9.0,124 GET sto3 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @10.5,4 GET kbn4 vali cbc4() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @10.5,25 GET kbg4 vali kbc4() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @10.5,37 GET nbg4 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @10.5,74 GET jmp4 PICT'@Jz 999,999.99' vali ckjm4() font'Book Antiqua',14 size 0.9,10
+        @10.5,87 get trf4 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @10.5,104 GET dqr4 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @10.5,110.5 GET dsc4 vali ckjm4() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.9,10
+        @10.5,124 GET sto4 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @12.0,4 GET kbn5 vali cbc5() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @12.0,25 GET kbg5 vali kbc5() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @12.0,37 GET nbg5 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @12.0,74 GET jmp5 PICT'@Jz 999,999.99' vali ckjm5() font'Book Antiqua',14 size 0.95,10
+        @12.0,87 get trf5 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @12.0,104 GET dqr5 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @12.0,110.5 GET dsc5 vali ckjm5() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.95,10
+        @12.0,124 GET sto5 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @13.5,4 GET kbn6 vali cbc6() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @13.5,25 GET kbg6 vali kbc6() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @13.5,37 GET nbg6 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @13.5,74 GET jmp6 PICT'@Jz 999,999.99' vali ckjm6() font'Book Antiqua',14 size 0.9,10
+        @13.5,87 get trf6 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @13.5,104 GET dqr6 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @13.5,110.5 GET dsc6 vali ckjm6() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.9,10
+        @13.5,124 GET sto6 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @15.0,4 GET kbn7 vali cbc7() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @15.0,25 GET kbg7 vali kbc7() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @15.0,37 GET nbg7 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @15.0,74 GET jmp7 PICT'@Jz 999,999.99' vali ckjm7() font'Book Antiqua',14 size 0.95,10
+        @15.0,87 get trf7 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @15.0,104 GET dqr7 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @15.0,110.5 GET dsc7 vali ckjm7() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @15.0,124 GET sto7 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @16.5,4 GET kbn8 vali cbc8() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @16.5,25 GET kbg8 vali kbc8() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @16.5,37 GET nbg8 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @16.5,74 GET jmp8 PICT'@Jz 999,999.99' vali ckjm8() font'Book Antiqua',14 size 0.9,10
+        @16.5,87 get trf8 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @16.5,104 GET dqr8 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @16.5,110.5 GET dsc8 vali ckjm8() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @16.5,124 GET sto8 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @18.0,4 GET kbn9 vali cbc9() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @18.0,25 GET kbg9 vali kbc9() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @18.0,37 GET nbg9 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @18.0,74 GET jmp9 PICT'@Jz 999,999.99' vali ckjm9() font'Book Antiqua',14 size 0.95,10
+        @18.0,87 get trf9 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @18.0,104 GET dqr9 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @18.0,110.5 GET dsc9 vali ckjm9() PICTURE '@Jz 999,999.99' font'Book Antiqua',14  size 0.95,10
+        @18.0,124 GET sto9 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @19.5,4 GET kbn10 vali cbc10() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @19.5,25 GET kbg10 vali kbc10() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @19.5,37 GET nbg10 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @19.5,74 GET jmp10 PICT'@Jz 999,999.99' vali ckjm10() font'Book Antiqua',14 size 0.9,10
+        @19.5,87 get trf10 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @19.5,104 GET dqr10 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @19.5,110.5 GET dsc10 vali ckjm10() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @19.5,124 GET sto10 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @21.0,4 GET kbn11 vali cbc11() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @21.0,25 GET kbg11 vali kbc11() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @21.0,37 GET nbg11 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @21.0,74 GET jmp11 PICT'@Jz 999,999.99' vali ckjm11() font'Book Antiqua',14 size 0.95,10
+        @21.0,87 get trf11 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @21.0,104 GET dqr11 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @21.0,110.5 GET dsc11 vali ckjm11() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @21.0,124 GET sto11 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @22.5,4 GET kbn12 vali cbc12() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @22.5,25 GET kbg12 vali kbc12() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @22.5,37 GET nbg12 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @22.5,74 GET jmp12 PICT'@Jz 999,999.99' vali ckjm12() font'Book Antiqua',14 size 0.9,10
+        @22.5,87 get trf12 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @22.5,104 GET dqr12 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @22.5,110.5 GET dsc12 vali ckjm12() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @22.5,124 GET sto12 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @24.0,4 GET kbn13 vali cbc13() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @24.0,25 GET kbg13 vali kbc13() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @24.0,37 GET nbg13 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @24.0,74 GET jmp13 PICT'@Jz 999,999.99' vali ckjm13() font'Book Antiqua',14 size 0.95,10
+        @24.0,87 get trf13 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @24.0,104 GET dqr13 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @24.0,110.5 GET dsc13 vali ckjm13() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @24.0,124 GET sto13 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @25.5,4 GET kbn14 vali cbc14() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @25.5,25 GET kbg14 vali kbc14() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @25.5,37 GET nbg14 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @25.5,74 GET jmp14 PICT'@Jz 999,999.99' vali ckjm14() font'Book Antiqua',14 size 0.9,10
+        @25.5,87 get trf14 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @25.5,104 GET dqr14 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @25.5,110.5 GET dsc14 vali ckjm14() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @25.5,124 GET sto14 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @27.0,4 GET kbn15 vali cbc15() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @27.0,25 GET kbg15 vali kbc15() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @27.0,37 GET nbg15 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @27.0,74 GET jmp15 PICT'@Jz 999,999.99' vali ckjm15() font'Book Antiqua',14 size 0.95,10
+        @27.0,87 get trf15 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @27.0,104 GET dqr15 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @27.0,110.5 GET dsc15 vali ckjm15() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @27.0,124 GET sto15 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @28.5,4 GET kbn16 vali cbc16() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @28.5,25 GET kbg16 vali kbc16() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @28.5,37 GET nbg16 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @28.5,74 GET jmp16 PICT'@Jz 999,999.99' vali ckjm16() font'Book Antiqua',14 size 0.9,10
+        @28.5,87 get trf16 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @28.5,104 GET dqr16 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @28.5,110.5 GET dsc16 vali ckjm16() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @28.5,124 GET sto16 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @30.0,4 GET kbn17 vali cbc17() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @30.0,25 GET kbg17 vali kbc17() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @30.0,37 GET nbg17 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @30.0,74 GET jmp17 PICT'@Jz 999,999.99' vali ckjm17() font'Book Antiqua',14 size 0.95,10
+        @30.0,87 get trf17 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @30.0,104 GET dqr17 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @30.0,110.5 GET dsc17 vali ckjm17() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @30.0,124 GET sto17 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @31.5,4 GET kbn18 vali cbc18() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+        @31.5,25 GET kbg18 vali kbc18() picture '@!' font 'Book Antiqua',14 size 0.9,9.5
+        @31.5,37 GET nbg18 PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.4 disa
+        @31.5,74 GET jmp18 PICT'@Jz 999,999.99' vali ckjm18() font'Book Antiqua',14 size 0.9,10
+        @31.5,87 get trf18 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @31.5,104 GET dqr18 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @31.5,110.5 GET dsc18 vali ckjm18() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+        @31.5,124 GET sto18 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @33.0,4 GET kbn19 vali cbc19() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+        @33.0,25 GET kbg19 vali kbc19() picture '@!' font 'Book Antiqua',14 size 0.95,9.5
+        @33.0,37 GET nbg19 PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.4 disa
+        @33.0,74 GET jmp19 PICT'@Jz 999,999.99' vali ckjm19() font'Book Antiqua',14 size 0.95,10
+        @33.0,87 get trf19 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b'
+        @33.0,104 GET dqr19 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+        @33.0,110.5 GET dsc19 vali ckjm19() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+        @33.0,124 GET sto19 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+        @39.8,127.1 get neks PICTURE '@*IHT ;' font 'Arial',9 size 2.6,8,3.4
+        @35,0 get jur1 PICTURE '@*IHT ;;' font 'Arial',9 size 5,16,2 default 0 
+     ENDIF
+     read
+     if read()=12.or.jur1=3
+        teesc=.t.
+        exit
+     endif
+     do case
+     case neks=1
+        if hl>1
+           do saveki
+           hl=hl-1
+           do slmula
+           do uraiki
+           nd=str(hl,1)   
+           gne='neks'+nd+'.bmp'
+           gno='hd'+nd+'.bmp'
+        endif
+     case neks=2
+        if hl<5
+           do saveki
+           hl=hl+1
+           do slmula
+           do uraiki
+           nd=str(hl,1)   
+           gne='neks'+nd+'.bmp'
+           gno='hd'+nd+'.bmp'
+        endif
+     endcase
+     if jur1=1
+       boyor=tot1
+       @39.6,103 get boyor pict'@z 99,999,999' font'foxprint',14
+       read
+       etq=0
+       sele 7
+       dele all
+       sele 6
+       bukw=righ(nbeliw,6)
+       seek bukw
+       if found()
+          do while bukti=bukw.and.!eof()
+             dele
+             skip
+          enddo
+       endif
+       sele 2
+       set orde to 1
+       seek nbeliw
+       norek=recno()
+       go norek
+       do whil njual=nbeliw.and.!eof()
+          kodew=kbrg
+          kurang=ukecil
+          etq=etq+1
+          oq(etq)=left(kodew,6)+str(kurang,9,2)+td+str(ds,6,2)
+          sele 1
+          set orde to 1
+          seek left(kodew,6)
+          if found()
+             repl ukecil with ukecil+kurang
+          endif   
+          sele 2
+          set orde to 1
+          dele
+          skip
+       enddo
+       tot1=0
+       mlo=.f.
+       for mi=1 to 95
+         mmr=0
+         if left(ki(mi),28)<>spac(28)
+           mlo=.t.
+           lem=left(ki(mi),28)
+           brc=subs(ki(mi),7,13)
+           ukecilw=val(left(ji(mi),9))
+           rqd=val(left(di(mi),1))
+           jasaw=val(righ(di(mi),7))
+           hbeliw=val(righ(ki(mi),10))
+           ton=spac(1)
+           jose=0
+           nmacus=' '
+           alacus=' '
+           do case
+           case rqd=0
+                totbw=hbeliw*ukecilw
+           case rqd=1
+                totbw=hbeliw*ukecilw
+           case rqd=2
+                jose=jasaw/100 
+                totbw=hbeliw*ukecilw
+                totbw=totbw-(totbw*jose)
+           case rqd=3
+                totbw=(ukecilw-jasaw)*hbeliw
+           case rqd=4
+                totbw=(hbeliw-jasaw)*ukecilw
+           endcase
+           tot1=tot1+totbw
+           barang=lem
+           tdw=serd(rqd)
+           kbrgw=spac(9)
+           sele 1
+           set orde to 2
+           seek barang
+           if found()
+              kbrgw=kbrg
+           endif
+           CARI=ASCAN(oq,left(Kbrgw,6))
+           IF CARI !=0
+              if left(kbrgw,6)+str(ukecilw,9,2)+tdw+str(jasaw,6,2)#oq(cari)
+                 ton='E'
+              endif
+           endif
+           sele 1
+           set orde to 1
+           seek kbrgw
+           if found()
+              repl ukecil with ukecil-ukecilw
+           endif
+           sele 5
+           set orde to 1
+           seek kangw
+           if found()
+              nmacus=nang
+              alacus=alang
+           endif
+           mmr=mmr+1
+           sele 2
+           set orde to 1
+           appe blan
+           REPL NJUAL WITH iif(ukecilw<0,'R'+righ(Nbeliw,6),Nbeliw),;
+                TJUAL WITH Tbeliw, Kbrg WITH Kbrgw,ukecil WITH Ukecilw,;
+                HJUAL WITH Hbeliw,TOTB WITH TOTBW,SPG WITH SPGW,;
+                DS WITH jasaw,KS WITH KSR,TD WITH tdw,period with wayah,;
+                EDIT WITH ton, TEDIT WITH DATE(), oleh with asmo,;
+                op with iif(jtem=0,'T','K'), kang with kangw, ke with jtem
+           sele 7
+           appe blan
+           REPL nota WITH Nbeliw,tanggal WITH dtoc(tbeliw), kode WITH Kbrgw, barang with lem, qty WITH Ukecilw, harga WITH Hbeliw,;
+                total WITH TOTBW, id with kangw, nama with nmacus, alamat with alacus, DSc WITH jasaw
+         endif       
+       next
+       susuke=0
+       if boyor-tot1>-1.and.boyor-tot1<0
+          susuke=0
+       else   
+          susuke=boyor-tot1
+       endif
+       @41,107 say susuke pict'@z 99,999,999' font'Book Antiqua',14 styl'b' colo rgb(255,255,255,115,110,88)
+       if mlo
+          sele 7
+          appe blan
+          REPL kode WITH '*', total WITH TOT1, barang with SPAC(10)+'T O T A L'
+          appe blan
+          REPL kode WITH '*'
+          sele 6
+          bukw=righ(nbeliw,6)
+          seek bukw
+          if !found()
+             if jtem=0
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '4101', perkiraan with 'Penjualan Barang',;
+                    uraian with nangw, kredit with totbw, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '1111', perkiraan with 'Kas',;
+                    uraian with nangw, debet with totbw, ttrans with tbeliw
+             else       
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '4101', perkiraan with 'Penjualan Barang',;
+                    uraian with nangw, kredit with totbw, ttrans with tbeliw
+               appe blan
+               repl bukti with bukw, kang with kangw, no_perk with '1131', perkiraan with 'Piutang Barang pada anggota',;
+                    uraian with nangw, debet with totbw, ttrans with tbeliw
+             endi       
+          endif
+          sele 2
+          set orde to 1
+*          acti wind jadi
+*          @0,0 say'prnt.bmp'bitm
+*          @0,25.4 say'prnt1.bmp'bitm
+*          @0,50.8 say'prnt2.bmp'bitm
+*          @0.2,27 get jek PICTURE '@*IHT ;' font 'Arial',9 size 5.7,24,0 default 0 
+*           read
+*          deac wind jadi
+*          if jek=1
+             sele 7
+             go top
+             repo form pno to prin prom
+*          endif
+       endif   
+       exit
+     endif  
+     if jur1=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 1.8,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 6
+          bukw=righ(nbeliw,6)
+          seek bukw
+          if found()
+             do while bukti=bukw.and.!eof()
+                dele
+                skip
+             enddo
+          endif
+          sele 2
+          set orde to 1
+          seek nbeliw
+          norek=recno()
+          go norek
+          do whil njual=nbeliw.and.!eof()
+             kodew=kbrg
+             kurang=ukecil
+             sele 1
+             set orde to 1
+             seek left(kodew,6)
+             if found()
+                repl ukecil with ukecil+kurang
+             endif   
+             sele 2
+             set orde to 1
+             dele
+             skip
+          enddo
+       endif
+       exit
+     endif
+  enddo
+  if teesc
+     exit
+  endif
+enddo
+clos data
+set readb off
+deac wind jual
+rele ki
+rele di
+rele ji
+rele serd
+rele oq
+do emn
+retu
+*
+proc cajual
+if nsama=nbeliw
+  nsama=nsama
+else  
+  nsama=nbeliw
+  tbeliw=date()
+  membara=spac(1)
+  kangw=spac(5)
+  nangw=spac(28)
+  store.f. to ono,moleh,teesc
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19,mel20
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19,sto20
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14,dsc15,dsc16,dsc17,dsc18,dsc19,dsc20
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19,trf20
+  store 1 to dqr1,dqr2,dqr3,dqr4,dqr5,dqr6,dqr7,dqr8,dqr9,dqr10,dqr11,dqr12,dqr13,dqr14,dqr15,dqr16,dqr17,dqr18,dqr19,dqr20
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19,jmp20
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19,kbn20
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19,kbg20
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19,nbg20
+  ndokw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  bares=1
+  phju=1
+  ksr=SPAC(3)
+  spgw=SPAC(3)
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo,jtem,mol
+  for ti=1 to 95
+    ki(ti)=spac(28)+ spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)='1'+'    .  '
+  next
+  for ti=1 to 95
+    ji(ti)='     1.00'
+  next
+  sele 2
+  set orde to 1
+  seek nbeliw
+  if found()
+     i=0
+     tbeliw=tjual
+     spgw=spg
+     ksr=ks
+     kbrgw=spac(9)
+     kangw=kang
+     jtem=ke
+     sele 5
+     set orde to 1
+     seek kangw
+     if found()
+        nangw=nang
+     endif
+     sele 2
+     set orde to 1
+     do while njual=nbeliw.and.!eof()
+        i=i+1
+        kbrgw=kbrg
+        trf=hjual
+        jmp=ukecil
+        dqr=ascan(serd,td)
+        dsc=ds
+        nbrgw=spac(28)
+        mil=0
+        kbn=spac(13)
+        sele 1
+        set orde to 1
+        seek kbrgw
+        if found()
+           nbrgw=nbrg
+           kbn=left(barcode,13)
+        endif
+        ki(i)=nbrgw+ kbn + kbrgw + str(trf,10)
+        di(i)=str(dqr,1) + str(dsc,7,2)
+        ji(i)=str(jmp,9,2)
+        sele 2
+        set orde to 1
+        skip
+     enddo
+     do uraiki
+  endif
+endif  
+show gets
+retu
+*
+proc cajual
+if nsama=nbeliw
+  nsama=nsama
+else  
+  nsama=nbeliw
+  tbeliw=date()
+  membara=spac(1)
+  kangw=spac(5)
+  nangw=spac(28)
+  store.f. to ono,moleh,teesc
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19,mel20
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19,sto20
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14,dsc15,dsc16,dsc17,dsc18,dsc19,dsc20
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19,trf20
+  store 1 to dqr1,dqr2,dqr3,dqr4,dqr5,dqr6,dqr7,dqr8,dqr9,dqr10,dqr11,dqr12,dqr13,dqr14,dqr15,dqr16,dqr17,dqr18,dqr19,dqr20
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19,jmp20
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19,kbn20
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19,kbg20
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19,nbg20
+  ndokw=spac(30)
+*  alam=spac(30)
+  arema=spac(15)
+  bares=1
+  phju=1
+  ksr=SPAC(3)
+  spgw=SPAC(3)
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo,jtem,mol
+  for ti=1 to 95
+    ki(ti)=spac(28)+ spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)='1'+'    .  '
+  next
+  for ti=1 to 95
+    ji(ti)='     1.00'
+  next
+  sele 2
+  set orde to 1
+  seek nbeliw
+  if found()
+     i=0
+     tbeliw=tjual
+     spgw=spg
+     ksr=ks
+     kbrgw=spac(9)
+     kangw=kang
+     jtem=ke
+     sele 5
+     set orde to 1
+     seek kangw
+     if found()
+        nangw=nang
+     endif
+     sele 2
+     set orde to 1
+     do while njual=nbeliw.and.!eof()
+        i=i+1
+        kbrgw=kbrg
+        trf=hjual
+        jmp=ukecil
+        dqr=ascan(serd,td)
+        dsc=ds
+        nbrgw=spac(28)
+        mil=0
+        kbn=spac(13)
+        sele 1
+        set orde to 1
+        seek kbrgw
+        if found()
+           nbrgw=nbrg
+           kbn=left(barcode,13)
+        endif
+        ki(i)=nbrgw+ kbn + kbrgw + str(trf,10)
+        di(i)=str(dqr,1) + str(dsc,7,2)
+        ji(i)=str(jmp,9,2)
+        sele 2
+        set orde to 1
+        skip
+     enddo
+     do uraiki
+  endif
+endif  
+show gets
+retu
+*
+proc tukbar
+do dmn
+Set dele on
+CLOS DATA
+SET EXCL OFF
+simp=.f.
+KSR=SPAC(3)
+VASMO=SPAC(3)
+VASMO=ASMO
+VASMO=RTRIM(VASMO)
+VASMO=RIGHT(VASMO,1)
+KSR='K-'+VASMO
+SPGW=SPAC(3)
+dime qi(95)
+dime ki(95)
+dime di(95)
+dime ji(95)
+dime serd(4)
+serd(1)=' '
+serd(2)='D'
+serd(3)='Q'
+serd(4)='R'
+CLOS DATA
+SELE 1 
+USE STOK INDE STOK1,STOK2,stok6
+SELE 2
+USE JUAL INDE JUAL9, JUALA
+sele 3
+use greet
+sele 4
+use nota
+DEFI WIND jual;
+FROM 0,(wcols()-154)/2 to 42,((wcols()-154)/2)+154 system title'Penukaran barang' font'foxprint',9;
+colo rgb(0,0,0,40,54,40)
+DEFI WIND jadi in wind jual FROM 12,15 to 20,70 system titl'Print' colo rgb(0,0,0,40,54,40) font'arial',9 
+defi wind konf in wind jual from 10,28.5 to 21.5,72 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Info'
+acti wind jual
+kdokw=spac(5)
+do while.t.
+  tbeliw=date()
+  store spac(7) to nbeliw, ntukba, nolaw
+  membara=spac(1)
+  brkl=spac(1)
+  her=1 
+  store.f. to ono,moleh,teesc
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14,mel15,mel16,mel17,mel18,mel19
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14,sto15,sto16,sto17,sto18,sto19
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14,dsc15,dsc16,dsc17,dsc18,dsc19
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14,trf15,trf16,trf17,trf18,trf19
+  store 1 to dqr1,dqr2,dqr3,dqr4,dqr5,dqr6,dqr7,dqr8,dqr9,dqr10,dqr11,dqr12,dqr13,dqr14,dqr15,dqr16,dqr17,dqr18,dqr19
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp13,jmp14,jmp15,jmp16,jmp17,jmp18,jmp19
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9,kbn10,kbn11,kbn12,kbn13,kbn14,kbn15,kbn16,kbn17,kbn18,kbn19
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14,kbg15,kbg16,kbg17,kbg18,kbg19
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14,nbg15,nbg16,nbg17,nbg18,nbg19
+  store spac(28) to bbg1,bbg2,bbg3,bbg4,bbg5,bbg6,bbg7,bbg8,bbg9,bbg10,bbg11,bbg12,bbg13,bbg14,bbg15,bbg16,bbg17,bbg18,bbg19
+  store 1 to msde,hl,mula
+  ndokw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo,totlws
+  clear
+  ??sys(2002,1)
+  for ti=1 to 95
+    ki(ti)=spac(28)+spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)='1'+'    .  '
+  next
+  for ti=1 to 95
+    ji(ti)='     1.00'
+  next
+  for ti=1 to 95
+    qi(ti)=' '
+  next
+  defi popup adn from 1,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+  for konter=1 to 95
+      DEFINE BAR konter OF adn PROMPT qi(konter)
+  next konter
+  nsama=spac(7)
+  do while.t.
+     clear
+     kbrgw=spac(9)
+     nbrgw=spac(28)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     ??sys(2002,1)
+     @0,0 say 'ta00.bmp' bitm
+     @0,7.2 say'ta01.bmp'bitm
+     @0,14.3 say'ta02.bmp'bitm
+     @0,21.4 say'ta03.bmp'bitm
+     @0,28.6 say'ta04.bmp'bitm
+     @0,35.7 say'ta05.bmp'bitm
+     @0,42.9 say'ta06.bmp'bitm
+     @0,50.0 say'ta07.bmp'bitm
+     @0,57.2 say'ta08.bmp'bitm
+     @0,64.3 say'ta09.bmp'bitm
+     @0,71.4 say'ta10.bmp'bitm
+     @0,78.6 say'ta11.bmp'bitm
+     @0,85.7 say'ta12.bmp'bitm
+     @0,92.9 say'ta13.bmp'bitm
+     @0,100  say'ta14.bmp'bitm
+     @0,107.2 say'ta15.bmp'bitm
+     @0,114.3 say'ta16.bmp'bitm
+     @0,121.4 say'ta17.bmp'bitm
+     @0,128.6 say'ta18.bmp'bitm
+     @41,0 say'mtrlog.bmp'bitm
+     @41,64.3 say'bott.bmp'bitm
+     tot1=0
+     @0.4,14 get nbeliw pict'!999999' vali catuk() colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 1,9.5
+     @0.4,41.8 get tbeliw colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 size 1,13
+     @0.4,71 get ksr colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 styl'b'size 1,4
+     @0.4,86 get SPGW colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 styl'b'size 1,4
+     @0.4,110 get totlws pict'@z 9,999,999,999' colo rgb(0,0,0,166,205,167)FONT'Book Antiqua',14 styl'b' disa
+     @3.3,1 GET msde vali cekqi() POPUP adn FUNCTION '&' SIZE 11,90.5 font'Courier New',12 defa 1
+     @21.0,3 GET kbn1 vali cbb1() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @21.0,24.5 GET bbg1 vali cbba1() PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.5
+     @21.0,61.5 GET jmp1 PICT'@Jz 999,999.99' vali tbjm1() font'Book Antiqua',14 size 0.95,10
+     @21.0,75 get trf1 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @21.0,92 GET dqr1 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @21.0,97.5 GET dsc1 vali tbjm1() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @21.0,111 GET sto1 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @22.5,3 GET kbn2 vali cbb2() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @22.5,24.5 GET bbg2 vali cbba2() PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.5
+     @22.5,61.5 GET jmp2 PICT'@Jz 999,999.99' vali tbjm2() font'Book Antiqua',14 size 0.9,10
+     @22.5,75 get trf2 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @22.5,92 GET dqr2 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @22.5,97.5 GET dsc2 vali tbjm2() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @22.5,111 GET sto2 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @24.0,3 GET kbn3 vali cbb3() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @24.0,24.5 GET bbg3 vali cbba3() PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.5
+     @24.0,61.5 GET jmp3 PICT'@Jz 999,999.99' vali tbjm3() font'Book Antiqua',14 size 0.95,10
+     @24.0,75 get trf3 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @24.0,92 GET dqr3 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @24.0,97.5 GET dsc3 vali tbjm3() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @24.0,111 GET sto3 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @25.5,3 GET kbn4 vali cbb4() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @25.5,24.5 GET bbg4 vali cbba4() PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.5
+     @25.5,61.5 GET jmp4 PICT'@Jz 999,999.99' vali tbjm4() font'Book Antiqua',14 size 0.9,10
+     @25.5,75 get trf4 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @25.5,92 GET dqr4 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @25.5,97.5 GET dsc4 vali tbjm4() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @25.5,111 GET sto4 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @27.0,3 GET kbn5 vali cbb5() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @27.0,24.5 GET bbg5 vali cbba5() PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.5
+     @27.0,61.5 GET jmp5 PICT'@Jz 999,999.99' vali tbjm5() font'Book Antiqua',14 size 0.95,10
+     @27.0,75 get trf5 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @27.0,92 GET dqr5 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @27.0,97.5 GET dsc5 vali tbjm5() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @27.0,111 GET sto5 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @28.5,3 GET kbn6 vali cbb6() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @28.5,24.5 GET bbg6 vali cbba6() PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.5
+     @28.5,61.5 GET jmp6 PICT'@Jz 999,999.99' vali tbjm6() font'Book Antiqua',14 size 0.9,10
+     @28.5,75 get trf6 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @28.5,92 GET dqr6 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @28.5,97.5 GET dsc6 vali tbjm6() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @28.5,111 GET sto6 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @30.0,3 GET kbn7 vali cbb7() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @30.0,24.5 GET bbg7 vali cbba7() PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.5
+     @30.0,61.5 GET jmp7 PICT'@Jz 999,999.99' vali tbjm7() font'Book Antiqua',14 size 0.95,10
+     @30.0,75 get trf7 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @30.0,92 GET dqr7 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @30.0,97.5 GET dsc7 vali tbjm7() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @30.0,111 GET sto7 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @31.5,3 GET kbn8 vali cbb8() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.9,17
+     @31.5,24.5 GET bbg8 vali cbba8() PICTURE '@!' font 'Book Antiqua',12 size 1.05,35.5
+     @31.5,61.5 GET jmp8 PICT'@Jz 999,999.99' vali tbjm8() font'Book Antiqua',14 size 0.9,10
+     @31.5,75 get trf8 size 0.9,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @31.5,92 GET dqr8 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @31.5,97.5 GET dsc8 vali tbjm8() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.9,10
+     @31.5,111 GET sto8 size 0.9,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @33.0,3 GET kbn9 vali cbb9() picture '!!!!!!!!!!!!!' font 'Book Antiqua',14 size 0.95,17
+     @33.0,24.5 GET bbg9 vali cbba9() PICTURE '@!' font 'Book Antiqua',12 size 1.1,35.5
+     @33.0,61.5 GET jmp9 PICT'@Jz 999,999.99' vali tbjm9() font'Book Antiqua',14 size 0.95,10
+     @33.0,75 get trf9 size 0.95,12 PICTURE '@z 999,999,999' font'Book Antiqua',14 style'b' disa
+     @33.0,92 GET dqr9 PICTURE '@^' from serd size 1,7 font 'Times New Roman'
+     @33.0,97.5 GET dsc9 vali tbjm9() PICTURE '@Jz 999,999.99' font'Book Antiqua',14 size 0.95,10
+     @33.0,111 GET sto9 size 0.95,14 PICTURE '@z 9,999,999,999' font'Book Antiqua',14 styl'b' disa
+     @35,0 get jur1 PICTURE '@*IHT ;;' font 'Arial',9 size 5,16,2 default 0 
+     read
+     if read()=12.or.jur1=3
+        teesc=.t.
+        exit
+     endif
+     if jur1=2
+       acti wind konf
+       @0,0 say 'free.bmp'bitm
+       @0,30 say 'free1.bmp'bitm
+       @7.6,24 get hpz PICTURE '@*HT OK' font'Arial' size 1.8,12,1 default 0
+       read
+       deac wind konf
+     endif
+     boyor=tot1
+     if jur1=1
+       @39.6,88 get boyor pict'@z 99,999,999' font'foxprint',14
+       read
+       ntukba='G'+righ(nbeliw,6)
+       endif
+       tot1=0
+       mlo=.f.
+       for mi=1 to 9
+         mmr=0
+         if left(ki(mi),28)<>spac(28)
+           mlo=.t.
+           bbg=left(ki(mi),27)
+           brc=subs(ki(mi),7,13)
+           ukecilw=val(left(ji(mi),9))
+           rqd=val(left(di(mi),1))
+           jasaw=val(righ(di(mi),7))
+           hbeliw=val(righ(ki(mi),10))
+           jose=0
+           do case
+           case rqd=0
+                totbw=hbeliw*ukecilw
+           case rqd=1
+                totbw=hbeliw*ukecilw
+           case rqd=2
+                jose=jasaw/100 
+                totbw=hbeliw*ukecilw
+                totbw=totbw-(totbw*jose)
+           case rqd=3
+                totbw=(abs(ukecilw)-jasaw)*hbeliw
+                totbw=iif(ukecilw<0,totbw*-1,totbw)
+           case rqd=4
+                totbw=(hbeliw-jasaw)*ukecilw
+           endcase
+           tot1=tot1+totbw
+           barang=bbg
+           tdw=serd(rqd)
+           kbrgw=spac(9)
+           sele 1
+           set orde to 2
+           seek barang
+           if found()
+              kbrgw=kbrg
+           endif
+           sele 1
+           set orde to 1
+           seek kbrgw
+           if found()
+              repl ukecil with ukecil-ukecilw
+           endif
+           mmr=mmr+1
+           sele 2
+           set orde to 1
+           appe blan
+           REPL NJUAL WITH ntukba,TJUAL WITH Tbeliw,;
+                Kbrg WITH Kbrgw,ukecil WITH Ukecilw,;
+                HJUAL WITH Hbeliw,TOTB WITH TOTBW,SPG WITH SPGW,;
+                DS WITH jasaw,KS WITH KSR,TD WITH tdw,period with wayah
+         endif       
+       next
+       @41,93 say boyor-tot1 pict'@z 99,999,999' font'Book Antiqua',14 styl'b' colo rgb(255,255,255,40,54,40)
+       if mlo
+          acti wind jadi
+          @0,0 say'prnt.bmp'bitm
+          @0,25.4 say'prnt1.bmp'bitm
+          @0,50.8 say'prnt2.bmp'bitm
+          @0.2,27 get jek PICTURE '@*IHT ;' font 'Arial',9 size 5.7,24,0 default 0 
+           read
+          deac wind jadi
+          if jek=1
+             nolaw=nbeliw
+             nbeliw=ntukba
+             do prtuba
+             nbeliw=nolaw         
+          endif
+       endif   
+       exit
+     endif  
+  enddo
+  if teesc
+     exit
+  endif
+enddo
+set readb off
+deac wind jual
+rele ki
+rele di
+rele qi
+rele ji
+rele serd
+clos data
+do emn
+retu
+*
+proc catuk
+if nsama=nbeliw
+  nsama=nsama
+else  
+  nsama=nbeliw
+  tbeliw=date()
+  membara=spac(1)
+  brkl=spac(1)
+  store.f. to ono,moleh,teesc
+  store 1 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9
+  store 1 to dqr1,dqr2,dqr3,dqr4,dqr5,dqr6,dqr7,dqr8,dqr9
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9
+  store spac(13) to kbn1,kbn2,kbn3,kbn4,kbn5,kbn6,kbn7,kbn8,kbn9
+  store spac(9) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9
+  store spac(28) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9
+  store spac(28) to bbg1,bbg2,bbg3,bbg4,bbg5,bbg6,bbg7,bbg8,bbg9
+  ndokw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo
+  for ti=1 to 95
+    ki(ti)=spac(28)+spac(13)+spac(10)
+  next
+  for ti=1 to 95
+    di(ti)='1'+'    .  '
+  next
+  for ti=1 to 95
+    ji(ti)='     1.00'
+  next
+  sele 2
+  SET ORDE TO 1
+  SEEK nbeliw
+  if found()
+     reo=recno() 
+     i=0
+     tbeliw=tjual
+     spgw=spg
+     @0.1,57 say 'tksr.bmp' bitm
+     @0.5,58 say ks FONT'Arial',12 styl'b' colo rgb(40,40,40,166,205,167)
+     kbrgw=spac(9)
+     totlws=0
+     sele 2
+     SET  ORDE TO 1
+     go reo
+     do while njual=nbeliw.and.!eof()
+        i=i+1
+        kbrgw=kbrg
+        trf=hjual
+        jmp=ukecil
+        dsc=ds
+        tdw=td
+        yos=0
+        DO CASE
+        CASE TDW=' '
+          totbw=totb
+        CASE TDW='D'
+          yos=dsc/100 
+          totbw=trf*jmp
+          totbw=totbw-(totbw*yos)
+        CASE TDW='Q'
+          totbw=(abs(jmp)-dsc)*trf
+          totbw=iif(jmp<0,totbw*-1,totbw)
+        CASE TDW='R'
+          totbw=(trf-dsc)*jmp
+        ENDCASE
+        totlws=totlws+totbw
+        nbrgw=spac(28)
+        kbn=spac(13)
+        sele 1
+        set orde to 1
+        seek kbrgw
+        if found()
+           nbrgw=left(nbrg,27)
+           kbn=left(barcode,13)
+        endif                             && 42                   51
+        qi(i)=kbn+spac(1)+nbrgw+spac(1)+str(jmp,7,2)+spac(2)+tran(trf,'@Jz 99,999,999')+;
+              spac(2)+tdw+spac(2)+str(dsc,7,2)+spac(2)+tran(totbw,'@Jz 999,999,999')+spac(5)+kbrgw
+        DEFINE BAR i OF adn PROMPT qi(i)
+        sele 2
+        SET  ORDE TO 1
+        skip
+     enddo
+     i=i+1
+     for ti=i to 95
+         qi(ti)=' '
+         DEFINE BAR ti OF adn PROMPT qi(ti)
+     next
+  endif
+endif  
+show gets
+retu
+*
+proc cekqi
+Nbrgw=subs(qi(msde),15,27)
+jmp=val(subs(qi(msde),42,7))*-1
+tdw=subs(qi(msde),64,1)
+dsc=val(subs(qi(msde),67,7))
+kbn=left(qi(msde),13)
+lbrgd=righ(qi(msde),9)
+lbrg=left(lbrgd,6)
+store 0 to trf,sto,dqr
+do case
+case tdw=' '
+   dqr=1
+case tdw='D'
+   dqr=2
+case tdw='Q'
+   dqr=3
+case tdw='R'
+   dqr=4
+endcase
+sele 1
+set orde to 1
+SEEK lbrg
+if found()
+   trf=hjual
+endif
+DO CASE
+CASE dqr=1
+     sto=trf*jmp
+CASE dqr=2
+     yos=dsc/100 
+     sto=trf*jmp
+     sto=sto-(sto*yos)
+CASE dqr=3
+     sto=(abs(jmp)-dsc)*trf
+     sto=iif(jmp<0,sto*-1,sto)
+CASE dqr=4
+     sto=(trf-dsc)*jmp
+ENDCASE
+   do case
+   case bbg1=spac(28)
+     kbn1=kbn
+     bbg1=nbrgw
+     jmp1=jmp
+     trf1=trf
+     dqr1=dqr
+     dsc1=dsc
+     sto1=sto   
+     ki(1) = bbg1 + kbn1 + kbg1 + str(trf1,10)
+     di(1) = str(dqr1,1) + str(dsc1,7,2)
+     ji(1) = str(jmp1,9,2)
+   case bbg2==spac(28)
+     kbn2=kbn
+     bbg2=nbrgw
+     jmp2=jmp
+     trf2=trf
+     dqr2=dqr
+     dsc2=dsc
+     sto2=sto   
+     ki(2) = bbg2 + kbn2 + kbg2 + str(trf2,10)
+     di(2) = str(dqr2,1) + str(dsc2,7,2)
+     ji(2) = str(jmp2,9,2)
+   case bbg3==spac(28)
+     kbn3=kbn
+     bbg3=nbrgw
+     jmp3=jmp
+     trf3=trf
+     dqr3=dqr
+     dsc3=dsc
+     sto3=sto   
+     ki(3) = bbg3 + kbn3 + kbg3 + str(trf3,10)
+     di(3) = str(dqr3,1) + str(dsc3,7,2)
+     ji(3) = str(jmp3,9,2)
+   case bbg4==spac(28)
+     kbn4=kbn
+     bbg4=nbrgw
+     jmp4=jmp
+     trf4=trf
+     dqr4=dqr
+     dsc4=dsc
+     sto4=sto   
+     ki(4) = bbg4 + kbn4 + kbg4 + str(trf4,10)
+     di(4) = str(dqr4,1) + str(dsc4,7,2)
+     ji(4) = str(jmp4,9,2)
+   case bbg5==spac(28)
+     kbn5=kbn
+     bbg5=nbrgw
+     jmp5=jmp
+     trf5=trf
+     dqr5=dqr
+     dsc5=dsc
+     sto5=sto   
+     ki(5) = bbg5 + kbn5 + kbg5 + str(trf5,10)
+     di(5) = str(dqr5,1) + str(dsc5,7,2)
+     ji(5) = str(jmp5,9,2)
+   case bbg6==spac(28)
+     kbn6=kbn
+     bbg6=nbrgw
+     jmp6=jmp
+     trf6=trf
+     dqr6=dqr
+     dsc6=dsc
+     sto6=sto   
+     ki(6) = bbg6 + kbn6 + kbg6 + str(trf6,10)
+     di(6) = str(dqr6,1) + str(dsc6,7,2)
+     ji(6) = str(jmp6,9,2)
+   case bbg7==spac(28)
+     kbn7=kbn
+     bbg7=nbrgw
+     jmp7=jmp
+     trf7=trf
+     dqr7=dqr
+     dsc7=dsc
+     sto7=sto   
+     ki(7) = bbg7 + kbn7 + kbg7 + str(trf7,10)
+     di(7) = str(dqr7,1) + str(dsc7,7,2)
+     ji(7) = str(jmp7,9,2)
+   case bbg8==spac(28)
+     kbn8=kbn
+     bbg8=nbrgw
+     jmp8=jmp
+     trf8=trf
+     dqr8=dqr
+     dsc8=dsc
+     sto8=sto   
+     ki(8) = bbg8 + kbn8 + kbg8 + str(trf8,10)
+     di(8) = str(dqr8,1) + str(dsc8,7,2)
+     ji(8) = str(jmp8,9,2)
+   case bbg9==spac(28)
+     kbn9=kbn
+     bbg9=nbrgw
+     jmp9=jmp
+     trf9=trf
+     dqr9=dqr
+     dsc9=dsc
+     sto9=sto   
+     ki(9) = bbg9 + kbn9 + kbg9 + str(trf9,10)
+     di(9) = str(dqr9,1) + str(dsc9,7,2)
+     ji(9) = str(jmp9,9,2)
+   endcase
+   jmp=1
+show gets
+retu
+*
+proc ckcus
+kag=spac(5)
+if cextr(kangw)
+   setri=''
+   for rq=1 to 5
+       if subs(kangw,rq,1) $ '0123456789'
+       else   
+          setri=setri+subs(kangw,rq,1)
+       endif
+   next    
+   do dftcos with setri
+   if last()=27
+      kangw=spac(5)
+      nangw=spac(30)
+      alam=spac(30)
+      show gets
+      retu
+   endi
+   sele 5
+   set orde to 1
+   seek kag
+   if found().and.kag<>spac(5)
+      kangw=kang
+      nangw=nang
+      alam=nins
+   else   
+      kangw=spac(5)
+      nangw=spac(30)
+      alam=spac(30)
+   endif   
+else
+   sele 5
+   set orde to 1
+   seek kangw
+   if found()
+      kangw=kang
+      nangw=nang
+      alam=nins
+   else   
+      kangw=spac(5)
+      nangw=spac(30)
+      alam=spac(30)
+   endif
+endif
+show gets
+retu
+*
+proc tagihan
+param mbar
+*do dmn
+set dele on
+periw=left(dtoc(tgskr,1),6)
+do case
+case righ(periw,2)='01'
+     bulan='Januari '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='02'
+     bulan='Pebruari '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='03'
+     bulan='Maret '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='04'
+     bulan='April '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='05'
+     bulan='Mei '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='06'
+     bulan='Juni '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='07'
+     bulan='Juli '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='08'
+     bulan='Agustus '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='09'
+     bulan='September '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='10'
+     bulan='Oktober '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='11'
+     bulan='Nopember '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='12'
+     bulan='Desember '+left(dtoc(tgskr,1),4)
+endcase
+tgpriw=righ(dtoc(tgskr,1),2)+' '+bulan
+clos data
+sele 1
+use instansi inde inst2
+sele 2
+use cus inde cus3
+sele 3
+use jual inde juali
+sele 4
+use hut inde hut3
+sele 5
+use tagih
+dele all
+sele 6
+use ztag inde ztag1
+instansiw=instan(mbar)
+sele 1
+seek instansiw
+if found()
+   kodew=kins
+   sele 2
+   seek kodew
+   if found()
+      do while kins=kodew.and.!eof()
+         nom=kang
+         namaw=nang
+         hedr=1
+         sele 5
+         appe blan
+         repl kode with kodew, instansi with instansiw, no with nom, nama with namaw, ab with 'h', tgpri with tgpriw, wln with bulan
+         notaw=spac(7)
+         tglw=spac(10)
+         nilaiw=0
+         xw=0
+         tagihanw=0
+         kew=0
+         harus=0
+         sele 3
+         seek nom
+         if found()
+            trg=spac(7)
+            do while kang=nom.and.!eof()
+              if op='K'
+               notaw=njual
+               tglw=dtoc(tjual)
+               sisaw=2
+               kew=1
+               toangs=0
+               sele 4
+               seek kodew+nom+notaw
+               if found()
+                  do while kins+kang+njual=kodew+nom+notaw.and.!eof()
+                     kew=ke
+                     sisaw=sisa
+                     toangs=toangs+angs
+                     skip
+                  enddo
+                  kew=kew+1
+               endif 
+               sele 3 
+               if trg=notaw
+                  trg=trg
+                  nilaiw=totb+nilaiw
+                  xw=ke
+                  tagihanw=nilaiw &&/xw
+                  harus=(kew-1)*(tagihanw)
+                  tunggakanw=harus-toangs
+                  if sisaw>1
+                     sele 5
+                     repl nilai with nilaiw, x with xw, tagihan with tagihanw, tunggakan with tunggakanw, denda with iif(tunggakanw>0,tagihan*0.05,0)
+                  endif        
+                  sele 3
+               else
+                  trg=notaw
+                  nilaiw=totb
+                  xw=ke
+                  tagihanw=nilaiw &&/xw
+                  harus=(kew-1)*(tagihanw)
+                  tunggakanw=harus-toangs
+                  if sisaw>1
+                     sele 5
+                     if hedr>1
+                        appe blan
+                     endi   
+                     repl kode with kodew, instansi with instansiw, no with nom, nama with namaw, nota with notaw,;
+                          tgl with tglw, nilai with nilaiw, x with xw, tagihan with tagihanw, ke with kew,;
+                          tunggakan with tunggakanw, tgpri with tgpriw, wln with bulan, denda with iif(tunggakanw>0,tagihan*0.05,0)
+                  endif        
+                  sele 3
+               endif   
+               hedr=hedr+1
+               if sisaw=0
+                  hedr=hedr-1
+               endi
+              endi  
+              sele 3
+              skip
+            enddo
+         endif
+         sele 2
+         skip
+      enddo
+   else
+      sele 5
+      appe blan
+      repl kode with kodew, instansi with instansiw, ab with 'h', tgpri with tgpriw, wln with bulan
+   endif
+   defi wind dokt FROM 0,(wcols()-170)/2 to wrows(),((wcols()-170)/2)+170 system title 'Instansi  :  '+kodew+'  '+instansiw;
+   colo rgb(0,0,0,129,126,101) font'Book Antiqua',9 close icon file'guni.ico'
+   mon=spac(5)
+   totk=0
+   sele 5
+   go top
+   do while !eof()
+      if mon=no
+         mon=mon
+         totk=tagihan+tunggakan+denda+totk
+         yor=recno()
+         skip-1
+         repl total with 0
+         go yor
+         repl total with totk
+      else
+         mon=no
+         totk=tagihan+tunggakan+denda
+         repl total with totk
+      endif
+      skip
+   enddo
+   tots=0
+   go top
+   do while !eof()
+      if ab=' '
+         repl no with spac(5), nama with spac(50)
+      endif
+      tots=tots+total
+      skip
+   enddo
+*frox   
+   sele 6
+   seek periw+kodew
+   if found()
+      repl kins with kodew, tins with tots, peri with periw
+   else
+      appe blan
+      repl kins with kodew, tins with tots, peri with periw
+   endif
+   totg=0
+   seek periw
+   if found()
+      do while peri=periw.and.!eof()
+         totg=totg+tins
+         skip
+      enddo   
+   endi
+*end frox   
+   sele 5
+   appe blan
+   repl nama with 'Tagihan '+trim(instansiw)+', '+bulan, ab with 'b', total with tots, tgpri with tgpriw, wln with bulan, kode with kodew, instansi with instansiw, btm with 't'
+   appe blan
+   repl nama with 'Tagihan yg sudah dihitung '+bulan, ab with 'f', total with totg, tgpri with tgpriw, wln with bulan, kode with kodew, instansi with instansiw, btm with 't'
+   go top
+   brow fiel no:r, nama:r, nota:r, tgl:r, nilai:p='@z 999,999,999':r, x:p='@z 999':r, ke:p='@z 999':r,;
+             tagihan:p='@z 999,999,999':r, tunggakan:p='@z 999,999,999':r, denda:p='@z 999,999,999':r, total:p='@z 9,999,999,999':r wind dokt nomenu;
+             title 'Kota/ Kec. / Desa : '+kodew+'  '+instansiw
+   go top          
+   repo form tagix to print prompt          
+else
+   clos data
+   return
+endi
+clos data
+*do emn
+retu
+*
+proc angsura
+param mbar
+*do dmn
+set dele on
+clos data
+sele 1
+use instansi inde inst2
+sele 2
+use cus inde cus3,cus2
+sele 3
+use jual inde juali,jualg EXCL
+rein
+sele 4
+use hut inde hut3,hut5 excl
+rein
+sele 5
+use tagih
+sele 6
+use ztag inde ztag1
+sele 7
+use trans inde trans5
+sele 8
+use bkma
+instansiw=instan(mbar)
+DEFI WIND dot;
+FROM 6,(wcols()-50)/2 to 14,((wcols()-50)/2)+50 system title trim(instansiw);
+colo rgb(0,0,0,255,255,255) font'Times New Roman',12
+defi wind dokt FROM 0,(wcols()-170)/2 to wrows()-1,((wcols()-170)/2)+170 system;
+colo rgb(0,0,0,129,126,101) font'Book Antiqua',9 close icon file'guni.ico'
+acti wind dot
+jdet=0
+sele 1
+seek instansiw
+if found()
+   kodew=kins
+   sele 2
+   set orde to 1 
+   seek kodew
+   jde=0
+   if found()
+      do while kins=kodew.and.!eof()
+         jdet=jdet+1
+         skip
+      endd
+   endif
+   dime riri(jdet)
+   sele 2
+   set orde to 1 
+   seek kodew
+   j=0
+   if found()
+      do while kins=kodew.and.!eof()
+         j=j+1
+         riri(j)=nang
+         skip
+      endd
+   endif
+endif   
+if jdet=0
+   do emn
+   retu
+endi
+mel=0
+om=spac(5)
+DO WHILE.T.
+@0,5 say'Customer :'
+@1,5 GET mel vali crr() PICTURE '@^'from riri size 0.9,40 font'Times New Roman' styl'b' defa 0
+@1.8,0 say'ags1.bmp'bitm
+@1.8,25 say'ags2.bmp'bitm
+@2.7,0 get npw PICTURE '@*IHT ;;' font 'Arial',9 size 3,19.5,0 default 0
+READ
+if read()=12.or.npw=3
+   exit
+endif   
+sele 5
+dele all
+*
+periw=left(dtoc(tgskr,1),6)
+do case
+case righ(periw,2)='01'
+     bulan='Januari '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='02'
+     bulan='Pebruari '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='03'
+     bulan='Maret '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='04'
+     bulan='April '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='05'
+     bulan='Mei '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='06'
+     bulan='Juni '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='07'
+     bulan='Juli '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='08'
+     bulan='Agustus '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='09'
+     bulan='September '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='10'
+     bulan='Oktober '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='11'
+     bulan='Nopember '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='12'
+     bulan='Desember '+left(dtoc(tgskr,1),4)
+endcase
+tgpriw=righ(dtoc(tgskr,1),2)+' '+bulan
+??sys(2002,1)
+if mel=0
+   kond="kins=kodew.and.!eof()"
+else
+   kond="kins+kang=kodew+om.and.!eof()"
+endif   
+sele 1
+seek instansiw
+if found()
+   kodew=kins
+   sele 2
+   set orde to 1 
+   if mel=0
+      seek kodew
+   else
+      seek kodew+om
+   endif   
+   if found()
+      do while &kond
+         nom=kang
+         namaw=nang
+         hedr=1
+         sele 5
+         appe blan
+         repl kode with kodew, instansi with instansiw, kank with nom, no with nom, nama with namaw, ab with 'h', tgpri with tgpriw, wln with bulan,;
+              uraian with namaw
+         notaw=spac(7)
+         tglw=spac(10)
+         nilaiw=0
+         xw=0
+         tagihanw=0
+         kew=0
+         harus=0
+         sele 3
+         set orde to 1
+         seek nom
+         if found()
+            trg=spac(7)
+            do while kang=nom.and.!eof()
+              if op='K'
+              if sek=' '
+               notaw=njual
+               tglw=dtoc(tjual)
+               sisaw=2
+               kew=1
+               toangs=0
+               sele 4
+               set orde to 1
+               seek kodew+nom+notaw
+               if found()
+                  do while kins+kang+njual=kodew+nom+notaw.and.!eof()
+                     kew=ke
+                     sisaw=sisa
+                     toangs=toangs+angs
+                     skip
+                  enddo
+                  kew=kew+1
+               endif 
+               sele 3 
+               set orde to 1
+               if trg=notaw
+                  trg=trg
+                  nilaiw=totb+nilaiw
+                  xw=ke
+                  tagihanw=nilaiw &&/xw
+                  harus=(kew-1)*(tagihanw)
+                  tunggakanw=harus-toangs
+                  if sisaw>1
+                     sele 5
+                     repl nilai with nilaiw, x with xw, tagihan with tagihanw, tunggakan with tunggakanw, denda with iif(tunggakanw>0,tagihan*0.05,0)
+                  endif        
+                  sele 3
+                  set orde to 1
+               else
+                  trg=notaw
+                  nilaiw=totb
+                  xw=ke
+                  tagihanw=nilaiw &&/xw
+                  harus=(kew-1)*(tagihanw)
+                  tunggakanw=harus-toangs
+                  if sisaw>1
+                     sele 5
+                     if hedr>1
+                        appe blan
+                     endi   
+                     repl kode with kodew, instansi with instansiw, kank with nom, no with nom, nama with namaw, nota with notaw,;
+                          tgl with tglw, nilai with nilaiw, x with xw, tagihan with tagihanw, ke with kew, uraian with namaw,;
+                          tunggakan with tunggakanw, tgpri with tgpriw, wln with bulan, denda with iif(tunggakanw>0,tagihan*0.05,0)
+                  endif        
+                  sele 3
+                  set orde to 1
+               endif   
+               hedr=hedr+1
+               if sisaw=0
+                  hedr=hedr-1
+               endi
+              endif 
+              endif 
+              sele 3
+              set orde to 1
+              skip
+            enddo
+         endif
+         sele 2
+         set orde to 1 
+         skip
+      enddo
+   else
+      sele 5
+      appe blan
+      repl kode with kodew, instansi with instansiw, ab with 'h', tgpri with tgpriw, wln with bulan
+   endif
+   mon=spac(5)
+   totk=0
+   sele 5
+   go top
+   do while !eof()
+      if mon=no
+         mon=mon
+         totk=tagihan+tunggakan+denda+totk
+         yor=recno()
+         skip-1
+         repl total with 0
+         go yor
+         repl total with totk
+      else
+         mon=no
+         totk=tagihan+tunggakan+denda
+         repl total with totk
+      endif
+      skip
+   enddo
+   mon=spac(5)
+   totk=0
+   sele 5
+   go top
+   do while !eof()
+      if mon=no
+         mon=mon
+         totk=tagihan+tunggakan+denda
+         repl totar with totk
+      else
+         mon=no
+         totk=tagihan+tunggakan+denda
+         repl totar with totk
+      endif
+      skip
+   enddo
+   tots=0
+   go top
+   do while !eof()
+      if ab=' '
+         repl no with spac(5), nama with spac(50)
+      endif
+      tots=tots+total
+      skip
+   enddo
+*frox   
+   sele 5
+   go top
+   brow fiel no:r, nama:r, nota:r, tgl:r, nilai:p='@z 999,999,999':r, x:p='@z 999':r, ke:p='@z 999':r,;
+             tagihan:p='@z 999,999,999', tunggakan:p='@z 999,999,999':r, total:p='@z 999,999,999':r wind dokt nomenu;
+             title 'Kota / Kec. / Desa : '+kodew+'  '+instansiw+' TOTAL :'+tran(tots,'@z 999,999,999') 
+ sele 8
+ dele all 
+ IF npw=2   
+   sele 5
+   mon=spac(5)
+   totk=0
+   go top
+   do while !eof()
+      mon=kank
+      totu=0
+      oer=recno()
+      do while kank=mon.and.!eof()
+         totu=total
+         skip
+      enddo
+      go oer
+      do while kank=mon.and.!eof()
+         repl total with totu
+         skip
+      enddo
+   enddo
+   go top
+   do while !eof()
+      mon=kank
+      wsis=total
+      wsi=wsis
+      do while kank=mon.and.!eof()
+         wsi=wsis
+         wsis=wsis-totar
+         if wsis<0
+            repl anksur with wsi, ss with wsi-anksur
+         else
+            repl anksur with totar, ss with wsis
+         endif   
+         skip
+      enddo
+   enddo
+   bukw=spac(6)
+   kmo=spac(5)
+   ne=250001
+   go top
+   do while !eof()
+      kangw=kank
+      kinsw=kode
+      angsw=tagihan
+      njualw=nota
+      lkew=x
+      kew=ke
+      insta=instansi
+      kodem=kode
+      nm=no
+      namax=uraian
+      uraianw=uraian
+      if kmo=kank
+         kmo=kmo
+         deb=angsw+deb
+         kre=angsw+kre
+         if angsw>0
+            sele 4
+            set orde to 2
+            go bott
+            if bof()
+               ne=250001
+            else
+               go bott
+               ne=val(righ(bukti,6))+1
+               if ne>450000
+                  wait'NOMOR BUKTI SUDAH HABIS'wind
+                  clos data
+                  clea wind
+                  retu
+               endi
+            endif
+            nomor=str(ne)
+            pjnomor=len(ltrim(nomor))
+            bukw=left('000000',len('000000')-pjnomor)+ltrim(nomor)
+            sele 8
+            appe blan
+            repl no with kangw, nama with namax, tgl with dtoc(tgskr),;
+                 ke with kew, tagihan with angsw, nota with bukw,;
+                 kode with kodew, instansi with instansiw 
+            sele 7
+            seek bukw
+            if !found()
+               if left(kangw,1)='0'
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1131', perkiraan with 'Piutang Barang Anggota',;
+                       uraian with uraianw, kredit with kre, ttrans with tgskr
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1111', perkiraan with 'Kas',;
+                       uraian with uraianw, debet with deb, ttrans with tgskr
+               else
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1132', perkiraan with 'Piutang Barang Non Anggota',;
+                       uraian with uraianw, kredit with kre, ttrans with tgskr
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1111', perkiraan with 'Kas',;
+                       uraian with uraianw, debet with deb, ttrans with tgskr
+               endif        
+            endi
+         endif   
+      else
+         kmo=kank
+         deb=angsw
+         kre=angsw
+         if angsw>0
+            sele 4
+            set orde to 2
+            go bott
+            if bof()
+               ne=250001
+            else
+               go bott
+               ne=val(righ(bukti,6))+1
+               if ne>450000
+                  wait'NOMOR BUKTI SUDAH HABIS'wind
+                  clos data
+                  clea wind
+                  retu
+               endi
+            endif
+            nomor=str(ne)
+            pjnomor=len(ltrim(nomor))
+            bukw=left('000000',len('000000')-pjnomor)+ltrim(nomor)
+            sele 8
+            appe blan
+            repl no with kangw, nama with namax, tgl with dtoc(tgskr),;
+                 ke with kew, tagihan with angsw, nota with bukw,;
+                 kode with kodew, instansi with instansiw 
+            sele 7
+            seek bukw
+            if !found()
+               if left(kangw,1)='0'
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1131', perkiraan with 'Piutang Barang Anggota',;
+                       uraian with uraianw, kredit with kre, ttrans with tgskr
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1111', perkiraan with 'Kas',;
+                       uraian with uraianw, debet with deb, ttrans with tgskr
+               else
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1132', perkiraan with 'Piutang Barang Non Anggota',;
+                       uraian with uraianw, kredit with kre, ttrans with tgskr
+                  appe blan
+                  repl bukti with bukw, kang with kmo, no_perk with '1111', perkiraan with 'Kas',;
+                       uraian with uraianw, debet with deb, ttrans with tgskr
+               endif        
+            endi
+         endif
+      endif   
+      sele 4
+      set orde to 1
+      seek kinsw+kangw+njualw+str(kew,2)+left(dtoc(tgskr,1),6)
+      if !found()
+         appe blan
+         repl njual with njualw, tangs with tgskr, angs with angsw, kang with kangw,;
+         kins with kinsw, ke with kew, lke with lkew, bukti with bukw
+      endif
+      sele 5
+      skip
+   enddo  
+   kmo=spac(5)
+   sele 4
+   set orde to 1
+   go top
+   dele all for angs=0.and!eof()
+   seek kodew
+   do while kins=kodew.and.!eof()
+      xang=kang
+      noya=njual
+      totan=0
+      sele 3
+      set orde to 2
+      seek xang+noya
+      if found()
+         do while kang+njual=xang+noya.and.!eof()
+            totan=totb+totan
+            skip
+         enddo
+      endif
+      sele 4
+      set orde to 1
+      seek kodew+xang+noya
+      sisaw=totan
+      do while kins+kang+njual=kodew+xang+noya.and.!eof()
+         sisaw=sisaw-angs
+         repl sisa with sisaw, tohut with totan
+         skip
+      enddo
+   enddo
+   ttup=0
+   sele 8
+   go top
+   do while !eof()
+      ttup=ttup+tagihan
+      skip
+   enddo
+   appe blan
+   repl tagihan with ttup, nama with spac(5)+'T O T A L',;
+                 kode with kodew, instansi with instansiw 
+   appe blan
+   repl nama with 'Bendahara'+spac(15)+'Kasir',btm with 't', ab with 'b',;
+                 kode with kodew, instansi with instansiw 
+   sele 8
+   go top
+   repo form bdx to print prom
+ ENDI  
+else
+   clos data
+*   do emn
+   return
+endi
+sele 3
+set orde to 1
+rein
+set orde to 2
+rein
+sele 4
+set orde to 1
+rein
+set orde to 2
+rein
+enddo
+deac wind dot
+clos data
+*do emn
+retu
+*
+proc dngsura
+param mbar
+*do dmn
+set dele on
+defi wind konf from 5,55 to 16,105 syst font'Arial',9 colo rgb(0,0,0,244,198,100) titl'Data sudah ada'
+periw=left(dtoc(tgskr,1),6)
+do case
+case righ(periw,2)='01'
+     bulan='Januari '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='02'
+     bulan='Pebruari '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='03'
+     bulan='Maret '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='04'
+     bulan='April '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='05'
+     bulan='Mei '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='06'
+     bulan='Juni '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='07'
+     bulan='Juli '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='08'
+     bulan='Agustus '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='09'
+     bulan='September '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='10'
+     bulan='Oktober '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='11'
+     bulan='Nopember '+left(dtoc(tgskr,1),4)
+case righ(periw,2)='12'
+     bulan='Desember '+left(dtoc(tgskr,1),4)
+endcase
+tgpriw=righ(dtoc(tgskr,1),2)+' '+bulan
+clos data
+sele 1
+use instansi inde inst2
+sele 2
+use cus inde cus3
+sele 3
+use jual inde jual1
+sele 4
+use hut inde hut4,hut3
+sele 5
+use tagih
+dele all
+sele 6
+use ztag inde ztag1
+sele 7
+use trans inde trans5
+instansiw=instan(mbar)
+??sys(2002,1)
+sele 1
+seek instansiw
+if found()
+   kodew=kins
+   sele 2
+   seek kodew
+   if found()
+      do while kins=kodew.and.!eof()
+         nom=kang
+         namaw=nang
+         hedr=1
+         notaw=spac(7)
+         tglw=spac(10)
+         nilaiw=0
+         xw=0
+         tagihanw=0
+         kew=0
+         harus=0
+         sele 4
+         set orde to 1
+         seek kodew+nom+left(dtoc(tgskr,1),6)
+         if found()
+            grk=recno()
+            sele 5
+            appe blan
+            repl kode with kodew, instansi with instansiw, kank with nom, no with nom, nama with namaw, ab with 'h', tgpri with tgpriw, wln with bulan
+            sele 4
+            set orde to 1
+            go grk
+            do while kins+kang+left(dtoc(tangs,1),6)=kodew+nom+left(dtoc(tgskr,1),6).and.!eof()
+               notaw=njual
+               tglw=dtoc(tangs)
+               xw=ke
+               tagihanw=angs
+               kew=ke
+               nilaiw=0
+               sele 3
+               seek notaw
+               if found()
+                  do while njual=notaw.and.!eof()
+                     nilaiw=nilaiw+totb
+                     tglw=dtoc(tjual)
+                     skip
+                  enddo   
+               endif
+               sele 5
+               if hedr>1
+                  appe blan
+               endif   
+               repl kode with kodew, instansi with instansiw, kank with nom, no with nom, nama with namaw, nota with notaw,;
+                    tgl with tglw, nilai with nilaiw, x with xw, tagihan with tagihanw, ke with kew,;
+                    tgpri with tgpriw, wln with bulan
+               hedr=hedr+1
+               sele 4
+               set orde to 1
+               skip
+            enddo
+         endif
+         sele 2
+         skip
+      enddo
+   else
+      wait'Data tidak ada'wind
+      loop
+   endif
+   defi wind dokt FROM 0,(wcols()-165)/2 to wrows()-1,((wcols()-165)/2)+165 system title 'Instansi  :  '+kodew+'  '+instansiw;
+   colo rgb(0,0,0,129,126,101) font'Book Antiqua' close icon file'guni.ico'
+   mon=spac(5)
+   totk=0
+   sele 5
+   go top
+   do while !eof()
+      if mon=no
+         mon=mon
+         totk=tagihan+totk
+         yor=recno()
+         skip-1
+         repl total with 0
+         go yor
+         repl total with totk
+      else
+         mon=no
+         totk=tagihan
+         repl total with totk
+      endif
+      skip
+   enddo
+   tots=0
+   go top
+   do while !eof()
+      if ab=' '
+         repl no with spac(5), nama with spac(50)
+      endif
+      tots=tots+total
+      skip
+   enddo
+*frox   
+   sele 5
+   go top
+   brow fiel no:r, nama:r, nota:r, tgl:r, nilai:p='@z 999,999,999':r, x:p='@z 999':r, ke:p='@z 999':r,;
+             tagihan:h='Pembayaran':p='@z 999,999,999', total:p='@z 999,999,999':r wind dokt nomenu;
+             title 'Instansi  :  '+kodew+'  '+instansiw+' TOTAL :'+tran(tots,'@z 999,999,999') freez tagihan
+   go top
+   buk=spac(6)
+   deb=0
+   kre=0
+   do while !eof()
+      kangw=kank
+      kinsw=kode
+      angsw=tagihan
+      njualw=nota
+      kew=ke
+      sele 4
+      set orde to 2
+      seek kinsw+kangw+njualw+str(kew,2)+left(dtoc(tgskr,1),6)
+      if found()
+         repl angs with angsw
+         bukw=bukti
+         if buk=bukw
+            buk=buk
+            deb=angsw+deb
+            kre=angsw+kre
+            sele 7
+            seek buk+'1131'
+            if found()
+               repl kredit with kre
+            endi
+            seek buk+'1132'
+            if found()
+               repl kredit with kre
+            endi
+            seek buk+'1111'
+            if found()
+               repl debet with deb
+            endi
+         else
+            buk=bukw
+            deb=angsw
+            kre=angsw
+            sele 7
+            seek buk+'1131'
+            if found()
+               repl kredit with kre
+            endi
+            seek buk+'1132'
+            if found()
+               repl kredit with kre
+            endi
+            seek buk+'1111'
+            if found()
+               repl debet with deb
+            endi
+         endif             
+      endif
+      sele 5
+      skip
+   enddo  
+   sele 4
+   set orde to 2
+   go top
+   dele all for angs=0.and!eof()
+   go top
+   seek kodew+nom
+   if found()
+      do while kins+kang=kodew+nom.and.!eof()
+         xang=kang
+         noya=njual
+         totan=0
+         sele 3
+         seek noya
+         if found()
+            do while njual=noya.and.!eof()
+               totan=totb+totan
+               skip
+            enddo
+         endif
+         sele 4
+         sisaw=totan
+         do while kins+kang+njual=kodew+xang+noya.and.!eof()
+            sisaw=sisaw-angs
+            repl sisa with sisaw, tohut with totan
+            skip
+         enddo
+     enddo
+   endif
+else
+   clos data
+*   do emn
+   return
+endi
+clos data
+*do emn
+retu
+*
+proc ljual11
+para mbar
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE cus INDE cus1
+SELE 3
+USE jual INDE jual1,jual5
+sele 4
+use ljual1
+sele 5
+use ljual2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar penjualan';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,0 to wrows(),wcols() system title'Laporan penjualan' font'arial' clos icon file'guni.ico'
+acti wind jual4
+store spac(7) to kjua3,kjua4
+if mbar=2
+   store ctod('  /  /  ') to tawal,takhir
+   do cartang
+   kjua3=tawal
+   kjua4=takhir
+endif
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   do case
+   case mbar=1
+      @4.5,6 say 'dari Nota' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'!999999' FONT'Book Antiqua',12 size 1,8
+      @5.7,19 get kjua4 pict'!999999' FONT'Book Antiqua',12 size 1,8
+      urtw='Urut Nota'
+      kond="njual>=trim(kjua3).and.njual<=trim(kjua4).and.!eof()"
+   case mbar=2
+      @4.5,6 say 'dari Tgl.' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+      @5.7,19 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+      urtw='Urut Tanggal'
+      kond="tjual>=kjua3.and.tjual<=kjua4.and.!eof()"
+   endcase
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   totmarg=0
+   tot=0
+   NRK=0
+   sele 3
+   set orde to mbar
+   if mbar=1
+      seek trim(kjua3)
+      if !found()
+         loop
+      ELSE
+         NRK=RECNO()    
+      endif
+   else
+      seek left(dtoc(kjua3,1),6)
+      if !found()
+         loop
+      ELSE
+         nrk=recno()
+         SEEK dtoc(kjua3,1)
+         IF FOUND()
+            NRK=RECNO()
+         ENDIF
+      endif
+   endif
+   GO NRK
+   do while &kond
+      nom=njual
+      tanggalw=dtoc(tjual)
+      kangw=kang
+      dokterw=spac(25)
+      kodew=left(kbrg,6)
+      obatw=spac(28)
+      hargaw=hjual
+      jmlw=ukecil
+      totalw=totb
+      tot=tot+totalw
+      beliw=0
+      ksw=ks
+      spgw=spg
+      jasaw=ds
+      ketw=td
+      sele 1
+      seek kodew
+      if found()
+         obatw=nbrg
+         beliw=hsat
+      endif
+      sele 2
+      seek kangw
+      if found()
+        dokterw=left(nang,25)
+      endif
+      modalw=beliw*jmlw
+      labaw=totalw-modalw
+      totmarg=totmarg+labaw
+      sele 4
+      appe blan
+      repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, beli with modalw, laba with labaw,;
+           jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw, dokter with dokterw,;
+           tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4), jasa with jasaw, kdok with ketw
+      sele 3
+      set orde to mbar
+      skip
+   enddo
+   nord=spac(7)
+   nyar=.t.
+   tord=0
+   sele 4
+   go top
+   do while !eof()
+      nom=no
+      tanggalw=tanggal
+      kodew=kode
+      obatw=obat
+      hargaw=harga
+      jmlw=jml
+      totalw=total
+      ksw=ks
+      ketw=kdok
+      spgw=spg
+      jasaw=jasa
+      dokterw=dokter
+      beliw=beli
+      labaw=laba
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         tolb=tolb+labaw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, beli with beliw, laba with labaw,;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw, dokter with dokterw,;
+              jasa with jasaw, kdok with ketw, tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+         nyar=.f.
+      else
+         nord=no
+         if !nyar
+            sele 5
+            appe blan
+            repl total with tord, laba with tolb, obat with spac(10)+'SUB.TOTAL'
+            appe blan
+         endi
+         tord=totalw
+         tolb=labaw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, beli with beliw, laba with labaw,;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw, dokter with dokterw,;
+              jasa with jasaw, kdok with ketw, tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tord, laba with tolb, obat with spac(10)+'SUB.TOTAL'
+   appe blan
+   appe blan
+   repl total with tot, laba with totmarg, obat with spac(20)+'TOTAL'
+   sele 5
+*   sele 4
+   go top   
+   do case
+   case nujl1=1
+        brow fiel tanggal, no , kode, obat:h='Item',;
+              jml:p='@Z 99,999.99', harga:p='@Z 99,999,999',jasa:h='Diskon':p='@z 999.99', kdok:h='DQR':w=3,;
+              total:p='@Z 9,999,999,999', beli:h='Modal':p='@z 9,999,999,999', laba:h='Margin':p='@z 9,999,999,999',;
+              dokter:h='Customer':r wind jual5 noedit nomenu ;
+              title urtw+' '+iif(mbar=2,dtoc(kjua3),trim(kjua3))+' - '+iif(mbar=2,dtoc(kjua4),trim(kjua4))
+   case nujl1=2
+        repo form ljuax prev
+        repo form ljuax to print prompt
+   endcase     
+enddo
+deac wind jual4
+do emn
+return
+*
+proc ljual12
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE stok1,STOK2
+SELE 2
+USE cus INDE cus1
+SELE 3
+USE JUAL INDE JUALb
+sele 4
+use ljual1
+sele 5
+use ljual2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-78)/2 to 24.7,((wcols()-78)/2)+78 system title'Daftar penjualan / item';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,(wcols()-136)/2 to wrows(),((wcols()-136)/2)+136 system title'Laporan penjualan' font'arial' clos icon file'guni.ico'
+acti wind jual4
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+kjua3=tawal
+kjua4=takhir
+nbg=spac(28)
+nbr=spac(28)
+kbr=spac(6)
+simp=.t.
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'Barang' styl'b'
+   @6.0,6 say 'dari Tgl.' styl'b'
+   @6.0,35 say 's/d.' styl'b'
+   @4.5,17 GET KBR PICT'!!!!!!' vali cnbr() FONT'Book Antiqua',12 size 1,8
+   @4.5,COL()+2 GET nbg  PICTURE '@!' FONT'Book Antiqua',12 size 1,37
+   @6.0,17 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @6.0,41 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   sele 1
+   SET ORDE TO 1
+   seek LEFT(kbr,6)
+   if !found()
+      loop
+   endif   
+   NBG=NBRG
+   sele 3
+   seek kbr
+   if !found()
+      loop
+   endif   
+   hor=recno()
+   go hor
+   do while left(kbrg,6)=kbr.and.!eof()
+      if tjual>=kjua3.and.tjual<=kjua4
+      nom=njual
+      kangw=kang
+      tanggalw=dtoc(tjual)
+      dokterw=spac(20)
+      kodew=left(kbrg,6)
+      obatw=spac(28)
+      hargaw=hjual
+      jmlw=ukecil
+      totalw=totb
+      ksw=ks
+      spgw=spg
+      beliw=0
+      sele 1
+      set orde to 1
+      seek trim(kodew)
+      if found()
+         obatw=nbrg
+         beliw=hsat
+      endif
+      sele 2
+      set orde to 1
+      seek kangw
+      if found()
+         dokterw=nang
+      endif
+      modalw=beliw*jmlw
+      labaw=totalw-modalw
+      sele 4
+      appe blan
+      repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, beli with modalw, laba with labaw,;
+           jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw,;
+           tg1 with dtoc(kjua3), tg2 with dtoc(kjua4), dokter with dokterw
+      endif
+      sele 3
+      skip
+   enddo
+*
+   tot=0
+   tot1=0
+   tom=0
+   odek=spac(6)
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      kodew=left(kode,6)
+      odek=left(kode,6)
+      dokterw=dokter
+      obatw=obat
+      jmlw=jml
+      hargaw=harga
+      totalw=total
+      beliw=beli
+      labaw=laba
+      ksw=ks
+      spgw=spg
+      if odek=kbr
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, obat with obatw, beli with beliw, laba with labaw,;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4), dokter with dokterw
+         tom=tom+laba     
+         tot=tot+total
+         tot1=tot1+jml
+      endif   
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tot, jml with tot1, laba with tom
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel tanggal, no, jml:p='@Z 99,999.99', harga:p='@Z 99,999,999.9',;
+              total:p='@Z 9,999,999,999.9', beli:h='Modal':p='@z 9,999,999,999', laba:h='Margin':p='@z 9,999,999,999',;
+              dokter:h='Customer' wind jual5 noedit nomenu ;
+              title dtoc(kjua3)+' - '+dtoc(kjua4)+spac(3)+'-'+spac(3)+kbr+spac(2)+'-'+spac(2)+trim(nbg)
+   case nujl1=2
+        repo form ljuax1 prev
+        repo form ljuax1 to print prompt
+   endcase     
+enddo
+deac wind jual4
+rele sere
+do emn
+return
+*
+proc cnbr
+kgb=spac(9)
+if cextr(kbr)
+   do dftbor with kbr
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kbr<>spac(9)
+      kbrgw=kbrg
+      nbrgw=nbrg
+      ukecilw=ukecil
+      hsatw=hsat
+      hjualw=hjual
+      barcodew=barcode
+      kbr=left(kbrg,6)
+      nbg=nbrgw
+   else
+      nbg=spac(28)   
+   endif
+endif
+sele 1
+set orde to 1
+seek kbr
+if found().and.kbr<>spac(6)
+   kbrgw=kbrg
+   kbr=left(kbrg,6)
+   nbrgw=nbrg
+   ukecilw=ukecil
+   hsatw=hsat
+   hjualw=hjual
+   barcodew=barcode
+   nbg=nbrgw
+endi
+show gets
+retu
+*   
+proc ljual13
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE cus INDE cus1,cus2
+SELE 2
+USE STOK INDE stok1
+SELE 3
+USE JUAL INDE JUALg
+sele 4
+use ljual1
+sele 5
+use ljual2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-78)/2 to 24.7,((wcols()-78)/2)+78 system title'Daftar penjualan / Customer';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,(wcols()-160)/2 to wrows(),((wcols()-160)/2)+160 system title'Laporan penjualan' font'arial' clos icon file'guni.ico'
+acti wind jual4
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+kjua3=tawal
+kjua4=takhir
+nbg=spac(28)
+nbr=spac(28)
+kbr=spac(6)
+simp=.t.
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'Customer' styl'b'
+   @6.0,6 say 'dari Tgl.' styl'b'
+   @6.0,35 say 's/d.' styl'b'
+   @4.5,17 GET KBR PICT'!!!!!' vali ccus() FONT'Book Antiqua',12 size 1,7
+   @4.5,COL()+2 GET nbg  PICTURE '@!' FONT'Book Antiqua',12 size 1,37
+   @6.0,17 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @6.0,41 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   sele 1
+   SET ORDE TO 1
+   seek kbr
+   if !found()
+      loop
+   endif   
+   NBG=Nang
+   sele 3
+   seek kbr
+   if !found()
+      loop
+   endif   
+   hor=recno()
+   go hor
+   do while kang=kbr.and.!eof()
+      if tjual>=kjua3.and.tjual<=kjua4
+         nom=njual
+         tanggalw=dtoc(tjual)
+         dokterw=spac(20)
+         kodew=left(kbrg,6)
+         kdokw=kang
+         obatw=spac(28)
+         hargaw=hjual
+         jmlw=ukecil
+         totalw=totb
+         ksw=ks
+         spgw=spg
+         jas3w=ke
+         beliw=0
+         sele 1
+         seek kdokw
+         if foun()
+            dokterw=nang
+         endif
+         sele 2
+         set orde to 1
+         seek trim(kodew)
+         if found()
+            obatw=nbrg         
+            beliw=hsat
+         endif
+         modalw=beliw*jmlw
+         labaw=totalw-modalw
+         sele 4
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, jas3 with jas3w,;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4), dokter with dokterw, kdok with kdokw,;
+              beli with modalw, laba with labaw
+      endif
+      sele 3
+      skip
+   enddo
+*
+   tot=0
+   tot1=0
+   tom=0
+   odek=spac(5)
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      kodew=left(kode,6)
+      odek=kdok
+      dokterw=dokter
+      obatw=obat
+      jmlw=jml
+      jas3w=jas3
+      hargaw=harga
+      totalw=total
+      ksw=ks
+      spgw=spg
+      beliw=beli
+      labaw=laba
+      if odek=kbr
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, obat with obatw, kode with kodew,;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw, jas3 with jas3w,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4), dokter with dokterw, kdok with odek,;
+              beli with beliw, laba with labaw
+         tom=tom+laba
+         tot=tot+total
+         tot1=tot1+jml
+      endif   
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tot, laba with tom
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel tanggal, no:h='Nota', kode, obat:h='Item', jml:p='@Z 99,999.99', harga:p='@Z 99,999,999.9',;
+              total:p='@Z 9,999,999,999.9', beli:h='Modal':p='@z 9,999,999,999', laba:h='Margin':p='@z 9,999,999,999',;
+              jas3:h='X':p='@z 99'  wind jual5 noedit nomenu ;
+              title dtoc(kjua3)+' - '+dtoc(kjua4)+spac(3)+'-'+spac(3)+kbr+spac(2)+'-'+spac(2)+trim(nbg)
+   case nujl1=2
+        repo form ljuax13 prev
+        repo form ljuax13 to print prompt
+   endcase     
+enddo
+deac wind jual4
+rele sere
+do emn
+return
+*
+proc ccus
+kgb=spac(5)
+if cextr(kbr)
+   do dftcus with kbr
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kbr<>spac(5)
+      kangw=kang
+      nangw=nang
+      kinsw=kins
+      ninsw=nins
+      nbg=nangw
+      kbr=kangw
+   else
+      nbg=spac(28)   
+   endif
+endif
+sele 1
+set orde to 1
+seek kbr
+if found().and.kbr<>spac(5)
+   kangw=kang
+   nangw=nang
+   kinsw=kins
+   ninsw=nins
+   nbg=nangw
+   kbr=kangw
+endi
+show gets
+retu
+*   
+proc ljual14
+para mbar
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE cus INDE cus1
+SELE 3
+USE jual INDE jual1,jual5
+sele 4
+use ljual1
+sele 5
+use ljual2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar penjualan tunai / kredit';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+defi wind konf from 5,55 to 16,105 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+DEFI WIND jual5;
+FROM 0,0 to wrows(),wcols() system title'Laporan penjualan' font'arial' clos icon file'guni.ico'
+acti wind jual4
+store spac(7) to kjua3,kjua4
+if mbar=2
+   store ctod('  /  /  ') to tawal,takhir
+   do cartang
+   kjua3=tawal
+   kjua4=takhir
+endif
+tun=0
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   do case
+   case mbar=1
+      @4.5,6 say 'dari Nota' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'J999999' FONT'Book Antiqua',12 size 1,8
+      @5.7,19 get kjua4 pict'J999999' FONT'Book Antiqua',12 size 1,8
+      urtw='Urut Nota'
+      kond="njual>=trim(kjua3).and.njual<=trim(kjua4).and.!eof()"
+   case mbar=2
+      @4.5,6 say 'dari Tgl.' styl'b'
+      @5.7,6 say 's/d.' styl'b'
+      @4.5,19 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+      @5.7,19 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+      urtw='Urut Tanggal'
+      kond="tjual>=kjua3.and.tjual<=kjua4.and.!eof()"
+   endcase
+   @4.5,35 say'X' styl'b'
+   @4.5,38 GET tun spinner 1,0,10 font'Book Antiqua',12 size 0.9,3
+   @4.5,46 say'hari' styl'b'
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 3
+   cond="ke=tun"
+   if tun>0
+      acti wind konf
+      @0,0 say 'xpic.bmp'bitm
+      @0,30 say'xpic1.bmp'bitm
+      @8.3,3.2 get hpx PICTURE '@*IHT ;;' font 'Arial',9;
+       size 1.1,17.2,2.1 default 0 
+      @5.9,51 get xph PICTURE '@*IHT ' font 'Arial',9;
+       size 2.1,6.5,0 default 0 
+      read
+      deac wind konf
+      do case
+      case hpx=0.or.xph=1
+           loop
+      case hpx=2
+           cond="ke>0"
+      case hpx=3
+           cond="ke>1"
+      endcase
+   endif   
+   sele 4
+   dele all
+   sele 5
+   dele all
+   tot=0
+   tom=0
+   sele 3
+   set orde to mbar
+   if mbar=1
+      seek trim(kjua3)
+      if !found()
+         loop
+      endif
+   else
+      seek left(dtoc(kjua3,1),6)
+      if !found()
+         loop
+      endif
+   endif
+   do while &kond
+      if &cond
+         nom=njual
+         tanggalw=dtoc(tjual)
+         kdokw=kang
+         dokterw=spac(20)
+         kodew=left(kbrg,6)
+         obatw=spac(28)
+         hargaw=hjual
+         jmlw=ukecil
+         totalw=jmlw*hargaw
+         tot=tot+totalw
+         jas3w=ke
+         beliw=0
+         sele 2
+         seek kdokw
+         if found()
+            dokterw=nang 
+         endif
+         sele 1
+         seek kodew
+         if found()
+            obatw=nbrg
+            beliw=hsat
+         endif
+         modalw=beliw*jmlw
+         labaw=totalw-modalw
+         tom=tom+labaw
+         sele 4
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, jas3 with jas3w,;
+              tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              beli with modalw, laba with labaw, kdok with kdokw
+      endif
+      sele 3
+      set orde to mbar
+      skip
+   enddo
+   nord=spac(7)
+   nyar=.t.
+   toja=0
+   tord=0
+   tobe=0
+   tola=0
+   sele 4
+   go top
+   do while !eof()
+      tanggalw=tanggal
+      nom=no
+      dokterw=dokter
+      kodew=kode
+      obatw=obat
+      kdokw=kdok
+      jmlw=jml
+      hargaw=harga
+      jas3w=jas3
+      totalw=total
+      ketw=ket
+      beliw=beli
+      labaw=laba
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         tola=tola+labaw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw, kdok with kdokw, jas3 with jas3w,;
+              tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw, beli with beliw, laba with labaw
+         nyar=.f.
+      else
+         nord=no
+         if !nyar
+            sele 5
+            appe blan
+            repl total with tord, laba with tola, obat with spac(10)+'SUB.TOTAL'
+            appe blan
+         endi
+         tord=totalw
+         tola=labaw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, dokter with dokterw, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ket with ketw, kdok with kdokw, jas3 with jas3w,;
+              tg1 with iif(mbar=2,dtoc(kjua3),kjua3), tg2 with iif(mbar=2,dtoc(kjua4),kjua4),;
+              urt with urtw, beli with beliw, laba with labaw
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tord, laba with tola, obat with spac(10)+'SUB.TOTAL'
+   appe blan
+   appe blan
+   repl total with tot, laba with tom, obat with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel kdok:h='No.', dokter:h='Customer', tanggal, no:h='Nota' , kode, obat:h='Item',;
+              jml:p='@Z 99,999.99', harga:p='@Z 99,999,999.9', total:p='@Z 9,999,999,999.9',;
+              beli:h='Modal':p='@z 9,999,999,999', laba:h='Margin':p='@z 9,999,999,999', jas3:h='X';
+              wind jual5 noedit nomenu title urtw+' '+iif(mbar=2,dtoc(kjua3),trim(kjua3))+' s/d '+iif(mbar=2,dtoc(kjua4),trim(kjua4))
+   case nujl1=2
+        repo form ljuaxt prev
+        repo form ljuaxt to print prompt
+   endcase     
+enddo
+deac wind jual4
+do emn
+return
+*
+proc ljual4
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE ANGGOTA INDE ANGGOTA1
+SELE 3
+USE jual INDE jual7
+sele 4
+use ljual1
+sele 5
+use ljual2
+DEFI WIND jual4;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Rekap penjualan kasir';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jual5;
+FROM 0,(wcols()-64)/2 to wrows(),((wcols()-64)/2)+64 system title'Rekap penjualan' font'arial' clos icon file'guni.ico'
+acti wind jual4
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+kjua3=tawal
+kjua4=takhir
+ksr=spac(3)
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'Kasir' styl'b'
+   @6.0,6 say 'dari Tgl.' styl'b'
+   @6.0,35 say 's/d.' styl'b'
+   @4.5,17 GET ksr PICTURE 'K-!'  FONT'Book Antiqua',12 size 1,5
+   @6.0,17 get kjua3 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @6.0,41 get kjua4 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   tot=0
+   kjuaz=kjua3
+   sele 3
+   seek ksr
+   if !found()
+      loop
+   endif
+   por=recno()   
+   go por
+   do while ks=ksr.and.!eof()
+      if tjual>=kjua3.and.tjual<=kjua4
+         nom=njual
+         tanggalw=dtoc(tjual)
+         dokterw=spac(20)
+         kodew=left(kbrg,6)
+         obatw=spac(28)
+         hargaw=hjual
+         jmlw=ukecil
+         totalw=totb
+         tot=tot+totalw
+         ksw=ks
+         spgw=spg
+         sele 1
+         set orde to 1
+         seek trim(kodew)
+         if found()
+            obatw=nbrg         
+         endif
+         sele 4
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+      endif   
+      sele 3
+      skip
+   enddo
+   nord=spac(7)
+   nyar=.t.
+   toja=0
+   tord=0
+   tobe=0
+   tola=0
+   sele 4
+   go top
+   do while !eof()
+      nom=no
+      tanggalw=tanggal
+      kodew=kode
+      obatw=obat
+      hargaw=harga
+      jmlw=jml
+      totalw=total
+      ksw=ks
+      spgw=spg
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         sele 5
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with tord, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+      else
+         nord=no
+         tord=totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with tord, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tot, obat with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel ks:h='Kasir', tanggal, no ,;
+              total:p='@Z 9,999,999,999', spg wind jual5 noedit nomenu ;
+              title dtoc(kjua3)+' - '+dtoc(kjua4)
+   case nujl1=2
+        repo form ljuax2 to print prompt
+   endcase     
+enddo
+deac wind jual4
+do emn
+return
+*
+proc ljual5
+do dmn
+set cons off
+set cent on
+set dele on
+clos data
+SELE 1
+USE STOK INDE STOK1
+SELE 2
+USE ANGGOTA INDE ANGGOTA1
+SELE 3
+USE jual INDE jual6
+sele 4
+use ljual1
+sele 5
+use ljual2
+DEFI WIND jk;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar penjualan kasir';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND jk1;
+FROM 0,(wcols()-134)/2 to wrows(),((wcols()-134)/2)+134 system title'Daftar penjualan kasir' font'arial' clos icon file'guni.ico'
+acti wind jk
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+kjua3=tawal
+kjua4=takhir
+waktu=spac(1)
+VASMO=SPAC(3)
+VASMO=ASMO
+VASMO=RTRIM(VASMO)
+VASMO=RIGHT(VASMO,1)
+KSR='K-'+VASMO
+do while.t.
+   clear
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   ??sys(2002,1)
+   @4.5,2 say 'Kasir :'styl'b' 
+   @4.5,20 say 'Periode :'styl'b'
+   @4.5,37 SAY 'Tanggal :'styl'b' 
+   @5.7,42.8 say 's/d :'styl'b' 
+   @4.4,11 say ksr PICT'K-!' font'Book Antiqua',12 styl'b'
+   @4.5,31.5 get waktu vali waktu $ '12' erro'1 atau 2 saja' font'Book Antiqua',12 size 1,1
+   @4.5,49 GET kjua3 font'Book Antiqua',12 size 1,12
+   @5.7,49 get kjua4 font'Book Antiqua',12 size 1,12
+   @7.5,0.1 get nujl1 PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nujl1=3
+      exit
+   endi
+   if kjua3>kjua4
+      loop
+   endif
+   sele 3
+   seek left(dtoc(kjua3,1),6)
+   if found()
+      kjua3=tjual
+   endif
+   sele 4
+   dele all
+   sele 5
+   dele all
+   tot=0
+   urtw=ksr
+   sele 3
+   seek dtoc(kjua3,1)+waktu+ksr
+   if !found()
+      loop
+   endif
+   por=recno()
+   go por
+   do while !eof()
+      if tjual>=kjua3.and.tjual<=kjua4
+         nom=njual
+         tanggalw=dtoc(tjual)
+         dokterw=spac(20)
+         kodew=left(kbrg,6)
+         obatw=spac(28)
+         hargaw=hjual
+         jmlw=ukecil
+         totalw=totb
+         tot=tot+totalw
+         ksw=ks
+         spgw=spg
+         sele 1
+         seek kodew
+         if found()
+            obatw=nbrg         
+         endif
+         sele 4
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4)
+      endif     
+      sele 3
+      skip 
+   enddo
+   nord=spac(7)
+   nyar=.t.
+   tord=0
+   sele 4
+   go top
+   do while !eof()
+      nom=no
+      tanggalw=tanggal
+      kodew=kode
+      obatw=obat
+      hargaw=harga
+      jmlw=jml
+      totalw=total
+      ksw=ks
+      spgw=spg
+      sele 4
+      if nord=no
+         nord=nord
+         tord=tord+totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4), urt with urtw
+         nyar=.f.
+      else
+         sele 4
+         nord=no
+         if !nyar
+            sele 5
+            appe blan
+            repl total with tord, obat with spac(10)+'SUB.TOTAL'
+            appe blan
+         endi
+         tord=totalw
+         sele 5
+         appe blan
+         repl tanggal with tanggalw, no with nom, kode with kodew, obat with obatw, ;
+              jml with jmlw, harga with hargaw, total with totalw, ks with ksw, spg with spgw,;
+              tg1 with dtoc(kjua3), tg2 with dtoc(kjua4), urt with urtw
+      endif
+      sele 4
+      skip
+   enddo
+   sele 5
+   appe blan
+   repl total with tord, obat with spac(10)+'SUB.TOTAL'
+   appe blan
+   appe blan
+   repl total with tot, obat with spac(20)+'TOTAL'
+   sele 5
+   go top   
+   do case
+   case nujl1=1
+        brow fiel tanggal, no , kode, obat:h='Item',;
+              jml:p='@Z 99,999.99', harga:p='@Z 99,999,999',;
+              total:p='@Z 9,999,999,999', ks:h='Kasir', spg wind jk1 noedit nomenu ;
+              title ksr+' '+dtoc(kjua3)+' - '+dtoc(kjua4)
+   case nujl1=2
+        repo form ljuax to print prompt
+   endcase     
+enddo
+clos data
+deac wind jk
+do emn
+retu
+*
+******************************************************   K E U A N G A N **********************************************************
+proc erek
+simp=.f.
+set dele on
+clos data
+sele 1
+use rek inde rek1,rek2
+DEFI WIND dokt;
+FROM 8,(wcols()-80)/2 to 14.7,((wcols()-80)/2)+80 system title'Entry / Edit Rekening';
+colo rgb(0,0,0,129,126,101) font'foxprint',9 
+defi wind konf from 15,(wcols()-50.8)/2 to 26,(wcols()-50.8)/2+50.8 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind dokt
+DO WHILE.T.
+   clea
+   kdokw=spac(7)
+   ndokw=spac(30)
+   mol=1
+   @0,0 say'hdr14.bmp'bitm
+   kdokl=kdokw
+   ??SYS(2002,1)
+   kal3=.f.
+   do while.t.
+     tejo=0
+     @2,13.1 get kdokw vali ckrx() FONT'Book Antiqua',12 size 1,8
+     @2,23 GET ndokw FONT'Book Antiqua',12 size 1,42
+     @3.5,12.6 get nu5 PICTURE '@*IHT ;;' font 'Arial',9 size 1.6,12,0.2 default 0
+     read
+     IF READ()=12.or.nu5=3.or.kdokw=spac(7)
+        kal3=.t.
+        EXIT
+     ENDIF
+     do case
+     case nu5=1
+       sele 1
+       set orde to 1
+       seek trim(kdokw)
+       if !found()
+          set orde to 2
+          seek TRIM(ndokw)
+          if found()
+             wait'Data sudah ada'wind
+             loop
+          endi
+          if ndokw<>spac(30)
+             append blank
+          endi   
+       endi
+       repl no_perk with kdokw, perkiraan with ndokw
+       exit
+     case nu5=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 1
+          set orde to 1
+          seek trim(kdokw)
+          if !found()
+             wait'Data tidak ada'wind
+             loop
+          endi
+          dele
+       endif   
+       exit
+     endcase
+   enddo
+   rele sera
+   if kal3
+      exit
+   endi   
+ENDDO  
+deac WIND dokt
+clos data
+rele sera
+RETURN
+*
+proc ckrx
+kgb=spac(7)
+if cextr(kdokw)
+   setri=''
+   for rq=1 to 7
+       if subs(kdokw,rq,1) $ '0123456789'
+       else   
+          setri=setri+subs(kdokw,rq,1)
+       endif
+   next    
+   do dftrek with setri
+   if last()=27
+      kdokw=kdokl
+      ndokw=spac(30)
+      show gets
+      retu
+   endi
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(7)
+      kdokw=no_perk
+      ndokw=perkiraan
+   else   
+      ndokw=spac(30)
+   endif   
+else
+   sele 1
+   set orde to 1
+   seek trim(kdokw)
+   if found()
+      ndokw=perkiraan
+   else   
+      ndokw=spac(30)
+   endif
+endif
+show gets
+retu
+*
+proc lrek
+do dmn
+set talk off
+set cent on
+set dele on
+clos data
+DEFI WIND gla;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Daftar Rekening';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND kot;
+FROM 0,(wcols()-60)/2 to wrows()-1,((wcols()-60)/2)+60 system title'Daftar Rekening' font'arial' clos
+SELE 1
+use rek inde rek1
+SELE 2
+use cust
+acti wind gla
+tah=spac(7)
+do while.t.
+   tam1='dari No.'
+   tam2='s/d No.'
+   store spac(7) to tg1,tg2
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say tam1
+   @5.7,6 say tam2
+   @4.5,15 get tg1 size 1,7
+   @5.7,15 get tg2 size 1,7
+   @7.5,0.1 get nu PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.nu=3
+      exit
+   endi
+   if tg1>tg2
+      loop
+   endif
+   sele 2
+   dele all
+   sele 1
+   SEEK trim(tg1)
+   IF.NOT.FOUN()
+      WAIT'DATA TIDAK ADA' WINDO
+      loop
+   ENDI
+   NOREK=RECNO()
+   kondi="no_perk>=trim(tg1).and.no_perk<=trim(tg2).and..not.eof()"
+   do while &kondi
+      kodew=no_perk
+      materiw=perkiraan
+      sele 2
+      appe blan
+      repl kode with kodew, nama with materiw, k1 with tg1, k2 with tg2
+      sele 1
+      skip
+   enddo
+   sele 2
+   go top   
+   do case
+   case nu=1
+        brow fiel kode:h='No.', nama:h='Perkiraan' wind kot noedit
+   case nu=2
+        repo form lreks prev
+        repo form lreks to print prompt
+   endcase     
+enddo
+deac wind gla
+clos data
+do emn
+return
+*
+proc mutas
+clos data
+set dele on
+use rek inde rek1
+juk=0
+go top
+do while !eof()
+   juk=juk+1
+   skip   
+enddo
+juk=juk+1
+dime sere(juk)
+j=1
+sere(j)=spac(1)
+go top
+do while !eof()
+   j=j+1
+   sere(j)=perkiraan
+   skip   
+enddo
+clos data
+sele 1
+use rek inde rek1,rek2
+sele 2
+use trans inde trans1
+sele 3
+use cus inde cus1,cus2
+DEFI WIND muts;
+FROM 0,(wcols()-105.1)/2 to 40,((wcols()-105.1)/2)+105.1 system title'Mutasi Adjustment, BU' font'foxprint',9;
+colo rgb(0,0,0,255,255,255)
+DEFI WIND mut1 FROM 0,(wcols()-120)/2 to wrows()-1,(wcols()-120)/2+120 title'Data Perawatan';
+font'Arial',8 close
+DEFI WIND jadi in wind muts FROM 14,15 to 20,67 system titl'Print' colo rgb(0,0,0,214,209,195)font'foxprint',9 
+defi wind konf in wind muts from 10,23.5 to 21.5,67 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind muts
+set readb off
+kdokw=spac(5)
+do while.t.
+  ewse=2 
+  tbeliw=date()
+  nbeliw=spac(6)
+  membara=spac(1)
+  store.f. to ono,moleh,teesc
+  store 0 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp12,jmp13,jmp14
+  store spac(7) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14
+  store spac(30) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14
+  ndokw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  nsama=spac(6)
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo
+  clear
+  ??sys(2002,1)
+  dime rawat(10)  
+  for i=1 to 10
+    rawat(i)=' '
+  next i
+  sele 2
+  if bof()
+      no=650001
+      nrsp=650001
+  else
+      seek '650'
+      if foun()
+         do while bukti<='750000'.and.!eof()
+            no=val(righ(bukti,6))+1
+            skip
+         enddo
+      else
+         no=650001
+      endi
+  endif    
+  nomor=str(no)
+  pjnomor=len(ltrim(nomor))
+  nbeliw=left('000000',len('000000')-pjnomor)+ltrim(nomor)
+  tot1=0
+  tot2=0
+  do while.t.
+     clear
+     kbrgw=spac(7)
+     nbrgw=spac(30)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     ??sys(2002,1)
+     @0,0 say 'mut00.bmp' bitm
+     @0,7.2 say'mut01.bmp'bitm
+     @0,14.3 say'mut02.bmp'bitm
+     @0,21.4 say'mut03.bmp'bitm
+     @0,28.6 say'mut04.bmp'bitm
+     @0,35.7 say'mut05.bmp'bitm
+     @0,42.9 say'mut06.bmp'bitm
+     @0,50.0 say'mut07.bmp'bitm
+     @0,57.2 say'mut08.bmp'bitm
+     @0,64.3 say'mut09.bmp'bitm
+     @0,71.4 say'mut10.bmp'bitm
+     @0,78.6 say'mut11.bmp'bitm
+     @0,85.7 say'mut12.bmp'bitm
+     @0.9,12 get nbeliw pict'!!!!!!' vali camuta() FONT'Book Antiqua',14 styl'b' size 1,7
+     @2.9,12 get tbeliw FONT'Book Antiqua',14 styl'b' size 1,11
+     @4.9,12 get kdokw pict'!!!!!' vali cdoke() FONT'Book Antiqua',14 styl'b' size 1,6
+     @4.9,21 get ndokw FONT'Book Antiqua',14 styl'b' size 1,33 disa
+     @9.6,15.5 GET mel1 vali ckba1() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @9.7,4.2 GET kbg1  font'Book Antiqua',14 size 1,9 disa
+     @9.7,51 GET trf1  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @9.7,70 GET dsc1 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @11.2,15.5 GET mel2 vali ckba2() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @11.3,4.2 GET kbg2  font'Book Antiqua',14 size 1,9 disa
+     @11.3,51 GET trf2  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @11.3,70 GET dsc2 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @12.8,15.5 GET mel3 vali ckba3() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @12.9,4.2 GET kbg3  font'Book Antiqua',14 size 1,9 disa
+     @12.9,51 GET trf3  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @12.9,70 GET dsc3 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @14.4,15.5 GET mel4 vali ckba4() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @14.45,4.2 GET kbg4  font'Book Antiqua',14 size 1,9 disa
+     @14.45,51 GET trf4  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @14.45,70 GET dsc4 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @16.0,15.5 GET mel5 vali ckba5() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @16.05,4.2 GET kbg5  font'Book Antiqua',14 size 1,9 disa
+     @16.05,51 GET trf5  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @16.05,70 GET dsc5 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @17.6,15.5 GET mel6 vali ckba6() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @17.65,4.2 GET kbg6  font'Book Antiqua',14 size 1,9 disa
+     @17.65,51 GET trf6  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @17.65,70 GET dsc6 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @19.2,15.5 GET mel7 vali ckba7() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @19.25,4.2 GET kbg7  font'Book Antiqua',14 size 1,9 disa
+     @19.25,51 GET trf7  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @19.25,70 GET dsc7 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @20.8,15.5 GET mel8 vali ckba8() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @20.85,4.2 GET kbg8  font'Book Antiqua',14 size 1,9 disa
+     @20.85,51 GET trf8  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @20.85,70 GET dsc8 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @22.4,15.5 GET mel9 vali ckba9() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @22.45,4.2 GET kbg9  font'Book Antiqua',14 size 1,9 disa
+     @22.45,51 GET trf9  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @22.45,70 GET dsc9 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @24.0,15.5 GET mel10 vali ckba10() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @24.05,4.2 GET kbg10  font'Book Antiqua',14 size 1,9 disa
+     @24.05,51 GET trf10  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @24.05,70 GET dsc10 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @25.6,15.5 GET mel11 vali ckba11() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @25.65,4.2 GET kbg11  font'Book Antiqua',14 size 1,9 disa
+     @25.65,51 GET trf11  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @25.65,70 GET dsc11 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @27.2,15.5 GET mel12 vali ckba12() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @27.25,4.2 GET kbg12  font'Book Antiqua',14 size 1,9 disa
+     @27.25,51 GET trf12  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @27.25,70 GET dsc12 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @28.8,15.5 GET mel13 vali ckba13() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @28.85,4.2 GET kbg13  font'Book Antiqua',14 size 1,9 disa
+     @28.85,51 GET trf13  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @28.85,70 GET dsc13 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @30.4,15.5 GET mel14 vali ckba14() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @30.45,4.2 GET kbg14  font'Book Antiqua',14 size 1,9 disa
+     @30.45,51 GET trf14  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @30.45,70 GET dsc14 vali ckjm()  PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @36,0 get jur1 PICTURE '@*IHT ;;' font 'Arial',9 size 4,13.5,0 default 0 
+     read
+     if read()=12.or.jur1=3
+        teesc=.t.
+        exit
+     endif
+     ketew=' '
+     do case
+     case jur1=1
+*       sele 25
+*       dele all
+       if tot1<>tot2
+          acti wind konf
+          @0,0 say  'baln1.bmp'bitm
+          @0,30 say 'baln2.bmp'bitm
+          @7.3,24 get yoz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+          read
+          deac wind konf
+          if yoz=1
+             exit
+          else   
+             ketew='T'
+          endif
+       endif
+       sele 2
+       seek nbeliw
+       if found()
+          do while bukti=nbeliw.and.!eof()
+             dele
+             skip
+          enddo
+       endif
+       if mel1>1
+          kbrgw=kbg1
+          hbeliw=trf1
+          jasaw=dsc1
+          do codet
+       endif  
+       if mel2>1
+          kbrgw=kbg2
+          hbeliw=trf2
+          jasaw=dsc2
+          do codet
+       endif  
+       if mel3>1
+          kbrgw=kbg3
+          hbeliw=trf3
+          jasaw=dsc3
+          do codet
+       endif  
+       if mel4>1
+          kbrgw=kbg4
+          hbeliw=trf4
+          jasaw=dsc4
+          do codet
+       endif  
+       if mel5>1
+          kbrgw=kbg5
+          hbeliw=trf5
+          jasaw=dsc5
+          do codet
+       endif  
+       if mel6>1
+          kbrgw=kbg6
+          hbeliw=trf6
+          jasaw=dsc6
+          do codet
+       endif  
+       if mel7>1
+          kbrgw=kbg7
+          hbeliw=trf7
+          jasaw=dsc7
+          do codet
+       endif  
+       if mel8>1
+          kbrgw=kbg8
+          hbeliw=trf8
+          jasaw=dsc8
+          do codet
+       endif  
+       if mel9>1
+          kbrgw=kbg9
+          hbeliw=trf9
+          jasaw=dsc9
+          do codet
+       endif  
+       if mel10>1
+          kbrgw=kbg10
+          hbeliw=trf10
+          jasaw=dsc10
+          do codet
+       endif  
+       if mel11>1
+          kbrgw=kbg11
+          hbeliw=trf11
+          jasaw=dsc11
+          do codet
+       endif  
+       if mel12>1
+          kbrgw=kbg12
+          hbeliw=trf12
+          jasaw=dsc12
+          do codet
+       endif  
+       if mel13>1
+          kbrgw=kbg13
+          hbeliw=trf13
+          jasaw=dsc13
+          do codet
+       endif  
+       if mel14>1
+          kbrgw=kbg14
+          hbeliw=trf14
+          jasaw=dsc14
+          do codet
+       endif  
+*       sele 25
+*       APPE BLANK
+*       repl barang with '*'
+*       APPE BLANK
+*       repl barang with '*', total with tot1
+*       go top
+*       repo form nota prev
+*       repo form nota to print prompt
+       exit
+     case jur1=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.3,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 2
+          seek nbeliw
+          if found()
+             do while bukti=nbeliw.and.!eof()
+                dele
+                skip
+             enddo
+          endif   
+       endif
+       exit
+     endcase  
+  enddo
+  if teesc
+     exit
+  endif
+enddo
+set readb off
+deac wind muts
+retu
+*
+proc ekm
+clos data
+set dele on
+use rek inde rek1
+juk=0
+go top
+do while !eof()
+   juk=juk+1
+   skip   
+enddo
+juk=juk+1
+dime sere(juk)
+j=1
+sere(j)=spac(1)
+go top
+do while !eof()
+   j=j+1
+   sere(j)=perkiraan
+   skip   
+enddo
+clos data
+sele 1
+use rek inde rek1,rek2
+sele 2
+use trans inde trans1
+sele 3
+use cus inde cus1,cus2
+DEFI WIND muts;
+FROM 0,(wcols()-84.1)/2 to 40,((wcols()-84.1)/2)+84.1 system title'KM' font'foxprint',9;
+colo rgb(0,0,0,255,255,255)
+DEFI WIND mut1 FROM 0,(wcols()-120)/2 to wrows()-1,(wcols()-120)/2+120 title'Data Perawatan';
+font'Arial',8 close
+DEFI WIND jadi in wind muts FROM 14,15 to 20,67 system titl'Print' colo rgb(0,0,0,214,209,195)font'foxprint',9 
+defi wind konf in wind muts from 10,23.5 to 21.5,67 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind muts
+set readb off
+kdokw=spac(5)
+do while.t.
+  ewse=1
+  tbeliw=date()
+  nbeliw=spac(6)
+  membara=spac(1)
+  store.f. to ono,moleh,teesc,mlxx
+  store 0 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp12,jmp13,jmp14
+  store spac(7) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14
+  store spac(30) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14
+  ndokw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  nsama=spac(6)
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo
+  clear
+  ??sys(2002,1)
+  dime rawat(10)  
+  for i=1 to 10
+    rawat(i)=' '
+  next i
+  sele 2
+  if bof()
+      no=450001
+      nrsp=450001
+  else
+      seek '450'
+      if foun()
+         do while bukti<='550000'.and.!eof()
+            no=val(righ(bukti,6))+1
+            skip
+         enddo
+      else
+         no=450001
+      endi
+  endif    
+  nomor=str(no)
+  pjnomor=len(ltrim(nomor))
+  nbeliw=left('000000',len('000000')-pjnomor)+ltrim(nomor)
+  tot1=0
+  tot2=0
+  do while.t.
+     clear
+     kbrgw=spac(7)
+     nbrgw=spac(30)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     ??sys(2002,1)
+     @0,0 say 'kam00.bmp' bitm
+     @0,7.2 say'kam01.bmp'bitm
+     @0,14.3 say'kam02.bmp'bitm
+     @0,21.4 say'kam03.bmp'bitm
+     @0,28.6 say'kam04.bmp'bitm
+     @0,35.7 say'kam05.bmp'bitm
+     @0,42.9 say'kam06.bmp'bitm
+     @0,50.0 say'kam07.bmp'bitm
+     @0,57.2 say'kam08.bmp'bitm
+     @0,64.3 say'kam09.bmp'bitm
+     @0.9,12 get nbeliw pict'!!!!!!' vali cakm() FONT'Book Antiqua',14 styl'b' size 1,7
+     @2.9,12 get tbeliw FONT'Book Antiqua',14 styl'b' size 1,11
+     @4.9,12 get kdokw pict'!!!!!' vali cdoke() FONT'Book Antiqua',14 styl'b' size 1,6
+     @4.9,21 get ndokw FONT'Book Antiqua',14 styl'b' size 1,33 disa
+     @9.6,15.5 GET mel1 vali ckba1() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @9.7,4.2 GET kbg1  font'Book Antiqua',14 size 1,9 disa
+     @9.7,51 GET trf1  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @11.2,15.5 GET mel2 vali ckba2() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @11.3,4.2 GET kbg2  font'Book Antiqua',14 size 1,9 disa
+     @11.3,51 GET trf2  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @12.8,15.5 GET mel3 vali ckba3() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @12.9,4.2 GET kbg3  font'Book Antiqua',14 size 1,9 disa
+     @12.9,51 GET trf3  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @14.4,15.5 GET mel4 vali ckba4() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @14.45,4.2 GET kbg4  font'Book Antiqua',14 size 1,9 disa
+     @14.45,51 GET trf4  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @16.0,15.5 GET mel5 vali ckba5() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @16.05,4.2 GET kbg5  font'Book Antiqua',14 size 1,9 disa
+     @16.05,51 GET trf5  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @17.6,15.5 GET mel6 vali ckba6() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @17.65,4.2 GET kbg6  font'Book Antiqua',14 size 1,9 disa
+     @17.65,51 GET trf6  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @19.2,15.5 GET mel7 vali ckba7() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @19.25,4.2 GET kbg7  font'Book Antiqua',14 size 1,9 disa
+     @19.25,51 GET trf7  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @20.8,15.5 GET mel8 vali ckba8() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @20.85,4.2 GET kbg8  font'Book Antiqua',14 size 1,9 disa
+     @20.85,51 GET trf8  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @22.4,15.5 GET mel9 vali ckba9() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @22.45,4.2 GET kbg9  font'Book Antiqua',14 size 1,9 disa
+     @22.45,51 GET trf9  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @24.0,15.5 GET mel10 vali ckba10() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @24.05,4.2 GET kbg10  font'Book Antiqua',14 size 1,9 disa
+     @24.05,51 GET trf10  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @25.6,15.5 GET mel11 vali ckba11() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @25.65,4.2 GET kbg11  font'Book Antiqua',14 size 1,9 disa
+     @25.65,51 GET trf11  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @27.2,15.5 GET mel12 vali ckba12() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @27.25,4.2 GET kbg12  font'Book Antiqua',14 size 1,9 disa
+     @27.25,51 GET trf12  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @28.8,15.5 GET mel13 vali ckba13() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @28.85,4.2 GET kbg13  font'Book Antiqua',14 size 1,9 disa
+     @28.85,51 GET trf13  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @30.4,15.5 GET mel14 vali ckba14() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @30.45,4.2 GET kbg14  font'Book Antiqua',14 size 1,9 disa
+     @30.45,51 GET trf14  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @36,0 get jur1 PICTURE '@*IHT ;;' font 'Arial',9 size 4,13.5,0 default 0 
+     read
+     if read()=12.or.jur1=3
+        teesc=.t.
+        exit
+     endif
+     do case
+     case jur1=1
+*       sele 25
+*       dele all
+       sele 2
+       seek nbeliw
+       if found()
+          do while bukti=nbeliw.and.!eof()
+             dele
+             skip
+          enddo
+       endif
+       if mel1>1
+          kbrgw=kbg1
+          hbeliw=trf1
+          jasaw=dsc1
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel2>1
+          kbrgw=kbg2
+          hbeliw=trf2
+          jasaw=dsc2
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel3>1
+          kbrgw=kbg3
+          hbeliw=trf3
+          jasaw=dsc3
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel4>1
+          kbrgw=kbg4
+          hbeliw=trf4
+          jasaw=dsc4
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel5>1
+          kbrgw=kbg5
+          hbeliw=trf5
+          jasaw=dsc5
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel6>1
+          kbrgw=kbg6
+          hbeliw=trf6
+          jasaw=dsc6
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel7>1
+          kbrgw=kbg7
+          hbeliw=trf7
+          jasaw=dsc7
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel8>1
+          kbrgw=kbg8
+          hbeliw=trf8
+          jasaw=dsc8
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel9>1
+          kbrgw=kbg9
+          hbeliw=trf9
+          jasaw=dsc9
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel10>1
+          kbrgw=kbg10
+          hbeliw=trf10
+          jasaw=dsc10
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel11>1
+          kbrgw=kbg11
+          hbeliw=trf11
+          jasaw=dsc11
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel12>1
+          kbrgw=kbg12
+          hbeliw=trf12
+          jasaw=dsc12
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel13>1
+          kbrgw=kbg13
+          hbeliw=trf13
+          jasaw=dsc13
+          mlxx=.t.
+          do codetm
+       endif  
+       if mel14>1
+          kbrgw=kbg14
+          hbeliw=trf14
+          jasaw=dsc14
+          mlxx=.t.
+          do codetm
+       endif  
+       if mlxx
+          sele 2
+          append blank
+          repl no_perk with '1111', perkiraan with 'Kas', debet with tot1,;
+               uraian with ndokw, bukti with nbeliw, ttrans with tbeliw, kang with kdokw
+       endif        
+*       sele 25
+*       APPE BLANK
+*       repl barang with '*'
+*       APPE BLANK
+*       repl barang with '*', total with tot1
+*       go top
+*       repo form nota prev
+*       repo form nota to print prompt
+       exit
+     case jur1=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.3,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 2
+          seek nbeliw
+          if found()
+             do while bukti=nbeliw.and.!eof()
+                dele
+                skip
+             enddo
+          endif   
+       endif
+       exit
+     endcase  
+  enddo
+  if teesc
+     exit
+  endif
+enddo
+set readb off
+deac wind muts
+retu
+*
+proc ekk
+clos data
+set dele on
+use rek inde rek1
+juk=0
+go top
+do while !eof()
+   juk=juk+1
+   skip   
+enddo
+juk=juk+1
+dime sere(juk)
+j=1
+sere(j)=spac(1)
+go top
+do while !eof()
+   j=j+1
+   sere(j)=perkiraan
+   skip   
+enddo
+clos data
+sele 1
+use rek inde rek1,rek2
+sele 2
+use trans inde trans1
+sele 3
+use cus inde cus1,cus2
+DEFI WIND muts;
+FROM 0,(wcols()-84.1)/2 to 40,((wcols()-84.1)/2)+84.1 system title'KK' font'foxprint',9;
+colo rgb(0,0,0,255,255,255)
+DEFI WIND mut1 FROM 0,(wcols()-120)/2 to wrows()-1,(wcols()-120)/2+120 title'Data Perawatan';
+font'Arial',8 close
+DEFI WIND jadi in wind muts FROM 14,15 to 20,67 system titl'Print' colo rgb(0,0,0,214,209,195)font'foxprint',9 
+defi wind konf in wind muts from 10,23.5 to 21.5,67 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind muts
+set readb off
+kdokw=spac(5)
+do while.t.
+  ewse=1
+  tbeliw=date()
+  nbeliw=spac(6)
+  membara=spac(1)
+  store.f. to ono,moleh,teesc,mlxx
+  store 0 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp12,jmp13,jmp14
+  store spac(7) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14
+  store spac(30) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14
+  ndokw=spac(30)
+  alam=spac(30)
+  arema=spac(15)
+  nsama=spac(6)
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo
+  clear
+  ??sys(2002,1)
+  dime rawat(10)  
+  for i=1 to 10
+    rawat(i)=' '
+  next i
+  sele 2
+  if bof()
+      no=550001
+      nrsp=550001
+  else
+      seek '550'
+      if foun()
+         do while bukti<='650000'.and.!eof()
+            no=val(righ(bukti,6))+1
+            skip
+         enddo
+      else
+         no=550001
+      endi
+  endif    
+  nomor=str(no)
+  pjnomor=len(ltrim(nomor))
+  nbeliw=left('000000',len('000000')-pjnomor)+ltrim(nomor)
+  tot1=0
+  tot2=0
+  do while.t.
+     clear
+     kbrgw=spac(7)
+     nbrgw=spac(30)
+     ukecilw=0
+     hbeliw=0
+     jasaw=0
+     totbw=0
+     ??sys(2002,1)
+     @0,0 say 'kak00.bmp' bitm
+     @0,7.2 say'kak01.bmp'bitm
+     @0,14.3 say'kak02.bmp'bitm
+     @0,21.4 say'kak03.bmp'bitm
+     @0,28.6 say'kak04.bmp'bitm
+     @0,35.7 say'kak05.bmp'bitm
+     @0,42.9 say'kak06.bmp'bitm
+     @0,50.0 say'kak07.bmp'bitm
+     @0,57.2 say'kak08.bmp'bitm
+     @0,64.3 say'kak09.bmp'bitm
+     @0.9,12 get nbeliw pict'!!!!!!' vali cakk() FONT'Book Antiqua',14 styl'b' size 1,7
+     @2.9,12 get tbeliw FONT'Book Antiqua',14 styl'b' size 1,11
+     @4.9,12 get kdokw pict'!!!!!' vali cdoke() FONT'Book Antiqua',14 styl'b' size 1,6
+     @4.9,21 get ndokw FONT'Book Antiqua',14 styl'b' size 1,33 disa
+     @9.6,15.5 GET mel1 vali ckba1() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @9.7,4.2 GET kbg1  font'Book Antiqua',14 size 1,9 disa
+     @9.7,51 GET trf1  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @11.2,15.5 GET mel2 vali ckba2() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @11.3,4.2 GET kbg2  font'Book Antiqua',14 size 1,9 disa
+     @11.3,51 GET trf2  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @12.8,15.5 GET mel3 vali ckba3() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @12.9,4.2 GET kbg3  font'Book Antiqua',14 size 1,9 disa
+     @12.9,51 GET trf3  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @14.4,15.5 GET mel4 vali ckba4() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @14.45,4.2 GET kbg4  font'Book Antiqua',14 size 1,9 disa
+     @14.45,51 GET trf4  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @16.0,15.5 GET mel5 vali ckba5() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @16.05,4.2 GET kbg5  font'Book Antiqua',14 size 1,9 disa
+     @16.05,51 GET trf5  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @17.6,15.5 GET mel6 vali ckba6() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @17.65,4.2 GET kbg6  font'Book Antiqua',14 size 1,9 disa
+     @17.65,51 GET trf6  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @19.2,15.5 GET mel7 vali ckba7() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @19.25,4.2 GET kbg7  font'Book Antiqua',14 size 1,9 disa
+     @19.25,51 GET trf7  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @20.8,15.5 GET mel8 vali ckba8() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @20.85,4.2 GET kbg8  font'Book Antiqua',14 size 1,9 disa
+     @20.85,51 GET trf8  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @22.4,15.5 GET mel9 vali ckba9() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @22.45,4.2 GET kbg9  font'Book Antiqua',14 size 1,9 disa
+     @22.45,51 GET trf9  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @24.0,15.5 GET mel10 vali ckba10() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @24.05,4.2 GET kbg10  font'Book Antiqua',14 size 1,9 disa
+     @24.05,51 GET trf10  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @25.6,15.5 GET mel11 vali ckba11() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @25.65,4.2 GET kbg11  font'Book Antiqua',14 size 1,9 disa
+     @25.65,51 GET trf11  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @27.2,15.5 GET mel12 vali ckba12() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @27.25,4.2 GET kbg12  font'Book Antiqua',14 size 1,9 disa
+     @27.25,51 GET trf12  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @28.8,15.5 GET mel13 vali ckba13() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @28.85,4.2 GET kbg13  font'Book Antiqua',14 size 1,9 disa
+     @28.85,51 GET trf13  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @30.4,15.5 GET mel14 vali ckba14() PICTURE '@^' from sere size 0.9,40 font 'Century Gothic' defa 0
+     @30.45,4.2 GET kbg14  font'Book Antiqua',14 size 1,9 disa
+     @30.45,51 GET trf14  vali ckjm() PICTURE '@z 999,999,999' font'Book Antiqua',14 size 1,15
+     @36,0 get jur1 PICTURE '@*IHT ;;' font 'Arial',9 size 4,13.5,0 default 0 
+     read
+     if read()=12.or.jur1=3
+        teesc=.t.
+        exit
+     endif
+     do case
+     case jur1=1
+*       sele 25
+*       dele all
+       sele 2
+       seek nbeliw
+       if found()
+          do while bukti=nbeliw.and.!eof()
+             dele
+             skip
+          enddo
+       endif
+       if mel1>1
+          kbrgw=kbg1
+          hbeliw=trf1
+          jasaw=dsc1
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel2>1
+          kbrgw=kbg2
+          hbeliw=trf2
+          jasaw=dsc2
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel3>1
+          kbrgw=kbg3
+          hbeliw=trf3
+          jasaw=dsc3
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel4>1
+          kbrgw=kbg4
+          hbeliw=trf4
+          jasaw=dsc4
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel5>1
+          kbrgw=kbg5
+          hbeliw=trf5
+          jasaw=dsc5
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel6>1
+          kbrgw=kbg6
+          hbeliw=trf6
+          jasaw=dsc6
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel7>1
+          kbrgw=kbg7
+          hbeliw=trf7
+          jasaw=dsc7
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel8>1
+          kbrgw=kbg8
+          hbeliw=trf8
+          jasaw=dsc8
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel9>1
+          kbrgw=kbg9
+          hbeliw=trf9
+          jasaw=dsc9
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel10>1
+          kbrgw=kbg10
+          hbeliw=trf10
+          jasaw=dsc10
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel11>1
+          kbrgw=kbg11
+          hbeliw=trf11
+          jasaw=dsc11
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel12>1
+          kbrgw=kbg12
+          hbeliw=trf12
+          jasaw=dsc12
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel13>1
+          kbrgw=kbg13
+          hbeliw=trf13
+          jasaw=dsc13
+          mlxx=.t.
+          do codetk
+       endif  
+       if mel14>1
+          kbrgw=kbg14
+          hbeliw=trf14
+          jasaw=dsc14
+          mlxx=.t.
+          do codetk
+       endif  
+       if mlxx
+          sele 2
+          append blank
+          repl no_perk with '1111', perkiraan with 'Kas', kredit with tot1,;
+               uraian with ndokw, bukti with nbeliw, ttrans with tbeliw, kang with kdokw
+       endif        
+*       sele 25
+*       APPE BLANK
+*       repl barang with '*'
+*       APPE BLANK
+*       repl barang with '*', total with tot1
+*       go top
+*       repo form nota prev
+*       repo form nota to print prompt
+       exit
+     case jur1=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.3,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 2
+          seek nbeliw
+          if found()
+             do while bukti=nbeliw.and.!eof()
+                dele
+                skip
+             enddo
+          endif   
+       endif
+       exit
+     endcase  
+  enddo
+  if teesc
+     exit
+  endif
+enddo
+set readb off
+deac wind muts
+retu
+*
+proc ckba1
+if mel1<>0
+   membara=sere(mel1)
+   phju=1
+   do ckbara
+endif   
+retu
+*
+proc ckba2
+if mel2<>0
+   membara=sere(mel2)
+   phju=2
+   do ckbara
+endif   
+retu
+*
+proc ckba3
+if mel3<>0
+   membara=sere(mel3)
+   phju=3
+   do ckbara
+endif   
+retu
+*
+proc ckba4
+if mel4<>0
+   membara=sere(mel4)
+   phju=4
+   do ckbara
+endif   
+retu
+*
+proc ckba5
+if mel5<>0
+   membara=sere(mel5)
+   phju=5
+   do ckbara
+endif   
+retu
+*
+proc ckba6
+if mel6<>0
+   membara=sere(mel6)
+   phju=6
+   do ckbara
+endif   
+retu
+*
+proc ckba7
+if mel7<>0
+   membara=sere(mel7)
+   phju=7
+   do ckbara
+endif   
+retu
+*
+proc ckba8
+if mel8<>0
+   membara=sere(mel8)
+   phju=8
+   do ckbara
+endif   
+retu
+*
+proc ckba9
+if mel9<>0
+   membara=sere(mel9)
+   phju=9
+   do ckbara
+endif   
+retu
+*
+proc ckba10
+if mel10<>0
+   membara=sere(mel10)
+   phju=10
+   do ckbara
+endif   
+retu
+*
+proc ckba11
+if mel11>0
+   membara=sere(mel11)
+   phju=11
+   do ckbara
+endif   
+retu
+*
+proc ckba12
+if mel12>0
+   membara=sere(mel12)
+   phju=12
+   do ckbara
+endif   
+retu
+*
+proc ckba13
+if mel13>0
+   membara=sere(mel13)
+   phju=13
+   do ckbara
+endif   
+retu
+*
+proc ckba14
+if mel14>0
+   membara=sere(mel14)
+   phju=14
+   do ckbara
+endif   
+retu
+*
+proc ckjm
+  tot1=trf1+trf2+trf3+trf4+trf5+trf6+trf7+trf8+trf9+trf10+trf11+trf12+trf13+trf14
+  tot2=dsc1+dsc2+dsc3+dsc4+dsc5+dsc6+dsc7+dsc8+dsc9+dsc10+dsc11+dsc12+dsc13+dsc14
+  @33.3,44 to 34,96 clear
+  @33.3,44 say'whit.bmp'bitm
+  @33.3,50 say tot1 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+  if ewse=2
+     @33.3,69 say tot2 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+  endif   
+show gets  
+retu
+*
+proc ckbara
+   sele 1
+   set orde to 2
+   seek membara
+   if found()
+      kbrgw=no_perk
+      nbrgw=perkiraan
+      do case
+      case phju=1
+         kbg1=kbrgw
+         nbg1=nbrgw
+      case phju=2
+         kbg2=kbrgw
+         nbg2=nbrgw
+      case phju=3
+         kbg3=kbrgw
+         nbg3=nbrgw
+      case phju=4
+         kbg4=kbrgw
+         nbg4=nbrgw
+      case phju=5
+         kbg5=kbrgw
+         nbg5=nbrgw
+      case phju=6
+         kbg6=kbrgw
+         nbg6=nbrgw
+      case phju=7
+         kbg7=kbrgw
+         nbg7=nbrgw
+      case phju=8
+         kbg8=kbrgw
+         nbg8=nbrgw
+      case phju=9
+         kbg9=kbrgw
+         nbg9=nbrgw
+      case phju=10
+         kbg10=kbrgw
+         nbg10=nbrgw
+      case phju=11
+         kbg11=kbrgw
+         nbg11=nbrgw
+      case phju=12
+         kbg12=kbrgw
+         nbg12=nbrgw
+      case phju=13
+         kbg13=kbrgw
+         nbg13=nbrgw
+      case phju=14
+         kbg14=kbrgw
+         nbg14=nbrgw
+      endcase
+   else   
+      kbrgw=spac(7)
+      nbrgw=spac(30)
+      do case
+      case phju=1
+         kbg1=kbrgw
+         nbg1=nbrgw
+         trf1=0
+         dsc1=0
+      case phju=2
+         kbg2=kbrgw
+         nbg2=nbrgw
+         trf2=0
+         dsc2=0
+      case phju=3
+         kbg3=kbrgw
+         nbg3=nbrgw
+         trf3=0
+         dsc3=0
+      case phju=4
+         kbg4=kbrgw
+         nbg4=nbrgw
+         trf4=0
+         dsc4=0
+      case phju=5
+         kbg5=kbrgw
+         nbg5=nbrgw
+         trf5=0
+         dsc5=0
+      case phju=6
+         kbg6=kbrgw
+         nbg6=nbrgw
+         trf6=0
+         dsc6=0
+      case phju=7
+         kbg7=kbrgw
+         nbg7=nbrgw
+         trf7=0
+         dsc7=0
+      case phju=8
+         kbg8=kbrgw
+         nbg8=nbrgw
+         trf8=0
+         dsc8=0
+      case phju=9
+         kbg9=kbrgw
+         nbg9=nbrgw
+         trf9=0
+         dsc9=0
+      case phju=10
+         kbg10=kbrgw
+         nbg10=nbrgw
+         trf10=0
+         dsc10=0
+      case phju=11
+         kbg11=kbrgw
+         nbg11=nbrgw
+         trf11=0
+         dsc11=0
+      case phju=12
+         kbg12=kbrgw
+         nbg12=nbrgw
+         trf12=0
+         dsc12=0
+      case phju=13
+         kbg13=kbrgw
+         nbg13=nbrgw
+         trf13=0
+         dsc13=0
+      case phju=14
+         kbg14=kbrgw
+         nbg14=nbrgw
+         trf14=0
+         dsc14=0
+      endcase
+   endif
+show gets   
+retu
+*
+proc camuta
+if nsama=nbeliw
+  nsama=nsama
+else  
+  nsama=nbeliw
+  tbeliw=date()
+  membara=spac(1)
+  store.f. to moleh,teesc
+  store.f. to ono,moleh,teesc
+  store 0 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp12,jmp13,jmp14
+  store spac(7) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14
+  store spac(30) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo,tot1,tot2
+  sele 2
+  seek nbeliw
+  if found()
+     i=0
+     tbeliw=ttrans
+     kdokw=kang
+     sele 3
+     set orde to 1
+     seek kdokw
+     if found()
+        ndokw=nang
+     endi
+     sele 2
+     do while bukti=nbeliw.and.!eof()
+       i=i+1
+       tot1=tot1+debet
+       tot2=tot2+kredit
+       do case
+       case i=1
+            kbg1=no_perk
+            nbg1=perkiraan
+            mel1=ascan(sere,nbg1)
+            trf1=debet
+            dsc1=kredit
+       case i=2
+            kbg2=no_perk
+            nbg2=perkiraan
+            mel2=ascan(sere,nbg2)
+            trf2=debet
+            dsc2=kredit
+       case i=3
+            kbg3=no_perk
+            nbg3=perkiraan
+            mel3=ascan(sere,nbg3)
+            trf3=debet
+            dsc3=kredit
+       case i=4
+            kbg4=no_perk
+            nbg4=perkiraan
+            mel4=ascan(sere,nbg4)
+            trf4=debet
+            dsc4=kredit
+       case i=5
+            kbg5=no_perk
+            nbg5=perkiraan
+            mel5=ascan(sere,nbg5)
+            trf5=debet
+            dsc5=kredit
+       case i=6
+            kbg6=no_perk
+            nbg6=perkiraan
+            mel6=ascan(sere,nbg6)
+            trf6=debet
+            dsc6=kredit
+       case i=7
+            kbg7=no_perk
+            nbg7=perkiraan
+            mel7=ascan(sere,nbg7)
+            trf7=debet
+            dsc7=kredit
+       case i=8
+            kbg8=no_perk
+            nbg8=perkiraan
+            mel8=ascan(sere,nbg8)
+            trf8=debet
+            dsc8=kredit
+       case i=9
+            kbg9=no_perk
+            nbg9=perkiraan
+            mel9=ascan(sere,nbg9)
+            trf9=debet
+            dsc9=kredit
+       case i=10
+            kbg10=no_perk
+            nbg10=perkiraan
+            mel10=ascan(sere,nbg10)
+            trf10=debet
+            dsc10=kredit
+       case i=11
+            kbg11=no_perk
+            nbg11=perkiraan
+            mel11=ascan(sere,nbg11)
+            trf11=debet
+            dsc11=kredit
+       case i=12
+            kbg12=no_perk
+            nbg12=perkiraan
+            mel12=ascan(sere,nbg12)
+            trf12=debet
+            dsc12=kredit
+       case i=13
+            kbg13=no_perk
+            nbg13=perkiraan
+            mel13=ascan(sere,nbg13)
+            trf13=debet
+            dsc13=kredit
+       case i=14
+            kbg14=no_perk
+            nbg14=perkiraan
+            mel14=ascan(sere,nbg14)
+            trf14=debet
+            dsc14=kredit
+       endcase
+       tot1=trf1+trf2+trf3+trf4+trf5+trf6+trf7+trf8+trf9+trf10+trf11+trf12+trf13+trf14
+       tot2=dsc1+dsc2+dsc3+dsc4+dsc5+dsc6+dsc7+dsc8+dsc9+dsc10+dsc11+dsc12+dsc13+dsc14
+       @33.3,44 to 34,96 clear
+       @33.3,44 say'whit.bmp'bitm
+       @33.3,50 say tot1 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+       @33.3,69 say tot2 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+       skip
+     enddo
+  else
+     tot1=0
+     tot2=0
+     kdokw=spac(5)
+     ndokw=spac(30)
+     @33.3,44 to 34,96 clear
+     @33.3,44 say'whit.bmp'bitm
+     @33.3,50 say tot1 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+     @33.3,69 say tot2 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+  endif   
+endi
+show gets
+retu
+*
+proc codet
+     sele 1
+     set orde to 1
+     seek kbrgw
+     if found()
+        perkiraanw=perkiraan
+        sele 2
+        append blank
+        repl no_perk with kbrgw, perkiraan with perkiraanw, debet with hbeliw, kredit with jasaw,;
+             uraian with ndokw, bukti with nbeliw, ttrans with tbeliw, kang with kdokw, kete with ketew
+*        sele 25
+*        appe blan
+*        repl barang with nbrgw, tanggal with dtoc(tbeliw),;
+*             jml with ukecilw, nota with nbeliw,;
+*             ket with iif(apem=1,'Kredit','Tunai'), nama with ndokw,;
+*             alamat with alam, harga with hbeliw, total with totbw,;
+*             disc with jasaw, telp with arema
+     endif
+retu
+*          
+proc cakm
+if nsama=nbeliw
+  nsama=nsama
+else  
+  nsama=nbeliw
+  tbeliw=date()
+  membara=spac(1)
+  store.f. to moleh,teesc
+  store.f. to ono,moleh,teesc
+  store 0 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp12,jmp13,jmp14
+  store spac(7) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14
+  store spac(30) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo,tot1,tot2
+  sele 2
+  seek nbeliw
+  if found()
+     i=0
+     tbeliw=ttrans
+     kdokw=kang
+     sele 3
+     set orde to 1
+     seek kdokw
+     if found()
+        ndokw=nang
+     endi
+     sele 2
+     do while bukti=nbeliw.and.!eof()
+       if no_perk<>'1111'
+          i=i+1
+          tot1=tot1+kredit
+          do case
+          case i=1
+            kbg1=no_perk
+            nbg1=perkiraan
+            mel1=ascan(sere,nbg1)
+            trf1=kredit
+          case i=2
+            kbg2=no_perk
+            nbg2=perkiraan
+            mel2=ascan(sere,nbg2)
+            trf2=kredit
+          case i=3
+            kbg3=no_perk
+            nbg3=perkiraan
+            mel3=ascan(sere,nbg3)
+            trf3=kredit
+          case i=4
+            kbg4=no_perk
+            nbg4=perkiraan
+            mel4=ascan(sere,nbg4)
+            trf4=kredit
+          case i=5
+            kbg5=no_perk
+            nbg5=perkiraan
+            mel5=ascan(sere,nbg5)
+            trf5=kredit
+          case i=6
+            kbg6=no_perk
+            nbg6=perkiraan
+            mel6=ascan(sere,nbg6)
+            trf6=kredit
+          case i=7
+            kbg7=no_perk
+            nbg7=perkiraan
+            mel7=ascan(sere,nbg7)
+            trf7=kredit
+          case i=8
+            kbg8=no_perk
+            nbg8=perkiraan
+            mel8=ascan(sere,nbg8)
+            trf8=kredit
+          case i=9
+            kbg9=no_perk
+            nbg9=perkiraan
+            mel9=ascan(sere,nbg9)
+            trf9=kredit
+          case i=10
+            kbg10=no_perk
+            nbg10=perkiraan
+            mel10=ascan(sere,nbg10)
+            trf10=kredit
+          case i=11
+            kbg11=no_perk
+            nbg11=perkiraan
+            mel11=ascan(sere,nbg11)
+            trf11=kredit
+          case i=12
+            kbg12=no_perk
+            nbg12=perkiraan
+            mel12=ascan(sere,nbg12)
+            trf12=kredit
+          case i=13
+            kbg13=no_perk
+            nbg13=perkiraan
+            mel13=ascan(sere,nbg13)
+            trf13=kredit
+          case i=14
+            kbg14=no_perk
+            nbg14=perkiraan
+            mel14=ascan(sere,nbg14)
+            trf14=kredit
+          endcase
+          tot1=trf1+trf2+trf3+trf4+trf5+trf6+trf7+trf8+trf9+trf10+trf11+trf12+trf13+trf14
+          @33.3,44 to 34,96 clear
+          @33.3,44 say'whit.bmp'bitm
+          @33.3,50 say tot1 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+       endif   
+       skip
+     enddo
+  else
+     tot1=0
+     tot2=0
+     kdokw=spac(5)
+     ndokw=spac(30)
+     @33.3,44 to 34,96 clear
+     @33.3,44 say'whit.bmp'bitm
+     @33.3,50 say tot1 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+  endif   
+endi
+show gets
+retu
+*
+proc codetm
+     sele 1
+     set orde to 1
+     seek kbrgw
+     if found()
+        perkiraanw=perkiraan
+        sele 2
+        append blank
+        repl no_perk with kbrgw, perkiraan with perkiraanw, kredit with hbeliw,;
+             uraian with ndokw, bukti with nbeliw, ttrans with tbeliw, kang with kdokw
+*        sele 25
+*        appe blan
+*        repl barang with nbrgw, tanggal with dtoc(tbeliw),;
+*             jml with ukecilw, nota with nbeliw,;
+*             ket with iif(apem=1,'Kredit','Tunai'), nama with ndokw,;
+*             alamat with alam, harga with hbeliw, total with totbw,;
+*             disc with jasaw, telp with arema
+     endif
+retu
+*          
+proc cakk
+if nsama=nbeliw
+  nsama=nsama
+else  
+  nsama=nbeliw
+  tbeliw=date()
+  membara=spac(1)
+  store.f. to moleh,teesc
+  store.f. to ono,moleh,teesc
+  store 0 to mel1,mel2,mel3,mel4,mel5,mel6,mel7,mel8,mel9,mel10,mel11,mel12,mel13,mel14
+  store 0 to sto1,sto2,sto3,sto4,sto5,sto6,sto7,sto8,sto9,sto10,sto11,sto12,sto13,sto14
+  store 0 to dsc1,dsc2,dsc3,dsc4,dsc5,dsc6,dsc7,dsc8,dsc9,dsc10,dsc11,dsc12,dsc13,dsc14
+  store 0 to trf1,trf2,trf3,trf4,trf5,trf6,trf7,trf8,trf9,trf10,trf11,trf12,trf13,trf14
+  store 1 to jmp1,jmp2,jmp3,jmp4,jmp5,jmp6,jmp7,jmp8,jmp9,jmp10,jmp11,jmp12,jmp12,jmp13,jmp14
+  store spac(7) to kbg1,kbg2,kbg3,kbg4,kbg5,kbg6,kbg7,kbg8,kbg9,kbg10,kbg11,kbg12,kbg13,kbg14
+  store spac(30) to nbg1,nbg2,nbg3,nbg4,nbg5,nbg6,nbg7,nbg8,nbg9,nbg10,nbg11,nbg12,nbg13,nbg14
+  bares=1
+  phju=1
+  store 0 to apem,pema,bayarw,utangw,nudok,tot1,jtempo,tot1,tot2
+  sele 2
+  seek nbeliw
+  if found()
+     i=0
+     tbeliw=ttrans
+     kdokw=kang
+     sele 3
+     set orde to 1
+     seek kdokw
+     if found()
+        ndokw=nang
+     endi
+     sele 2
+     do while bukti=nbeliw.and.!eof()
+       if no_perk<>'1111'
+          i=i+1
+          tot1=tot1+debet
+          do case
+          case i=1
+            kbg1=no_perk
+            nbg1=perkiraan
+            mel1=ascan(sere,nbg1)
+            trf1=debet
+          case i=2
+            kbg2=no_perk
+            nbg2=perkiraan
+            mel2=ascan(sere,nbg2)
+            trf2=debet
+          case i=3
+            kbg3=no_perk
+            nbg3=perkiraan
+            mel3=ascan(sere,nbg3)
+            trf3=debet
+          case i=4
+            kbg4=no_perk
+            nbg4=perkiraan
+            mel4=ascan(sere,nbg4)
+            trf4=debet
+          case i=5
+            kbg5=no_perk
+            nbg5=perkiraan
+            mel5=ascan(sere,nbg5)
+            trf5=debet
+          case i=6
+            kbg6=no_perk
+            nbg6=perkiraan
+            mel6=ascan(sere,nbg6)
+            trf6=debet
+          case i=7
+            kbg7=no_perk
+            nbg7=perkiraan
+            mel7=ascan(sere,nbg7)
+            trf7=debet
+          case i=8
+            kbg8=no_perk
+            nbg8=perkiraan
+            mel8=ascan(sere,nbg8)
+            trf8=debet
+          case i=9
+            kbg9=no_perk
+            nbg9=perkiraan
+            mel9=ascan(sere,nbg9)
+            trf9=debet
+          case i=10
+            kbg10=no_perk
+            nbg10=perkiraan
+            mel10=ascan(sere,nbg10)
+            trf10=debet
+          case i=11
+            kbg11=no_perk
+            nbg11=perkiraan
+            mel11=ascan(sere,nbg11)
+            trf11=debet
+          case i=12
+            kbg12=no_perk
+            nbg12=perkiraan
+            mel12=ascan(sere,nbg12)
+            trf12=debet
+          case i=13
+            kbg13=no_perk
+            nbg13=perkiraan
+            mel13=ascan(sere,nbg13)
+            trf13=debet
+          case i=14
+            kbg14=no_perk
+            nbg14=perkiraan
+            mel14=ascan(sere,nbg14)
+            trf14=debet
+          endcase
+          tot1=trf1+trf2+trf3+trf4+trf5+trf6+trf7+trf8+trf9+trf10+trf11+trf12+trf13+trf14
+          @33.3,44 to 34,96 clear
+          @33.3,44 say'whit.bmp'bitm
+          @33.3,50 say tot1 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+       endif   
+       skip
+     enddo
+  else
+     tot1=0
+     tot2=0
+     kdokw=spac(5)
+     ndokw=spac(30)
+     @33.3,44 to 34,96 clear
+     @33.3,44 say'whit.bmp'bitm
+     @33.3,50 say tot1 pict'@zj 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',18 styl'b'
+  endif   
+endi
+show gets
+retu
+*
+proc codetk
+     sele 1
+     set orde to 1
+     seek kbrgw
+     if found()
+        perkiraanw=perkiraan
+        sele 2
+        append blank
+        repl no_perk with kbrgw, perkiraan with perkiraanw, debet with hbeliw,;
+             uraian with ndokw, bukti with nbeliw, ttrans with tbeliw, kang with kdokw
+*        sele 25
+*        appe blan
+*        repl barang with nbrgw, tanggal with dtoc(tbeliw),;
+*             jml with ukecilw, nota with nbeliw,;
+*             ket with iif(apem=1,'Kredit','Tunai'), nama with ndokw,;
+*             alamat with alam, harga with hbeliw, total with totbw,;
+*             disc with jasaw, telp with arema
+     endif
+retu
+*          
+proc cdoke
+kgb=spac(5)
+if cextr(kdokw)
+   setri=''
+   for rq=1 to 5
+       if subs(kdokw,rq,1) $ '0123456789'
+       else   
+          setri=setri+subs(kdokw,rq,1)
+       endif
+   next    
+   do dftces with setri
+   if last()=27
+      kdokw=kdokl
+      ndokw=spac(30)
+      show gets
+      retu
+   endi
+   sele 3
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(5)
+      kdokw=kang
+      ndokw=nang
+   else   
+      ndokw=spac(30)
+   endif   
+else
+   sele 3
+   set orde to 1
+   seek kdokw
+   if found()
+      ndokw=nang
+   else   
+      ndokw=spac(30)
+   endif
+endif
+show gets
+retu
+*
+proc laperk
+set date brit
+set cent on
+set dele on
+ktm=' '
+clos data
+DEFI WIND gl;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Buku Besar';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND gl1;
+FROM 0,(wcols()-130)/2 to wrows(),((wcols()-130)/2)+130 system title'Buku besar' font'arial' clos
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+taun=tawal
+taun1=takhir
+SELE 1
+use rek inde rek1
+SELE 2
+USE trans inde trans2,trans7,trans9
+SELE 3
+use nga inde nga1
+sele 4
+use bu inde bu2,bu8
+sele 5
+use awus
+acti wind GL
+NOPERKI=SPAC(7)
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'No.' styl'b'
+   @6.0,6 say 'dari Tgl.' styl'b'
+   @6.0,35 say 's/d.' styl'b'
+   @4.5,17 GET noperki FONT'Book Antiqua',12 size 1,7
+   @6.0,17 get taun pict'@!' FONT'Book Antiqua',12 size 1,12
+   @6.0,41 get taun1 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @7.5,0.1 get ake PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.ake=3
+      exit
+   endi
+   if taun>taun1
+      loop
+   endif
+   sele 3
+   dele all
+   sele 1
+   seek noperki
+   if !found()
+      loop
+   endi
+   perki=perkiraan
+* PERHITUNGAN SALDO AWAL   
+   awad=0
+   awak=0
+   sele 5
+   go top
+   locate for no=noperki
+   if found()
+      if debet<>0
+         awad=debet
+      else   
+         awak=kredit
+      endi
+   endif
+   sele 2
+   set orde to 1
+   seek noperki
+   if found()
+       do while no_perk=noperki.and.!eof()
+          if dtoc(ttrans,1)<dtoc(taun,1).and.!eof()
+             if kete=' '
+                awad=awad+debet
+                awak=awak+kredit
+             endif
+          endif   
+          skip
+       enddo
+   endif
+   seek noperki
+   if found()
+       do while no_perk=noperki.and.!eof()
+          if dtoc(ttrans,1)<dtoc(taun,1).and.!eof()
+             if kete='T'
+                awad=awad+debet
+                awak=awak+kredit
+             endif
+          endif   
+          skip
+       enddo
+   endif
+   slat=awad-awak
+*  PERHITUNGAN TRANSAKSI
+   sele 2
+   set orde to 1         
+   seek noperki+left(dtoc(taun,1),6)
+   if found()
+      do while no_perk=noperki.and.!eof()
+         if dtoc(ttrans,1)>=dtoc(taun,1).and.dtoc(ttrans,1)<=dtoc(taun1,1)
+           if kete=' '
+            tgw=dtoc(ttrans)
+            buktiw=bukti
+            urw=uraian
+            debw=debet
+            krew=kredit
+            sele 3
+            appe blan
+            repl km with buktiw, uraian with urw,;
+                 debet with debw, kredit with krew,;
+                 nop with noperki, perk with perki,;
+                 tg1 with dtoc(taun), tg2 with dtoc(taun1),;
+                 ket with ktm, tg with tgw
+           endif      
+         endif   
+         sele 2
+         set orde to 1
+         skip             
+      enddo
+   endif
+   sele 2
+   set orde to 1         
+   seek noperki+left(dtoc(taun,1),6)
+   if found()
+      do while no_perk=noperki.and.!eof()
+         if dtoc(ttrans,1)>=dtoc(taun,1).and.dtoc(ttrans,1)<=dtoc(taun1,1)
+           if kete='T'
+            tgw=dtoc(ttrans)
+            buktiw=bukti
+            urw=uraian
+            debw=debet
+            krew=kredit
+            sele 3
+            appe blan
+            repl km with buktiw, uraian with urw,;
+                 debet with debw, kredit with krew,;
+                 nop with noperki, perk with perki,;
+                 tg1 with dtoc(taun), tg2 with dtoc(taun1),;
+                 ket with ktm, tg with tgw
+           endif      
+         endif   
+         sele 2
+         set orde to 1
+         skip             
+      enddo
+   endif
+   sele 3
+   go top
+   repl all tnd with '1' for debet>0
+   go top
+   repl all tnd with '2' for kredit>0
+   go top
+   de=0
+   kr=0
+   go top
+   do while !eof()
+      slat=slat+(debet-kredit)
+      repl sisa with abs(slat)
+      de=de+debet
+      kr=kr+kredit
+      skip
+   enddo
+   sele 3
+   appe blan
+   repl debet with de, kredit with kr, uraian with spac(15)+'J U M L A H',;
+        tg1 with dtoc(taun), tg2 with dtoc(taun1), tnd with '3', ket with ktm
+   appe blan
+   repl debet with awad, kredit with awak, uraian with spac(15)+'SALDO AWAL',;
+        tg1 with dtoc(taun), tg2 with dtoc(taun1), tnd with '3', ket with ktm
+   tode=de+awad
+   tokr=kr+awak
+   akr=tode-tokr
+   akde=0
+   akkr=0
+   do case
+   case akr>0
+      akkr=akr
+   case akr<0
+      akde=akr
+   case akr=0
+      akde=0
+      akkr=0
+   endcase
+   appe blan
+   repl debet with akde, kredit with akkr, uraian with spac(15)+'SALDO AKHIR',;
+        tg1 with dtoc(taun), tg2 with dtoc(taun1), tnd with '3', ket with ktm
+   appe blan
+   repl debet with akde+awad+de, kredit with akkr+awak+kr, uraian with spac(15)+'TOTAL',;
+        tg1 with dtoc(taun), tg2 with dtoc(taun1), tnd with '3', ket with ktm
+   go top
+   do case
+   case ake=1
+     brow fiel tg:h='Tanggal':r,km:h='KM/KK':r,uraian:r,;
+               debet:r:p='@Z 999,999,999,999',kredit:r:p='@Z 999,999,999,999',;
+               sisa:r:p='@Z 999,999,999,999';
+          wind gl1 font'Arial',9 Title 'BUKU BESAR :'+noperki+' '+perki
+   case ake=2
+      repo form laperk prev
+      repo form laperk to print prom
+   endcase
+enddo   
+rele wind GL,nrc1
+clos data
+retu
+*
+proc nerac
+set date brit
+set cent on
+set dele on
+ktm=' '
+clos data
+DEFI WIND gl;
+FROM 10.5,(wcols()-75)/2 to 24.7,((wcols()-75)/2)+75 system title'Neraca';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND nrc1;
+FROM 0,(wcols()-176)/2 to wrows(),((wcols()-176)/2)+176 system title'Neraca' font'arial' clos
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+taun=tawal
+taun1=takhir
+SELE 1
+use rek inde rek1
+SELE 2
+USE trans inde trans2,trans7,trans9
+SELE 3
+use MUTASI excl
+dele all
+pack
+acti wind GL
+NOPERKI=SPAC(7)
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12'bitm
+   @7.5,0 say 'scree.bmp'bitm
+   @4.5,6 say 'dari Tgl.' styl'b'
+   @6.0,6 say  's/d.' styl'b'
+   @4.5,17 GET taun pict'@!' FONT'Book Antiqua',12 size 1,12
+   @6.0,17 get taun1 pict'@!' FONT'Book Antiqua',12 size 1,12
+   @7.5,0.1 get ake PICTURE '@*IHT ;;' font 'Arial',9;
+    size 2.3,19.1,0 default 0 
+   read
+   if read()=12.or.ake=3
+      exit
+   endi
+   if taun>taun1
+      loop
+   endif
+   sele 3
+   dele all
+   sele 3
+   dele all
+   tglshow=taun
+   tglshow1=taun1
+   tglawal=ctod('01/01/'+left(dtoc(taun1,1),4))
+*
+*  MUTASI
+*   
+   sele 1
+   go top
+   store 0 to tde,tkr
+   do while !eof()
+      acc=no_perk
+      accoun=perkiraan
+      store 0 to de,kr,awal
+      de=0
+      kr=0
+      sele 2
+      set orde to 1         
+      seek acc
+      if found()
+         do while no_perk=acc.and.!eof()
+            if dtoc(ttrans,1)>=dtoc(tglawal,1).and.dtoc(ttrans,1)<=dtoc(taun1,1)
+               de=de+debet
+               kr=kr+kredit
+            endif   
+            skip             
+         enddo
+      endif
+      de=de
+      kr=kr
+      tde=tde+de
+      tkr=tkr+kr
+      sele 3
+      appe blan
+      repl no with acc, perkiraan with accoun, debet with de, kredit with kr
+      de=0
+      kr=0
+      sele 1
+      skip
+   enddo
+   sele 3
+   go top
+   copy to musp
+*
+*  PERCOBAAN   
+*
+   SELE 1
+   use rek inde rek1
+   SELE 2
+   USE trans inde trans2,trans7,trans9
+   sele 3
+   use awus
+   SELE 4
+   use MUTASI excl
+   DELE ALL
+   pack
+   sele 1
+   go top
+   store 0 to tde,tkr
+   do while !eof()
+      acc=no_perk
+      accoun=perkiraan
+      store 0 to de,kr,awalde,awalkr,saldde,saldkr
+      sele 3
+      go top
+      locate for no=acc
+      if found()
+         awalde=awalde+debet
+         awalkr=awalkr+kredit
+      endi   
+*wait 'Debet :'+tran(awalde,'@z 999,999,999,999') wind
+*wait 'Kredit :'+tran(awalkr,'@z 999,999,999,999') wind
+      de=0
+      kr=0
+      sele 2
+      set orde to 1         
+      seek acc
+      if found()
+         do while no_perk=acc.and.!eof()
+            if dtoc(ttrans,1)>=dtoc(tglawal,1).and.dtoc(ttrans,1)<=dtoc(taun1,1)
+               de=de+debet
+               kr=kr+kredit
+            endif   
+            skip             
+         enddo
+      endif
+      saldde=abs(saldde)
+      saldkr=abs(saldkr)
+      saldde=awalde+de
+      saldkr=awalkr+kr
+      tde=tde+saldde
+      tkr=tkr+saldkr
+      sele 4
+      appe blan
+      repl no with acc, perkiraan with accoun, debet with saldde, kredit with saldkr
+      sele 1
+      skip
+   enddo
+   sele 4
+   go top
+   copy to pusp
+   clos data
+*
+*  SALDO
+*
+   ktm=' '
+   clos data
+   SELE 1
+   use rek inde rek1
+   SELE 2
+   use pusp
+   SELE 3
+   use MUTASI excl
+   dele all
+   pack
+   sele 1
+   go top
+   store 0 to tde,tkr
+   do while !eof()
+      acc=no_perk
+      accoun=perkiraan
+      store 0 to de,kr,awal,hs
+      sele 2
+      locate for no=acc
+      if found()
+         de=debet
+         kr=kredit
+      endif  
+      hs=de-kr
+      do case
+      case hs>0
+         sele 3
+         appe blan
+         repl no with acc, perkiraan with accoun, debet with abs(hs)
+      case hs<0
+         sele 3
+         appe blan
+         repl no with acc, perkiraan with accoun, kredit with abs(hs)
+      other   
+         sele 3
+         appe blan
+         repl no with acc, perkiraan with accoun
+      endc 
+      sele 1
+      skip
+   enddo
+   sele 3
+   go top
+   copy to susp
+   clos data
+*
+*  ADJUSTMENT
+*
+   clos data
+   ktm=' '
+   SELE 1
+   use rek inde rek1
+   SELE 2
+   use trans inde trans2,trans7
+   SELE 3
+   use MUTASI excl
+   dele all
+   pack
+   sele 4
+   use susp
+   sele 1
+   go top
+   store 0 to tde,tkr
+   ketew='T'
+   pers_aw=0
+   pembelian=0
+   pers_ak=0
+   ambi0=0
+   do while !eof()
+      acc=no_perk
+      accoun=perkiraan
+      store 0 to de,kr,awal
+      de=0
+      kr=0
+      sele 2
+      set orde to 1         
+      seek acc
+      if found()
+         do while no_perk=acc.and.!eof()
+            if acc<>'1171'
+               if dtoc(ttrans,1)>=dtoc(tglawal,1).and.dtoc(ttrans,1)<=dtoc(taun1,1)
+                  if kete=ketew
+                     de=de+debet
+                     kr=kr+kredit
+                  endif   
+               endif
+            else
+               if dtoc(ttrans,1)>=dtoc(taun,1).and.dtoc(ttrans,1)<=dtoc(taun1,1)
+                  if kete=ketew
+                     de=de+debet
+                     kr=kr+kredit
+                  endif   
+               endif
+            endi   
+            skip             
+         enddo
+      endif
+      if acc<>'1171'.and.acc<>'5001'.and.acc<>'5005'
+         de=abs(de)
+         kr=abs(kr)
+      else
+         if acc='1171'.or.acc='5001'
+            de=abs(de)
+            if acc='1171'
+               pers_ak=de
+            endi   
+            do case
+               case acc='1171'
+                 sele 4
+                 locate for no='1171'.and.!eof()
+                 if found()
+                    kr=abs(debet)
+                    pers_aw=kr
+                 endif   
+               case acc='5001'
+                 sele 4
+                 locate for no='5001'.and.!eof()
+                 if found()
+                    kr=abs(debet)
+                    pembelian=kr
+                 endif   
+            endcase
+            sele 4
+            locate for no=acc.and.!eof()
+            if found()
+               kr=abs(debet)
+            endi
+         else   
+            if acc='5005'
+               ambi0=pers_aw+pembelian
+               kr=0
+               de=ambi0-pers_ak
+            endif   
+         endi   
+      endif   
+      sele 2
+      set orde to 1             
+      tde=tde+de
+      tkr=tkr+kr
+      sele 3
+      appe blan
+      repl no with acc, perkiraan with accoun, debet with de, kredit with kr
+      de=0
+      kr=0
+      sele 1
+      skip
+   enddo
+   sele 3
+   go top
+   copy to Ausp
+   clos data
+*
+*  RUGI/LABA
+*
+   clos data
+   ktm=' '
+   if !file('susp.dbf').or.!file('ausp.dbf')
+       wait'Salah satu belum diproses'wind
+       return
+   endif
+   SELE 1
+   use rek inde rek1
+   SELE 2
+   use susp
+   SELE 3
+   use ausp
+   SELE 4
+   use MUTASI excl
+   dele all
+   pack
+   sele 1
+   go top
+   store 0 to tde,tkr
+   do while !eof()
+      acc=no_perk
+      accoun=perkiraan
+      store 0 to de,kr,db,ke,sde,skr
+      de=0
+      kr=0
+      sele 2
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)>='4'
+            de=de+debet
+         endif   
+         skip
+      enddo
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)>='4'
+            kr=kr+kredit 
+         endif   
+         skip
+      enddo
+      sele 3
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)>='4'
+            db=db+debet
+         endif   
+         skip
+      enddo
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)>='4'
+            ke=ke+kredit 
+         endif   
+         skip
+      enddo
+      sde=de+db
+      skr=kr+ke
+      if acc<>'5001'
+         sde=abs(sde)
+         skr=abs(skr)
+      else
+         sde=0
+         skr=0
+      endif   
+      tde=tde+sde
+      tkr=tkr+skr
+      if left(acc,1)<>'9'
+         sele 4
+         appe blan
+         repl no with acc, perkiraan with accoun, debet with sde, kredit with skr
+      else   
+         selisi=tkr-tde
+         selis=abs(selisi)
+         sele 4
+         appe blan
+         repl no with acc, perkiraan with accoun, debet with selisi, kredit with skr
+         tde=tde+selisi
+      endi   
+      de=0
+      kr=0
+      sele 1
+      skip
+   enddo
+   hslo=0
+   sele 4
+   go top
+   locate for no='4101'
+   if found()
+      hslo=debet-kredit
+      if hslo>0
+         repl debet with abs(hslo), kredit with 0
+      endif
+      if hslo<0
+         repl kredit with abs(hslo), debet with 0
+      endif
+   endif
+   copy to rusp
+   clos data
+*
+*  NERACA AKHIR
+*
+   clos data
+   if !file('susp.dbf').or.!file('ausp.dbf')
+      wait'Salah satu belum diproses'wind
+      return
+   endif
+   SELE 1
+   use rek inde rek1
+   SELE 2
+   use susp
+   SELE 3
+   use ausp
+   sele 4
+   use musp
+   sele 5
+   use pusp
+   sele 6
+   use rusp
+   sele 7
+   use zusp
+   sele 8
+   use MUTASI excl
+   dele all
+   pack
+   sele 9
+   use AKHIR excl
+   pack
+   sele 10
+   use awus
+   sele 7
+   dele all
+   sele 9
+   dele all
+   sele 8
+   dele all
+   sele 7
+   dele all
+   sele 1
+   go top
+   store 0 to tde,tkr
+   do while !eof()
+      acc=no_perk
+      accoun=perkiraan
+      store 0 to de,kr,db,ke,sde,skr
+      de=0
+      kr=0
+      sele 2
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)<'4'
+            de=de+debet
+         endif   
+         skip
+      enddo
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)<'4'
+            kr=kr+kredit 
+         endif   
+         skip
+      enddo
+      hsul=0
+      sele 3
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)<'4'
+            db=db+debet
+         endif   
+         skip
+      enddo
+      go top
+      do while !eof()
+         if no=acc.and.left(acc,1)<'4'
+            ke=ke+kredit 
+         endif   
+         skip
+      enddo
+*      if acc<>'2133'
+         if de>0
+            de=de+db-ke
+         endif
+         if kr>0   
+            kr=kr+ke-db
+         endi   
+         sde=abs(de)
+         skr=abs(kr)
+         tde=tde+de
+         tkr=tkr+kr
+*      else
+*         sele 3
+*         locate for no='2133'
+*         if found()
+*            hsul=debet-kredit
+*            if hsul>0
+*               de=hsul
+*               sde=abs(de)
+*               tde=tde-de
+*            endif   
+*            if hsul<0
+*               kr=hsul
+*               skr=abs(kr)
+*               tkr=tkr-kr
+*            endif   
+*         endif
+*      endif   
+      if left(acc,1)<>'9'
+         sele 8
+         appe blan
+         repl no with acc, perkiraan with accoun, debet with sde, kredit with skr
+      else   
+         selisi=tde-tkr
+         sele 8
+         appe blan
+         repl no with acc, perkiraan with accoun, debet with sde, kredit with selisi
+         tkr=tkr+selisi
+      endi   
+      de=0
+      kr=0
+      sele 1
+      skip
+   enddo
+   sele 8
+   go top
+   do while !eof()
+      nom=no
+      pkr=perkiraan
+      pls=debet
+      mns=kredit
+      sele 7
+      appe blan
+      repl no with nom, perkiraan with pkr, debet with pls, kredit with mns
+      sele 8
+      skip
+   enddo
+   do prozz
+   sele 9
+   go top
+   jene=righ(dtoc(taun,1),2)+'-'+subs(dtoc(taun,1),5,2)+'-'+subs(dtoc(taun,1),3,2)
+*   if mchoice=2
+*      if subs(dtoc(taun1,1),5,4)='1231'
+*         sele 10
+*         zap
+*         sele 9
+*         go top
+*         do while !eof()
+*            nope=no
+*            perki=perkiraan
+*            debe=akhir_d
+*            kred=akhir_k
+*            sele 10
+*            appe blan
+*            repl no with nope, perkiraan with perki, debet with debe, kredit with kred,;
+*                 ttrans with taun1
+*            sele 9
+*            skip
+*         enddo
+*      endif
+*   endif
+   if ake=2
+      repo form nrc prev
+      repo form nrc to print prom
+   endi
+   clos data
+   use mutasi
+   copy to zusp
+   clos data
+   SELE 1
+   use rek inde rek1
+   SELE 2
+   USE trans inde trans2,trans7
+   SELE 3
+   use MUTASI excl
+   dele all
+   pack
+enddo   
+rele wind GL,nrc1
+clos data
+  use sususp
+  dele all
+  use akhir
+  go top
+  locate for no='1312'
+  if found()
+     jumlah=akhir_d
+     use sususp
+     appe blan
+     repl j1312 with jumlah
+  endif
+  use akhir
+  go top
+  locate for no='1313'
+  if found()
+     jumlah=akhir_d
+     use sususp
+     repl j1313 with jumlah
+  endif
+  use akhir
+  go top
+  COPY TO SKONTR FOR NO<'4000'.and.no<>spac(7)
+  use akhir
+  GO TOP
+  COPY TO RL FOR NO>='4000'.and.no<>spac(7)
+  USE SKONTR
+  APPE FROM AKHIR FOR NO='9000' 
+  APPE FROM AKHIR FOR NO=spac(7) 
+  repl all tg1 with taun1
+  USE rl
+  APPE FROM AKHIR FOR NO='1181' 
+  USE rl
+  APPE FROM AKHIR FOR NO=spac(7) 
+  repl all tg1 with taun1
+  clos data
+retu
+*
+proc prozz
+  sele 1
+  go top
+  store 0 to tdm,tkm,tdp,tkp,tds,tks
+  store 0 to tda,tka,tdr,tkr,tdz,tkz,tdw,tkw
+  do while !eof()
+     acc=no_perk
+     accoun=perkiraan
+     store 0 to de,kr,db,ke,sde,skr
+     de=0
+     kr=0
+     sele 9
+     appe blan
+     repl no with acc, perkiraan with accoun, tg0 with taun, tg1 with taun1, jud with 'Waserda'
+     sele 4
+     go top
+     do while !eof()
+        de=debet
+        kr=kredit
+        if no=acc
+           sele 9 
+           repl mutasi_d with de, mutasi_k with kr
+           tdm=tdm+de
+           tkm=tkm+kr
+        endif   
+        sele 4
+        skip
+     enddo
+     sele 10
+     go top
+     do while !eof()
+        de=debet
+        kr=kredit
+        if no=acc
+           sele 9 
+           repl awal_d with de, awal_k with kr
+           tdw=tdw+de
+           tkw=tkw+kr
+        endif   
+        sele 10
+        skip
+     enddo
+     sele 5
+     go top
+     do while !eof()
+        de=debet
+        kr=kredit
+        if no=acc
+           sele 9 
+           repl perc_d with de, perc_k with kr
+           tdp=tdp+de
+           tkp=tkp+kr
+        endif   
+        sele 5
+        skip
+     enddo
+     sele 2
+     go top
+     do while !eof()
+        de=debet
+        kr=kredit
+        if no=acc
+           sele 9 
+           repl sisa_d with de, sisa_k with kr
+           tds=tds+de
+           tks=tks+kr
+        endif   
+        sele 2
+        skip
+     enddo
+     sele 3
+     go top
+     do while !eof()
+        de=debet
+        kr=kredit
+        if no=acc
+           sele 9 
+           repl adjust_d with de, adjust_k with kr
+           tda=tda+de
+           tka=tka+kr
+        endif   
+        sele 3
+        skip
+     enddo
+     sele 6
+     go top
+     do while !eof()
+        de=debet
+        kr=kredit
+        if no=acc
+           sele 9 
+           repl rl_d with de, rl_k with kr
+           tdr=tdr+de
+           tkr=tkr+kr
+        endif   
+        sele 6
+        skip
+     enddo
+     sele 7
+     go top
+     do while !eof()
+        de=debet
+        kr=kredit
+        if no=acc
+           sele 9 
+           repl akhir_d with de, akhir_k with kr
+           tdz=tdz+de
+           tkz=tkz+kr
+        endif   
+        sele 7
+        skip
+     enddo
+     sele 1
+     skip
+  enddo
+  sele 9
+  appe blan
+  repl awal_d with tdw,;
+      awal_k with tkw,;
+      mutasi_d with tdm,;
+      mutasi_k with tkm,;
+      perc_d with tdp,;
+      perc_k with tkp,;
+      sisa_d with tds,;
+      sisa_k with tks,;
+      adjust_d with tda,;
+      adjust_k with tka,;
+      rl_d with tdr,;
+      rl_k with tkr,;
+      akhir_d with tdz,;
+      akhir_k with tkz
+  brow FIEL no:r,perkiraan:r,;
+      awal_d:r:h='Awal (D)':p='@z 99,999,999,999',awal_k:r:h='Awal (K)':p='@z 99,999,999,999',;
+      mutasi_d:r:h='Mutasi (D)':p='@z 99,999,999,999',mutasi_k:r:h='Mutasi (K)':p='@z 99,999,999,999',;
+      perc_d:r:h='Percobaan (D)':p='@z 99,999,999,999',perc_k:r:h='Percobaan (K)':p='@z 99,999,999,999',;
+      sisa_d:r:h='Sisa (D)':p='@z 99,999,999,999',sisa_k:r:h='Sisa (K)':p='@z 99,999,999,999',;
+      adjust_d:r:h='Koreksi (D)':p='@z 99,999,999,999',adjust_k:r:h='Koreksi (K)':p='@z 99,999,999,999',;
+      rl_d:r:h='R/L (D)':p='@z 99,999,999,999',rl_k:r:h='R/L (K)':p='@z 99,999,999,999',;
+      akhir_d:r:h='AKhir (D)':p='@z 99,999,999,999',akhir_k:r:h='AKhir (K)':p='@z 99,999,999,999';
+      lock(2) wind nrc1 font'arial',8 noedit  title 'Neraca Waserda'
+retu
+*
+*****************************************************************************************************************************
+proc ehila
+do dmn
+simp=.f.
+set dele on
+clos data
+*
+sele 1
+use stok inde stok1,stok2,stok6
+sele 2
+use hilang inde hilang1
+DEFI WIND dokt;
+FROM 3,(wcols()-74)/2 to 24,((wcols()-74)/2)+74 system title'Entry / edit barang hilang';
+colo rgb(0,0,0,166,205,167) font'Arial'
+defi wind konf in wind dokt from 1,5 to 12,55.6 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind dokt
+tgl=date()
+DO WHILE.T.
+   mel=1
+   nbg=spac(28)
+   kbrgw=spac(6)
+   hrg=0
+   ukecilw=0
+   totbw=0
+   jml=0
+   clea
+   ??sys(2002,1)
+   @0,0 say'hdr12.bmp'bitm
+   @15,0 say'crekam.bmp'bitm
+   @6,2 say 'Tanggal'font'Arial',12 styl'b'
+   @8,2 say 'Barang'font'Arial',12 styl'b'
+   @10,2 say 'Jumlah'font'Arial',12 styl'b'
+   @12,2 say 'Nilai Rp.'font'Arial',12 styl'b'
+   @6,16 get tgl font'Book Antiqua',12 size 1,12
+   @8,16 GET kbrgw vali cnbrg1() PICTURE '!!!!!!' FONT'Book Antiqua',12 size 1,8
+   @8,col()+2 GET nbg Vali carbil() PICTURE '@!' size 1,37  font'Book Antiqua',12
+   @10,16 get ukecilw vali xjum() pict'@Z 999,999.99' font'Book Antiqua',12 size 1,12
+   @12,16 get totbw pict'@Z 9,999,999,999' font'Book Antiqua',12 styl'b' size 1,15 disa
+   @15,0 get nu5 PICTURE '@*IHT ;;' font 'Arial',9 size 2.3,18.8,0 default 0
+   read
+   IF READ()=12.or.nu5=3
+      EXIT
+   ENDIF 
+   if ukecilw=0
+      loop
+   endif
+   if nu5=1
+      sele 2
+      seek dtoc(tgl,1)+kbrgw
+      if !found()
+            sele 1
+            set orde to 1
+            seek kbrgw
+            if found()
+               repl ukecil with ukecil-ukecilw
+            endif   
+            sele 2
+            appe blan
+            repl thilang with tgl,kbrg with kbrgw,ukecil with ukecilw
+      else
+         sele 2
+         jml=ukecil       
+         sele 1
+         set orde to 1
+         seek kbrgw
+         if found()
+            repl ukecil with ukecil+jml
+            repl ukecil with ukecil-ukecilw
+         endif   
+         sele 2
+         repl thilang with tgl,kbrg with kbrgw,ukecil with ukecilw, nbrg with nbg
+      endif
+   endi
+   if nu5=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 2
+          jml=ukecil       
+          sele 1
+          set orde to 1
+          seek kbrgw
+          if found()
+             repl ukecil with ukecil+jml
+          endif   
+          sele 2
+          dele
+       endif   
+   endif
+ENDDO  
+deac WIND dokt
+rele sere
+clos data
+do emn
+RETURN
+*
+proc carbil
+      sele 2
+      seek dtoc(tgl,1)+kbrgw
+      if found()
+         ukecilw=ukecil
+         show gets
+      endif
+retu
+*
+proc cnbrg1
+kgb=spac(9)
+if cextr(kbrgw)
+   do dftbor with kbrgw
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kbrgw<>spac(6)
+      kbrgw=kbrg
+      nbg=nbrg
+      ukecilw=0
+      hRG=hjual
+      barcodew=barcode
+   else
+      kbrgw=spac(6)
+   endif
+endif
+sele 1
+set orde to 1
+seek kbrgw
+if found().and.kbrgw<>spac(6)
+   kbrgw=kbrg
+   nbg=nbrg
+   ukecilw=0
+   hRG=hjual
+   barcodew=barcode
+endi
+show gets
+retu
+*   
+proc xjum
+  totbw=ukecilw*hrg
+show gets
+retu
+*
+proc ebrok
+do dmn
+simp=.f.
+set dele on
+clos data
+*
+sele 1
+use stok inde stok1,stok2,stok6
+sele 2
+use brok inde brok1
+DEFI WIND dokt;
+FROM 3,(wcols()-74)/2 to 24,((wcols()-74)/2)+74 system title'Entry / edit barang rusak';
+colo rgb(0,0,0,129,126,101) font'Arial'
+defi wind konf in wind dokt from 1,5 to 12,55.6 syst font'Arial',9 colo rgb(255,255,255,0,0,0) titl'Konfirmasi'
+acti wind dokt
+tgl=date()
+DO WHILE.T.
+   mel=1
+   nbg=spac(28)
+   kbrgw=spac(6)
+   hrg=0
+   ukecilw=0
+   totbw=0
+   jml=0
+   clea
+   ??sys(2002,1)
+   @0,0 say'hdr3.bmp'bitm
+   @15,0 say'crekam.bmp'bitm
+   @7,2 say 'Tanggal'font'Arial',12 styl'b'
+   @9,2 say 'Barang'font'Arial',12 styl'b'
+   @11,2 say 'Jumlah'font'Arial',12 styl'b'
+   @13,2 say 'Nilai Rp.'font'Arial',12 styl'b'
+   @7,16 get tgl font'Book Antiqua',12 size 1,12
+   @9,16 GET kbrgw Vali cnbrg4() PICTURE '!!!!!!' size 1,8  font'Book Antiqua',12
+   @9,col()+2 GET nbg vali carbil4() PICTURE '@!' FONT'Book Antiqua',12 size 1,35
+   @11,16 get ukecilw vali xjum4() pict'@Z 999,999.99' font'Book Antiqua',12 size 1,12
+   @13,16 get totbw pict'@Z 9,999,999,999' font'Book Antiqua',12 styl'b' size 1,15 disa
+   @15,0 get nu5 PICTURE '@*IHT ;;' font 'Arial',9 size 2.3,18.8,0 default 0
+   read
+   IF READ()=12.or.nu5=3
+      EXIT
+   ENDIF 
+   if ukecilw=0
+      loop
+   endif
+   if nu5=1
+      sele 2
+      seek dtoc(tgl,1)+kbrgw
+      if !found()
+            sele 1
+            set orde to 1
+            seek kbrgw
+            if found()
+               repl ukecil with ukecil-ukecilw
+            endif   
+            sele 2
+            appe blan
+            repl thilang with tgl,kbrg with kbrgw,ukecil with ukecilw
+      else
+         sele 2
+         jml=ukecil       
+         sele 1
+         set orde to 1
+         seek kbrgw
+         if found()
+            repl ukecil with ukecil+jml
+            repl ukecil with ukecil-ukecilw
+         endif   
+         sele 2
+         repl thilang with tgl, kbrg with kbrgw, ukecil with ukecilw, nbrg with nbg
+      endif
+   endi
+   if nu5=2
+       acti wind konf
+       @0,0 say 'confirm.bmp'bitm
+       @0,30 say 'confirm1.bmp'bitm
+       @7.2,24 get hpz PICTURE '@*HT Ya;Tidak' font'Arial' size 2,12,1 default 0
+       read
+       deac wind konf
+       if hpz=1
+          sele 2
+          jml=ukecil       
+          sele 1
+          set orde to 1
+          seek kbrgw
+          if found()
+             repl ukecil with ukecil+jml
+          endif   
+          sele 2
+          dele
+       endif   
+   endif
+ENDDO  
+deac WIND dokt
+rele sere
+clos data
+do emn
+RETURN
+*
+proc carbil4
+      sele 2
+      seek dtoc(tgl,1)+kbrgw
+      if found()
+         ukecilw=ukecil
+         show gets
+      endif
+retu
+*
+proc cnbrg4
+kgb=spac(9)
+if cextr(kbrgw)
+   do dftbor with kbrgw
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kbrgw<>spac(6)
+      kbrgw=kbrg
+      nbg=nbrg
+      ukecilw=0
+      hRG=hjual
+      barcodew=barcode
+   else
+      kbrgw=spac(6)
+   endif
+endif
+sele 1
+set orde to 1
+seek kbrgw
+if found().and.kbrgw<>spac(6)
+   kbrgw=kbrg
+   nbg=nbrg
+   ukecilw=0
+   hRG=hjual
+   barcodew=barcode
+endi
+show gets
+retu
+*   
+proc xjum4
+  totbw=ukecilw*hrg
+show gets
+retu
+*
+proc lbrok
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1 
+use brok inde brok1
+SELE 2
+USE STOK INDE STOK1
+SELE 1 
+GO TOP
+DO WHILE !EOF()
+   KN=KBRG
+   NB=' '
+   SELE 2
+   SEEK KN
+   IF FOUND()
+      NB=NBRG
+   ENDI
+   SELE 1
+   REPL NBRG WITH NB
+   SKIP
+ENDDO
+SELE 1
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-57)/2 to 24.7,((wcols()-57)/2)+57 system title'Daftar barang rusak';
+colo rgb(0,0,0,129,126,101)font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-106)/2 to wrows()-1,((wcols()-106)/2)+106 system title'Daftar barang rusak' font'arial' clos
+acti wind dokt2
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+tdo1=tawal
+tdo2=takhir
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr11.bmp'bitm
+   @7.5,0 say 'ok.bmp'bitm
+   @4.5,6 say 'Tanggal' styl'b'
+   @5.7,6 say  's/d'styl'b'
+   @4.5,19 get tdo1 font'Book Antiqua',12 size 1,12
+   @5.7,19 get tdo2 font'Book Antiqua',12 size 1,12
+   @7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+    size 2.3,16.2,0 default 0 
+   read
+   if read()=12.or.nud=2
+      exit
+   endi
+   if tdo1>tdo2
+      loop
+   endif
+   go top
+*   sum totb for thilang>=tdo1.and.thilang<=tdo2.and.!eof() to tohil
+   if nud=1
+        go top
+        brow fiel thilang:h='Tanggal':r, kbrg:h='Kode Barang':r, NBRG:H='ITEM':R,;
+        ukecil:h='Qty':p='@z 99,999.99':r wind dokt3;
+        noedit nomenu normal ;
+        for thilang>=tdo1.and.thilang<=tdo2.and.!eof()
+*        go top
+*        repo form hilx for thilang>=tdo1.and.thilang<=tdo2.and.!eof() to print prompt
+   endif
+enddo
+deac wind dokt2
+do emn
+clos data
+return
+*
+proc lhila
+do dmn
+set cent on
+set dele on
+clos data
+SELE 1
+use hilang inde hilang1
+SELE 2
+USE STOK INDE STOK1
+SELE 1 
+GO TOP
+DO WHILE !EOF()
+   KN=KBRG
+   NB=' '
+   SELE 2
+   SEEK KN
+   IF FOUND()
+      NB=NBRG
+   ENDI
+   SELE 1
+   REPL NBRG WITH NB
+   SKIP
+ENDDO
+SELE 1
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-57)/2 to 24.7,((wcols()-57)/2)+57 system title'Daftar barang hilang';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-106)/2 to wrows()-1,((wcols()-106)/2)+106 system title'Daftar barang hilang' font'arial' clos
+acti wind dokt2
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+tdo1=tawal
+tdo2=takhir
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'ok1.bmp'bitm
+   @4.5,6 say 'Tanggal' styl'b'
+   @5.7,6 say  's/d'styl'b'
+   @4.5,19 get tdo1 font'Book Antiqua',12 size 1,12
+   @5.7,19 get tdo2 font'Book Antiqua',12 size 1,12
+   @7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+    size 2.3,16.2,0 default 0 
+   read
+   if read()=12.or.nud=2
+      exit
+   endi
+   if tdo1>tdo2
+      loop
+   endif
+   go top
+   if nud=1
+        go top
+        brow fiel thilang:h='Tanggal':r, kbrg:h='Kode Barang':r, NBRG:H='ITEM':R,;
+        ukecil:h='Qty':p='@z 99,999.99':r wind dokt3;
+        noedit nomenu normal ;
+        for thilang>=tdo1.and.thilang<=tdo2.and.!eof()
+*        go top
+*        repo form hilx for thilang>=tdo1.and.thilang<=tdo2.and.!eof() to print prompt
+   endif
+enddo
+deac wind dokt2
+do emn
+clos data
+return
+*
+*******************************************************************************************************************************
+proc sesuaij
+nordin=spac(7)
+go top
+do while !eof()
+   if nordin=no
+      repl tanggal with spac(10), no with spac(10),  ket with spac(10)
+   else
+      nordin=no
+   endi
+   skip
+enddo
+*
+procedure gper1
+  sele 1
+  set orde to 1
+  IF kbrgw<>spac(7)
+     retu
+  endi
+  if kbrgw=spac(7)
+     do dftbrg
+  endif
+  moleh=.f.
+  sele 1
+  set orde to 1
+  seek kbrgw
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nbrgw=nbrg
+  vktm=nmr+'. '+kbrgw
+  ketemu=ASCAN(rawit,vktm)
+  if ketemu !=0
+     hbeliw=hbeliw
+  else
+     hbeliw=round(hsat,0)
+  endi
+  dime mul(25)
+  for chks=1 to 25
+      mul(chks)=subs(rawit(chks),5,7)
+  next
+  cr=ASCAN(mul,kbrgw)
+  sele 7
+  set orde to 4
+  seek kbrgw+dtoc(tbeliw,1)+nbeliw
+  if cr!=0
+     if cr<>bares
+        kbrgw=spac(7)
+        nbrgw=spac(30)
+        hbeliw=0
+        ukecilw=0
+        wait'Item Entry sudah ada'wind
+     endif
+  endif
+  show gets
+retur
+*
+procedure gper2
+  sele 1
+  set orde to 1
+  IF kbrgw<>spac(7)
+     retu
+  endi
+  if kbrgw=spac(7)
+     do dftbrg
+  endif
+  moleh=.f.
+  sele 1
+  set orde to 1
+  seek kbrgw
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nbrgw=nbrg
+  qty=ukecil
+  nbrgw=nbrg
+  vktm=nmr+'. '+kbrgw
+  ketemu=ASCAN(rawit,vktm)
+  if ketemu !=0
+     hbeliw=hbeliw
+  else
+     hbeliw=round(hjual,0)
+  endi   
+  dime mul(25)
+  for chks=1 to 25
+      mul(chks)=subs(rawit(chks),5,7)
+  next
+  cr=ASCAN(mul,kbrgw)
+  sele 7
+  set orde to 4
+  seek kbrgw+dtoc(tbeliw,1)+nbeliw
+  if cr!=0
+     if cr<>bares
+        kbrgw=spac(7)
+        nbrgw=spac(30)
+        hbeliw=0
+        ukecilw=0
+        wait'Item Entry sudah ada'wind
+     endif
+  endif
+  show gets
+retur
+*
+procedure gper8
+  sele 1
+  set orde to 1
+  IF kbrgw<>spac(7)
+     retu
+  endi
+  if kbrgw=spac(7)
+     do dftbrg
+  endif
+  moleh=.f.
+  sele 1
+  set orde to 1
+  seek kbrgw
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nbrgw=nbrg
+  qty=ukecil
+  nbrgw=nbrg
+  vktm=nmr+'. '+kbrgw
+  ketemu=ASCAN(rawit,vktm)
+  hbeliw=round(hjual,0)
+  show gets
+retur
+*
+proc dftgnr
+DEFI WIND gnr1 FROM 1,12 to 41,44 system title 'Bahan' colo rgb(0,0,0,205,204,197)
+acti wind gnr1
+@0.2,21 say'sear.bmp'bitm
+@1.4,3 say'Bahan-bahan' font'Book Antiqua',11 styl'b'
+@35,2 say'oke.bmp'bitm
+bhan=spac(15)
+sele 3
+set orde to 1
+go top
+coun for !eof() to jp
+if jp=0
+   deac wind gnr1
+   retu
+endi
+dime ar(jp)
+ct=1
+go top
+do while !eof()
+   ar(ct)=generik
+   ct=ct+1
+   skip
+enddo
+STORE 1 TO mchoice
+defi popup ant from 1,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to jp
+    DEFINE BAR konter OF ant PROMPT aR(konter)
+next konter
+@ 3,1 GET mchoice POPUP ant FUNCTION '&T' SIZE 23,46 font'Times New Roman',9 
+@35,2 get nugr PICTURE '@*IHT ;' font 'Arial',9 size 2.3,18.8,0 default 0
+READ	
+if read()=12
+   rele ar
+   rele popup ant
+   deac wind gnr1
+   kogew=kogew
+   retu
+endi
+bhan=left(ar(mchoice),15)
+seek bhan
+if found()
+   kogew=koge
+else
+   kogew=kogew
+endif
+deac wind gnr1
+rele ar
+rele popup ant
+retu
+*
+proc dftbrg
+namav=spac(30)
+DEFI WIND brg1 FROM 1,12 to 41,51 system title 'Perawatan' colo rgb(0,0,0,205,204,197)
+acti wind brg1
+@0.3,30 say'sear.bmp'bitm
+@1.4,3 say'Perawatan' font'Book Antiqua',11 styl'b'
+@35,2 say'oke.bmp'bitm
+sele 1
+set orde to 2
+go top
+coun for !eof() to jod
+if jod=0
+   deac wind brg1
+   retu
+endi
+dime ade(jod)
+ct=1
+go top
+do while !eof()
+   ade(ct)=nbrg
+   ct=ct+1
+   skip
+enddo
+STORE 1 TO msd
+defi popup adm from 1,1 margin scro 
+for konter=1 to jod
+    DEFINE BAR konter OF adm PROMPT ade(konter)
+next konter
+@ 3,1 GET msd POPUP adm FUNCTION '&T' SIZE 23,56 font'Times New Roman',9 
+@35,2 get nudok PICTURE '@*IHT ;' font 'Arial',9 size 2.3,18.8,0 default 0
+READ	
+if read()=12.or.nudok=2
+   rele ade
+   rele popup adm
+   deac wind brg1
+   kbrgw=kbrgw
+   retu
+endi
+namav=left(ade(msd),30)
+seek namav
+if found()
+   kbrgw=kbrg
+else
+   kbrgw=kbrgw
+endif
+deac wind brg1
+rele ade
+rele popup adm
+retu
+*
+proc dftbrg1
+  set readb off
+  namaw=spac(30)
+  DEFI WIND pas2 FROM 1,3 to 42,87 system titl'Barang' font'Arial',8
+  ACTI WIND pas2
+  clea
+  STORE 1 TO mchoice
+  sele 1
+  set orde to 1
+  seek trim(kbrgw)
+  if !found()
+     deac wind pas2
+     retu
+  endif
+  jp=0
+  norek=recno()
+  go norek
+  do while left(kbrg,len(trim(kbrgw)))=trim(kbrgw).and.!eof()
+     jp=jp+1        
+     skip
+  enddo
+  dime AM(JP)
+  ct=0 
+  seek trim(kbrgw)
+  do while left(kbrg,len(trim(kbrgw)))=trim(kbrgw).and.!eof()
+     ct=ct+1
+     if upper(asmo)='OWNER'
+        AM(ct)=kbrg+spac(1)+generik+SPAC(1)+nbrg+SPAC(1)+trans(ukecil,'@Z 999,999')+spac(1)+trans(hsat,'@Z 9,999,999.9')+;
+               spac(1)+trans(hjual,'@Z 9,999,999.9')
+     else
+        AM(ct)=kbrg+spac(1)+generik+SPAC(1)+nbrg+SPAC(1)+trans(ukecil,'@Z 999,999')+spac(1)+trans(0,'@Z 9,999,999.9')+;
+               spac(1)+trans(hjual,'@Z 9,999,999.9')
+     endif          
+     skip
+  enddo
+  defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+  for konter=1 to ct
+      DEFINE BAR konter OF psn PROMPT AM(konter)
+  next konter
+  @0.3,2 say'sear.bmp'bitm
+*  @1.75,29.4 say'kot.bmp'bitm
+  @4.6,3 say'NO.'font'arial',9 styl'b'
+  @4.6,9.6 say'GOLONGAN'font'arial',9 styl'b'
+  @4.6,24 say'NAMA 'font'arial',9 styl'b'
+  @4.6,54.5 say'QTY'font'arial',9 styl'b'
+  @4.6,61 say'HRG.BELI'font'arial',9 styl'b'
+  @4.6,71.5 say'HRG.JUAL'font'arial',9 styl'b'
+  @35.6,56 say'oke.bmp'bitm
+*  @2,29.94 get namaw PICT'@!'font'lucida console' vali mbara()
+  @6,1 GET mchoice POPUP psn FUNCTION '&T' when refresh() SIZE 29,92 font'Lucida Console',9 
+  @35.7,56 get nubrg PICTURE '@*IHT ;' font 'Arial',9 size 2.2,18.8,2 default 0
+  READ	
+  if read()=12.or.nubrg=2
+     rele am
+     rele popup psn
+     deac wind pas2
+     deac wind pas1
+     kbrgw=spac(7)
+     k2d=left(kbrgw,2)
+   retu
+endi
+kbrgw=left(am(mchoice),7)
+k2d=left(kbrgw,2)
+wsdpl=.t.
+deac wind pas1
+deac wind pas2
+rele am
+rele popup psn
+RETU
+*
+proc dftdok
+DEFI WIND doke1 FROM 1,2 to 36,54.4 system title 'Supplier' colo rgb(0,0,0,205,204,197)
+acti wind doke1
+@0,41.6 say'sear.bmp'bitm
+@1.4,3 say'Nama' font'Arial' styl'b'
+@1.4,30 say'No.' font'Arial' styl'b'
+@1.4,35 say'Telepon' font'Arial' styl'b'
+@30.5,2 say'oke.bmp'bitm
+sele 1
+set orde to 2
+go top
+coun for !eof() to jdk
+if jdk=0
+   deac wind doke1
+   retu
+endi
+dime ad(jdk)
+ct=1
+go top
+do while !eof()
+   ad(ct)=nang+' '+kang+' '+tlang
+   ct=ct+1
+   skip
+enddo
+STORE 1 TO msde
+defi popup adn from 1,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to jdk
+    DEFINE BAR konter OF adn PROMPT ad(konter)
+next konter
+@ 4,1 GET msde POPUP adn FUNCTION '&T' SIZE 26,56 font'Lucida Console',9 
+@30.5,2 get nudok PICTURE '@*IHT ;' font 'Arial',9 size 2.3,18.8,0 default 0
+READ	
+if read()=12.or.nudok=2
+   rele ad
+   rele popup adn
+   deac wind doke1
+   kdokw=kdokw
+   retu
+endi
+kdokw=subs(ad(msde),22,5)
+deac wind doke1
+rele ad
+rele popup adn
+retu
+*
+proc dftdok2
+DEFI WIND dok1 FROM 1,2 to 36,54.4 system title 'Hutang Supplier' colo rgb(0,0,0,205,204,197)
+acti wind dok1
+   @0,18 say'sear.bmp'bitm
+   @1.4,3 say'Nota' font'Arial' styl'b'
+   @2.6,29 say'Hutang' font'Arial' styl'b'
+   @30.5,2 say'oke.bmp'bitm
+   jdk=0
+   sele 3
+   seek kdokw
+   if found()
+      her=recno()
+      remon=spac(7)
+      go her
+      do while kang=kdokw.and.!eof()
+         if ket='K'
+            if tanda=' '
+            if remon=nbeli
+               remon=remon
+            else
+               remon=nbeli
+               jdk=jdk+1
+            endi  
+            endi  
+         endi
+         sele 3
+         skip
+      enddo            
+   endif   
+   if jdk=0
+      deac wind dok1
+      retu
+   endi
+   dime ad(jdk)
+   ct=0
+   sele 3
+   seek kdokw
+   if found()
+      her=recno()
+      remon=spac(7)
+      torens=0
+      go her
+      do while kang=kdokw.and.!eof()
+         if ket='K'
+            if tanda=' '
+            if remon=nbeli
+               remon=remon
+               tras=hbeli*ukecil
+               torens=torens+tras
+               totrans=torens
+               ad(ct)=nbeli+' '+dtoc(tbeli)+' '+tran(torens,'@z 9,999,999,999')
+            else
+               remon=nbeli
+               tras=hbeli*ukecil
+               torens=+tras-umuk
+               totrans=torens
+               ct=ct+1
+               ad(ct)=nbeli+' '+dtoc(tbeli)+' '+tran(torens,'@z 9,999,999,999')
+            endif 
+            endif
+         endi
+         sele 3
+         skip
+      enddo            
+   endif      
+STORE 1 TO msd
+defi popup adm from 1,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to jdk
+    DEFINE BAR konter OF adm PROMPT ad(konter)
+next konter
+@ 4,1 GET msd POPUP adm FUNCTION '&T' SIZE 26,56 font'Lucida Console',9 
+@30.5,2 get nudok PICTURE '@*IHT ;' font 'Arial',9 size 2.3,18.8,0 default 0
+READ	
+if read()=12.or.nudok=2
+   rele ad
+   rele popup adm
+   deac wind dok1
+   nbeliw=nbeli
+   retu
+endi
+nbeliw=left(ad(msd),7)
+deac wind dok1
+rele ad
+rele popup adm
+retu
+*
+****************************************************************************************************************************
+PROC glnota2
+   sele 8
+   set orde to 15
+   remon=spac(10)
+   go norek
+   do while kdok=kdokw.and.!eof()
+      nog=nbeli
+      tanggalg=tbeli
+      kodeg=kbrg
+      obatg=nbrg
+      jmlg=ukecil
+      hrgg=hsat
+      jsag=jasa
+      tobg=jmlg*hrgg
+      tobg=tobg-(tobg*jsag)
+      if remon=nog
+         remon=remon
+         sele 14
+         appe blan
+         repl kode with kodeg, obat with obatg, jml with jmlg, harga with hrgg, jasa with jsag*100, total with tobg,;
+              ket with nog
+         sele 8
+         set orde to 15
+      else
+         remon=nog
+         sele 14
+         appe blan
+         repl no with nog, tanggal with dtoc(tanggalg), kode with kodeg, obat with obatg, jml with jmlg, harga with hrgg,;
+              jasa with jsag*100, total with tobg, ket with nog
+         sele 8
+         set orde to 15
+      endi  
+      sele 8
+      set orde to 15
+      skip
+   enddo
+RETU
+*
+PROC glbeli
+   niar=.t.
+   sele 7
+   set orde to 1
+   remon=spac(10)
+   go top
+   do while !eof()
+      nog=nbeli
+      tanggalg=tbeli
+      kodeg=left(kbrg,3)
+      obatg=left(nbrg,15)
+      generi=nsup
+      jmlg=ukecil
+      hrgg=hsat
+      jsag=jasa
+      tobg=jmlg*hrgg
+      tobg=tobg-(tobg*jsag)
+      if remon=nog
+         remon=remon
+         sele 14
+         appe blan
+         repl kode with kodeg, obat with obatg, jml with jmlg, harga with hrgg, jasa with jsag*100, total with tobg,;
+              ket with nog
+      else
+         remon=nog
+         sele 14
+         appe blan
+         repl no with nog, tanggal with dtoc(tanggalg), kode with kodeg, obat with obatg, jml with jmlg,;
+              harga with hrgg, jasa with jsag*100, total with tobg, ket with nog, generik with generi
+      endi  
+      sele 7
+      set orde to 1
+      skip
+   enddo
+RETU
+*
+PROC glkred1
+   remon=spac(10)
+   go nork
+   do while kdok=kdokw.and.!eof()
+      if ketj='Kredit    '
+         if remon=nbeli
+            remon=remon
+         else
+            remon=nbeli
+            jn=jn+1
+         endi  
+      endif
+      skip
+   enddo
+RETU
+*
+proc glkred2
+   remon=spac(10)
+   umw=0
+   go nork
+   do while kdok=kdokw.and.!eof()
+      if ketj='Kredit    '
+         if remon=nbeli
+            remon=remon
+         else
+            remon=nbeli
+            umw=bayar
+            sdh=0
+            uta=0
+            recv=recno()
+            sele 21
+            set orde to 3
+            seek remon
+            if found()
+               sum angs for nbeli=remon.and.!eof() to sdh
+            endif            
+            sele 8
+            set orde to 1
+            seek remon
+            if found()
+               nor=recno()
+               sum totb for nbeli=remon.and.!eof() to uta
+            endif
+            uta=uta-sdh-umw
+            go recv
+            sele 8
+            set orde to 7
+            cn=cn+1
+            ERAN(cn)=nbeli+spac(9)+dtoc(tbeli)+spac(7)+tran(uta,'@Z 999,999,999.9')
+         endi  
+      endif   
+      skip
+   enddo
+retu
+*
+PROC glkred3
+   remon=spac(10)
+   go nork
+   do while ksup=ksupw.and.!eof()
+      if ketj='Kredit    '
+         if remon=nbeli
+            remon=remon
+         else
+            remon=nbeli
+            jn=jn+1
+         endi  
+      endif
+      skip
+   enddo
+RETU
+*
+proc glkred4
+   remon=spac(10)
+   umw=0
+   go nork
+   do while ksup=ksupw.and.!eof()
+      if ketj='Kredit    '
+         if remon=nbeli
+            remon=remon
+         else
+            remon=nbeli
+            umw=bayar
+            sdh=0
+            uta=0
+            recv=recno()
+            sele 22
+            set orde to 3
+            seek remon
+            if found()
+               sum angs for nbeli=remon.and.!eof() to sdh
+            endif            
+            sele 7
+            set orde to 1
+            seek remon
+            if found()
+               nor=recno()
+               sum totb for nbeli=remon.and.!eof() to uta
+            endif
+            uta=uta-sdh-umw
+            go recv
+            sele 7
+            set orde to 6
+            cn=cn+1
+            EHUT(cn)=+nbeli+spac(1)+str(tempe,3)+spac(1)+dtoc(tbeli)+spac(1)+dtoc(tbeli+tempe)+spac(1)+tran(uta,'@Z 999,999,999.9')
+         endi  
+      endif   
+      skip
+   enddo
+retu
+*
+PROC globt
+   go top
+   do while !eof()
+      jsto=jsto+1
+      endi  
+      skip
+   enddo
+RETU
+*
+proc globt1
+   go top
+   do while !eof()
+      cn=cn+1
+      ARST(cn)=nbrg+'  '+trans(ukecil,'@z 9,999,999.9')
+      skip
+   enddo
+retu
+*
+*
+proc mengisi
+     sele 1
+     set orde to 2
+     DO DFTbrg
+     if kbrgw#spac(7)
+        kbrgw=kbrgw
+     endi   
+retu
+*
+proc podo
+if !yaho
+   ncusw=anw
+endi
+show gets
+retu
+*
+proc hitotb
+if upper(asmo)='OWNER'
+   totbw=ukecilw*hbeliw
+   totbw=totbw-(totbw*jasaw/100)
+else
+   totbw=ukecilw*hbeliw
+   jasaw=0
+endif   
+show gets   
+retu
+*
+proc hitotj
+totbw=ukecilw*hbeliw
+totbw=totbw-(totbw*jasaw/100)
+show gets   
+retu
+*
+procedure gkd1
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd1
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb1=nbrg
+  do case
+  case phju=1
+     hj1=hjual
+  case phju=2
+     hj1=htelk
+  case phju=3
+     hj1=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd2
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd2
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb2=nbrg
+  do case
+  case phju=1
+     hj2=hjual
+  case phju=2
+     hj2=htelk
+  case phju=3
+     hj2=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd3
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd3
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb3=nbrg
+  do case
+  case phju=1
+     hj3=hjual
+  case phju=2
+     hj3=htelk
+  case phju=3
+     hj3=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd4
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd4
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb4=nbrg
+  do case
+  case phju=1
+     hj4=hjual
+  case phju=2
+     hj4=htelk
+  case phju=3
+     hj4=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd5
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd5
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb5=nbrg
+  do case
+  case phju=1
+     hj5=hjual
+  case phju=2
+     hj5=htelk
+  case phju=3
+     hj5=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd6
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd6
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb6=nbrg
+  do case
+  case phju=1
+     hj6=hjual
+  case phju=2
+     hj6=htelk
+  case phju=3
+     hj6=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd7
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd7
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb7=nbrg
+  do case
+  case phju=1
+     hj7=hjual
+  case phju=2
+     hj7=htelk
+  case phju=3
+     hj7=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd8
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd8
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb8=nbrg
+  do case
+  case phju=1
+     hj8=hjual
+  case phju=2
+     hj8=htelk
+  case phju=3
+     hj8=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd9
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd9
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb9=nbrg
+  do case
+  case phju=1
+     hj9=hjual
+  case phju=2
+     hj9=htelk
+  case phju=3
+     hj9=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd10
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd10
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb10=nbrg
+  do case
+  case phju=1
+     hj10=hjual
+  case phju=2
+     hj10=htelk
+  case phju=3
+     hj10=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd11
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd11
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb11=nbrg
+  do case
+  case phju=1
+     hj11=hjual
+  case phju=2
+     hj11=htelk
+  case phju=3
+     hj11=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd12
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd12
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb12=nbrg
+  do case
+  case phju=1
+     hj12=hjual
+  case phju=2
+     hj12=htelk
+  case phju=3
+     hj12=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd13
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd13
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb13=nbrg
+  do case
+  case phju=1
+     hj13=hjual
+  case phju=2
+     hj13=htelk
+  case phju=3
+     hj13=kask
+  endcase
+  show gets
+retur
+*
+procedure gkd14
+  sele 1
+  set orde to 1
+  moleh=.f.
+  seek kd14
+  if !found()
+     moleh=.t.
+     return.t.
+  endif
+  nb14=nbrg
+  do case
+  case phju=1
+     hj14=hjual
+  case phju=2
+     hj14=htelk
+  case phju=3
+     hj14=kask
+  endcase
+  show gets
+retur
+*
+* DIK ISA
+proc POKSAY
+param y,y1,x,x1
+for sb_y=y to y1 &&-y
+  @sb_y,x say repl(' ',x1-x) colo RGB(,,,175,188,211)
+next sb_y
+hig=sb_y
+@y-0.005,x+0.005 to y-0.005,x1 colo RGB(247,248,251,175,188,211)
+@y-0.005,x-0.005 to hig-0.005,x-0.005 colo RGB(247,248,251,175,188,211)
+@y-0.005,x1-0.005 to hig-0.005,x1-0.005 colo RGB(67,88,124,175,188,211)
+*@hig-0.01,x+0.01 to hig-0.01,x1 colo RGB(67,88,124,175,188,211)
+retu
+*
+*
+proc tupsay
+param y,y1,x,x1
+for sb_y=y to y1 &&-y
+  @sb_y,x say repl(' ',x1-x) colo RGB(,,,214,209,195)
+next sb_y
+retu
+*
+proc cartang
+tawal=ctod('01/'+subs(dtoc(date(),1),5,2)+'/'+left(dtoc(date(),1),4))
+do case
+case MONTH(date())=1
+  gtl='31'
+case MONTH(date())=2
+  gtl='28'
+case MONTH(date())=3
+  gtl='31'
+case MONTH(date())=4
+  gtl='30'
+case MONTH(date())=5
+  gtl='31'
+case MONTH(date())=6
+  gtl='30'
+case MONTH(date())=7
+  gtl='31'
+case MONTH(date())=8
+  gtl='31'
+case MONTH(date())=9
+  gtl='30'
+case MONTH(date())=10
+  gtl='31'
+case MONTH(date())=11
+  gtl='30'
+case MONTH(date())=12
+  gtl='31'
+endcase
+takhir=ctod(gtl+'/'+subs(dtoc(date(),1),5,2)+'/'+left(dtoc(date(),1),4))
+retu
+*
+PROCEDURE terjemah
+  lengkap=str(angka_u)
+  a=alltrim(str(angka_u))
+  simpan=spac(6)
+  j=len(a)
+  store .f. to bel,las
+  for i=1 to len(a)
+    do case
+    case subs(a,i,1)='0'
+      jn=0
+      do nol
+    case subs(a,i,1)='1'
+      do satu
+    case subs(a,i,1)='2'
+      kata=kata+'dua '
+    case subs(a,i,1)='3'
+      kata=kata+'tiga '
+    case subs(a,i,1)='4'
+      kata=kata+'empat '
+    case subs(a,i,1)='5'
+      kata=kata+'lima '
+    case subs(a,i,1)='6'
+      kata=kata+'enam '
+    case subs(a,i,1)='7'
+      kata=kata+'tujuh '
+    case subs(a,i,1)='8'
+      kata=kata+'delapan '
+    case subs(a,i,1)='9'
+      kata=kata+'sembilan '
+    endcase
+    if bel
+      kata=kata+simpan
+      bel=.f.
+    endif
+    if !las.and.subs(a,i,1)#'0'
+    do case 
+    case j=10
+        kata=kata+'milyar '
+    case j=9
+        kata=kata+'ratus '
+    case j=8
+        kata=kata+'puluh '
+    case j=7
+        kata=kata+'juta '
+    case j=6
+        kata=kata+'ratus '
+    case j=5
+        kata=kata+'puluh '
+    case j=4
+        kata=kata+'ribu '
+    case j=3
+        kata=kata+'ratus '
+    case j=2
+        kata=kata+'puluh '
+    endcase
+    endif
+    rbada=iif('ribu ' $ kata,.t.,.f.)
+    if j=4.and.!rbada.and.jn<=2
+      kata=kata+'ribu '
+    endi
+    j=j-1
+    if las
+      las=.f.
+      bel=.t.
+    endif
+  next i
+  if len(a)=6.and.!rbada
+    kata=kata+'ribu '
+  endif 
+  if len(a)>6.and.!rbada.and.jn>=2.and.subs(lengkap,5,3)#'000'
+    kata=kata+'ribu '
+  endi
+  if subs(lengkap,6,1)='1'.and.subs(lengkap,7,1)#'0'
+    do ganti
+  endi  
+**** khusus
+  if len(a)>=6.and.subs(lengkap,6,3)='000'.and.subs(lengkap,5,1)#'0'
+    rbada=iif('ribu '$ kata,.t.,.f.)
+    if rbada
+      kt=stuf(kata,at('ribu ',kata),5,'')
+      atak=stuf(kt,at('ratus ',kt)+6,0,'ribu ')
+      kata=''
+      kata=atak
+    else
+      kata=kata+'ribu '  
+      kt=stuf(kata,at('ribu ',kata),5,'')
+      atak=stuf(kt,at('ratus ',kt)+6,0,'ribu ')
+      kata=''
+      kata=atak
+    endif  
+  endif 
+**** end khusus  
+  if left(kata,10)='juta belas'
+     kata='sepuluh juta'+subs(kata,11,len(kata)-10)
+  endi   
+Return
+*
+Procedure Satu
+  do case
+  case j=8.or.(j=2.and.subs(lengkap,10,1)#'0')
+      simpan='belas '
+      las=.t.
+      retu
+  case j=9.or.j=6.or.(j=4.and.len(a)=4).or.j=5.or.j=3.or.bel;
+       .or.(j=2.and.subs(lengkap,10,1)='0');
+       .or.(j=4.and.subs(lengkap,5,2)='00')
+      kata=kata+'se'
+  case j=10.or.j=7;
+       .or.(j=4.and.len(a)>4.and.subs(lengkap,5,2)#'00');
+       .or.j=1
+      if !bel
+        kata=kata+'satu '
+      endif  
+  endcase  
+retu
+*
+Procedure Nol
+  if (j=4)    
+     kata=kata+'ribu '
+  endif  
+  if (j=7.or.j=8)
+     kata=kata+'juta '
+  endif  
+  do while subs(a,i,1)='0'
+    jn=jn+1
+    i=i+1
+    j=j-1
+  enddo
+  i=i-1
+  j=j+1
+retu
+*
+Procedure Ganti
+     do case
+     case 'sepuluh satu ' $ kata
+         ilang='sepuluh satu '
+         DLUSUP='sebelas '
+     case 'sepuluh dua ' $ kata
+         ilang='sepuluh dua '
+         DLUSUP='duabelas '
+     case 'sepuluh tiga ' $ kata
+         ilang='sepuluh tiga '
+         DLUSUP='tigabelas '
+     case 'sepuluh empat ' $ kata
+         ilang='sepuluh empat '
+         DLUSUP='empatbelas '
+     case 'sepuluh lima ' $ kata
+         ilang='sepuluh lima '
+         DLUSUP='limabelas '
+     case 'sepuluh enam ' $ kata
+         ilang='sepuluh enam '
+         DLUSUP='enambelas '
+     case 'sepuluh tujuh ' $ kata
+         ilang='sepuluh tujuh '
+         DLUSUP='tujuhbelas '
+     case 'sepuluh delapan ' $ kata
+         ilang='sepuluh delapan '
+         DLUSUP='delapanbelas '
+     case 'sepuluh sembilan ' $ kata
+         ilang='sepuluh sembilan '
+         DLUSUP='sembilanbelas '
+  endcase
+  kata=STUFF(KATA,at(ilang,kata),len(ilang),dlusup)
+return
+*
+proc pword
+clos data
+use p
+i=0
+pas=''
+namaPS=spac(20)
+defi wind pwd from 32,(wcols()-60)/2 to 38.2,(wcols()-60)/2+60 panel;
+              FONT'Arial' colo RGB(255,255,255,11,59,100)
+acti wind pwd
+do while.T.  
+   clear
+   paswo=''  
+   namaps=spac(20)
+   hit=1
+   ret=0
+   @0,0 say'warno.bmp'bitm
+   @0,29.7 say'warno1.bmp'bitm
+   ??sys(2002,1)
+   @1.5,34 get namaps
+   @2.7,34 get wayah vali wayah $ '12' error 'Isi dengan 1 atau 2 saja, Pagi=1, Sore=2'
+   read
+   if read()=12
+      deac wind pwd
+      set sysm to defa
+      clea all
+      QUIT
+   endi   
+   LOCATE FOR JENENG=NAMAps
+   IF !FOUND().OR.NAMAps=SPAC(20)
+      LOOP
+   ENDI   
+   do whil paswo # TRIM(pw)
+      ??sys(2002)
+      ret=0
+      do whil ret=0
+         ret=inkey()
+      enddo   
+      paswo=paswo+chr(ret)
+      @4,33+hit say '*'
+      hit=hit+1
+      If Hit>10
+         exit
+      endif
+   enddo
+   if i>3
+      clea wind
+      quit
+   endif
+    if NAMAps+paswo=jeneng+TRIM(PW)
+     asmo=namaps
+     EXIT
+   endif   
+   i=i+1
+enddo
+deac wind pwd
+clos data
+return
+*
+PROC RUBPW
+do dmn
+clos data
+use p
+set dele on
+defi wind pwd from 7,(wcols()-60)/2 to 16.8,(wcols()-60)/2+60 system titl'Rubah password';
+     FONT'Arial' colo RGB(255,255,255,11,59,100)
+acti wind pwd
+DO WHILE.T.
+   ??SYS(2002,1)
+   PWw=spac(10)
+   nangw=spac(20)
+   clea
+   @0,0 say'wrno1.bmp'bitm
+   @0,29.7 say'wrno.bmp'bitm
+   @ 2,34 GET NANGW font'Courier New',9 vali capw()
+   @ 3.2,34 get PWW font'Courier New',9
+   @6.3,2 get npwp1;
+   PICTURE '@*HT \<Rekam;\<Hapus;\<Exit';
+   font 'Arial',9 size 1.5,10,0.5 default 0
+   READ
+   if read()=12.or.npwp1=3
+      exit
+   endif   
+   do case
+   case npwp1=1
+     LOCATE FOR JENENG=NANGW
+     if !found()
+       if PWw#spac(10)
+          append blank
+       endi   
+     endi
+     REPLACE PW WITH PWW, JENENG WITH NANGW
+   case npwp1=2
+     LOCATE FOR JENENG=NANGW
+     if !found()
+       wait'Data tidak ada'wind
+       loop
+     endi
+     dele
+   endcase
+ENDDO  
+deac wind pwd
+do emn
+RETURN        
+*
+proc gre
+do dmn
+set dele on
+clos data
+use greet
+go top
+DEFI WIND dokt;
+FROM 3,(wcols()-80)/2 to 24,((wcols()-80)/2)+80 system title'Greeting';
+colo rgb(0,0,0,129,126,101) font'Arial' 
+acti wind dokt
+DO WHILE.T.
+   te1=teks1
+   te2=teks2
+   te3=teks3
+   clea
+   ??sys(2002,1)
+   @0,0 say'hdr3.bmp'bitm
+   @15,0 say'ok.bmp'bitm
+   @9,2 say 'Teks 1'font'Arial',12 styl'b'
+   @10.5,2 say 'Teks 2'font'Arial',12 styl'b'
+   @12,2 say 'Teks 3'font'Arial',12 styl'b'
+   @9,12 get te1 pict'@!' font'Book Antiqua',12 size 1,40
+   @10.5,12 get te2 pict'@!' font'Book Antiqua',12 size 1,40
+   @12,12 get te3 pict'@!' font'Book Antiqua',12 size 1,40
+
+   @15,0 get nu5 PICTURE '@*IHT ;' font 'Arial',9 size 2.3,16.4,0 default 0
+     read
+     IF READ()=12.or.nu5=2
+        EXIT
+     ENDIF 
+     if nu5=1
+        repl teks1 with te1, teks2 with te2, teks3 with te3
+     endif  
+ENDDO  
+deac WIND dokt
+clos data
+do emn
+RETURN
+*
+PROCEDURE FPWW
+   CLEAR
+   @0,wcols()-8 say'rbpw.bmp'bitm
+   @ 1.5,3 SAY 'USER'
+   @ 1.5,21 say':'
+   @ 3,3 SAY 'PASSWORD'
+   @ 3,21 say':'
+RETURN
+*
+proc capw
+   LOCATE FOR JENENG=NANGW
+   if found()
+      PWW=PW
+   endif   
+   show gets
+retu
+*
+proc maxhari
+     do case
+     case wumont='01'
+          karmont='Januari  '
+          maxtgl=31
+     case wumont='02'
+          karmont='Pebruari '
+          maxtgl=-1
+          tgpeb=1
+          tpeb=ctod('01/02/'+tayear)
+          do while mont(tpeb)=2
+             if tgpeb<10
+                stlp='0'+str(tgpeb,1)
+             else   
+                stlp=str(tgpeb,2)
+             endi
+             maxtgl=maxtgl+1
+             tpeb=ctod(stlp+'/02/'+tayear)
+             tgpeb=tgpeb+1
+          enddo
+     case wumont='03'
+          karmont='Maret    '
+          maxtgl=31
+     case wumont='04'
+          karmont='April    '
+          maxtgl=30
+     case wumont='05'
+          karmont='Mei      '
+          maxtgl=31
+     case wumont='06'
+          karmont='Juni     '
+          maxtgl=30
+     case wumont='07'
+          karmont='Juli     '
+          maxtgl=31
+     case wumont='08'
+          karmont='Agustus  '
+          maxtgl=31
+     case wumont='09'
+          karmont='September'
+          maxtgl=30
+     case wumont='10'
+          karmont='Oktober  '
+          maxtgl=31
+     case wumont='11'
+          karmont='November '
+          maxtgl=30
+     case wumont='12'
+          karmont='Desember '
+          maxtgl=31
+     endcase
+retu
+*
+proc cakus
+do case
+case ares=1
+   seles='JOMBANG 1      '
+case ares=2
+   seles='JOMBANG 2      '
+case ares=3
+   seles='KERTOSONO      '
+endcase
+mel=1
+for iu=1 to jsel
+    =ADEL(sere, iu)
+next
+jsel=0    
+sele 6
+set orde to 3
+seek seles
+if found()
+   nogek=recno()
+   coun while area=seles.and.!eof() to jsel
+   iu=1
+   dime sere(jsel)
+   go nogek
+   do while area=seles.and.!eof()
+      sere(iu)=nsup
+      iu=iu+1
+      skip
+   enddo
+endif
+retu
+*
+proc tpo
+clos data
+set dele on
+DEFI WIND po;
+FROM 12,(wcols()-67)/2 to 26.2,((wcols()-67)/2)+67 system title'Terima item dari PO';
+colo rgb(0,0,0,255,236,2) font'Arial',9 
+acti wind po
+@0,0 say 'po.bmp'bitm
+@0,40.1 say 'po1.bmp'bitm
+@6.2,42 get ny PICTURE '@*IHT ;' font 'Arial',9 size 2.2,14.7,1.7 default 0
+read
+if read()=12.or.ny=2
+   clos data
+   deac wind po
+   retu
+endif
+@11.5,26 say'Copying files 'font'Arial',11 styl'TI'
+set excl on
+use terim
+@11.5,26 say'Copying files .'font'Arial',11 styl'TI'
+go top
+do while !eof()
+   dele
+   skip
+enddo   
+pack
+@11.5,26 say'Copying files . .'font'Arial',11 styl'TI'
+appe from f:\po1\stok.dbf
+clos data
+baru=0
+lama=0
+@11.5,26 say'Copying files . . .'font'Arial',11 styl'TI'
+sele 1
+use stok inde stok6
+rein
+sele 2
+use terim
+clea
+@0,0 say 'pon.bmp'bitm
+@0,40.1 say 'pon1.bmp'bitm
+@11.2,23 say'- Terima item BARU dari PO'styl'i'
+@11.2,56 say':'+ tran(baru,'@J 9,999,999')font'Courier New'
+@11.2,73 say'item'
+@12.2,23 say'- Penggantian Bar Code'styl'i'
+@12.2,56 say':'+ tran(lama,'@J 9,999,999')font'Courier New'
+@12.2,73 say'item'
+go top
+do while !eof()
+   kb=LEFT(kbrg,12)
+   kbR=kbrg
+   nb=nbrg
+   nom=noba
+   hb=hsat
+   sele 1
+   seek kb
+   if !found()
+      appe blan
+      repl barcode with kbR, nbrg with nb, KBRG WITH NOM
+      baru=baru+1
+   else
+      repl barcode with kbR &&, nbrg with nb, KBRG WITH NOM
+      lama=lama+1
+   endif
+   @11.2,56 say':'+ tran(baru,'@J 9,999,999')font'Courier New'
+   @12.2,56 say':'+ tran(lama,'@J 9,999,999')font'Courier New'
+   SELE 2
+   skip
+enddo
+@6.2,33 get nw PICTURE '@*IHT ' font 'Arial',9 size 2.2,14.7,1.7 default 0
+read
+set excl off
+clos data
+deac wind po
+do ind
+retu
+*
+proc ind
+clos data
+set excl on
+??SYS(2002)
+wait 'Proses...' wind timeout 0.5
+kinsw = ' '
+clos data
+set dele on
+sele 1
+use cus inde cus4
+sele 2
+use instansi
+dele all
+sele 1
+go top
+nons=spac(25)
+n=0
+do while !eof()
+   if nons=nins
+      nons=nons
+      repl kins with kinsw         
+      else
+      nons=nins
+      n=n+1
+      kinsw=STUF('000',;          
+               3-LEN(LTRIM(STR(N)))+1 ,; 
+               LEN(LTRIM(STR(N))) ,;
+               LTRIM(STR(N)))
+      repl kins with kinsw
+      sele 2
+      appe blan
+      repl kins with kinsw, nins with nons
+   endif 
+   sele 1
+   skip
+enddo
+clos data
+   use stok
+   pack
+   REPL ALL SUP WITH RIGH(KBRG,3)
+   inde on kbrg to stok1
+   inde on nbrg to stok2
+   inde on ukecil to stok3
+   inde on left(kbrg,3)+nbrg to stok4
+   inde on SUP to stok5
+   inde on barcode to stok6
+   inde on subs(barcode,4,10) to stok7
+   use jual
+   pack
+   inde on njual to jual1
+   inde on dtoc(tjual,1) to jual2
+   inde on kbrg+dtoc(tjual,1)+period+njual to jual3
+   inde on kbrg+dtoc(tjual,1)+njual to jual4
+   inde on dtoc(tjual,1)+NJUAL to jual5
+   inde on dtoc(tjual,1)+PERIOD+ks+NJUAL to jual6
+   inde on KS+dtoc(tjual,1)+NJUAL to jual7
+   inde on SPG+dtoc(tjual,1)+NJUAL to jual8
+   inde on NJUAL+dtoc(tjual,1) to jual9
+   INDE ON NJUAL+kbrg TO JUALA
+   inde on KBRG+dtoc(tjual,1) to jualB
+   inde on dtoc(tjual,1)+SPG+NJUAL to jualC
+   inde on SUP+dtoc(tjual,1) to jualD
+   inde on dtoc(tedit,1)+oleh+edit to jualE
+   inde on dtoc(tjual,1)+ks+NJUAL to jualf
+   inde on kang+NJUAL to jualg
+   inde on kang+str(ke,2)+njual to juali
+   inde on kang+kbrg+njual to jualj
+   use beli
+   PACK
+   inde on nbeli to beli1
+   inde on dtoc(tbeli,1) to beli2
+   inde on kang+ket+nbeli+tanda to beli3
+   inde on kang+ket+nbeli+tanda+dtoc(tbeli,1) to beli4
+   INDE ON KET+DTOC(Tbeli,1) TO beli5
+   inde on KET+NBELI to beli6
+   INDE ON dtoc(tlunas,1) TO beli7
+   inde on dtoc(tbeli,1)+KANG+KET TO beli8
+   inde on dtoc(tbeli,1)+NBELI to beli9
+   INDE ON KBRG+NBELI TO BELI10
+   inde on kang+nBELI+dtoc(tBELI,1) to beli11
+   INDE ON DTOC(TEDIT,1) TO BELIA
+   inde on KBRG+dtoc(tBELI,1) to BELIB
+   inde on SUP+dtoc(TBELI,1) to BELIC
+   inde on KET+kang+nbeli+dtoc(TBELI,1) to BELId
+   inde on dtoc(tedit,1)+oleh+edit to beliE
+   use instansi
+   pack
+   inde on kins to inst1
+   inde on nins to inst2
+   use anggota
+   pack
+   inde on kang to anggota1
+   inde on nang to anggota2
+   inde on kins+kang to anggota3
+   inde on nins to anggota4
+   use cus
+   pack
+   inde on kang to cus1
+   inde on nang to cus2
+   inde on kins+kang to cus3
+   inde on nins to cus4
+   use konsumsi
+   PACK
+   inde on kang+nbeli+dtoc(tg,1) to kons1
+   inde on kang+dtoc(tg,1) to kons2
+   inde on nbeli+kang+dtoc(tg,1) to kons3
+   inde on nbeli+dtoc(tg,1) to kons4
+   inde on dtoc(tg,1)+kang to kons5
+   use hut
+   pack
+   inde on kins+kang+ab+njual to hut1
+   inde on kins+kang+njual to hut2
+   inde on kins+kang+njual+str(ke,2)+dtoc(tangs,1) to hut3
+   inde on kins+kang+dtoc(tangs,1) to hut4
+   inde on bukti to hut5
+   use simpanan
+   pack
+   inde on kang+dtoc(tg,1) to simpan1
+   inde on dtoc(tg,1)+kang to simpan2
+   inde on kins+kang+dtoc(tg,1) to simpan3
+   inde on pobuk+kang to simpan4
+   inde on wabuk+kang to simpan5
+   inde on mabuk+kang to simpan6
+   inde on dtoc(tg,1)+kins+kang to simpan7
+   use rek
+   PACK
+   inde on No_perk to rek1
+   inde on perkiraan to rek2
+   use trans
+   PACK
+   inde on bukti to trans1
+   inde on no_perk+dtoc(ttrans,1)+str(kredit,14)+bukti to trans2
+   inde on dtoc(ttrans,1)+str(kredit,14)+bukti+no_perk to trans3
+   inde on dtoc(ttrans,1)+bukti+no_perk to trans4
+   inde on bukti+no_perk to trans5
+   inde on no_perk+dtoc(ttrans,1)+bukti to trans6
+   inde on left(no_perk,2)+dtoc(ttrans,1)+str(kredit,14)+bukti to trans7
+   inde on kang+dtoc(ttrans,1)+no_perk+str(kredit,14)+bukti to trans8
+   inde on no_perk+bukti to trans9
+   inde on kang+no_perk+dtoc(ttrans,1)+str(kredit,14)+bukti to transa
+   use bu
+   PACK
+   inde on bukti to bu1
+   inde on no_perk+dtoc(ttrans,1)+str(kredit,14)+bukti to bu2
+   inde on dtoc(ttrans,1)+str(kredit,14)+bukti+no_perk to bu3
+   inde on dtoc(ttrans,1)+bukti+no_perk to bu4
+   inde on bukti+no_perk to bu5
+   inde on no_perk+dtoc(ttrans,1)+bukti to bu6
+   inde on left(no_perk,2)+dtoc(ttrans,1)+str(kredit,14)+bukti to bu7
+   inde on no_perk+bukti to bu8
+   use keluar
+   pack
+   inde on dtoc(tgk,1) to keluar1
+   inde on dtoc(tgk,1)+uraian to keluar2
+   use ztag
+   pack
+   inde on peri+kins to ztag1
+   use ytag
+   pack
+   inde on peri+kins to ytag1
+   use nga
+   pack
+   inde on tnd+km to nga1
+   use BROK
+   pack
+   inde on dtoc(thilang,1)+kbrg to BROK1
+   inde on kbrg+dtoc(thilang,1) to BROK2
+   USE AHA
+   pack
+   INDE ON DTOC(TB,1)+JB+KET TO AHA1
+   use meti
+   pack
+   inde on sup to meti1
+   use item
+   pack
+   use kots
+   pack
+   use sedia
+   pack
+   USE STPER
+   pack
+   INDE ON DTOC(TGL,1) TO STPER1
+   use hilang
+   pack
+   inde on dtoc(thilang,1)+kbrg to hilang1
+   inde on kbrg+dtoc(thilang,1) to hilang2
+   use TAMBAH
+   pack
+   inde on dtoc(thilang,1)+kbrg+IDT to TAMBAH1
+   inde on kbrg+dtoc(thilang,1) to TAMBAH2
+   USE CAD
+   COPY TO ETEM
+   USE RJUAL
+   PACK
+   INDE ON KBRG TO RJUAL1
+   USE RK
+   ZAP
+   USE ETEM
+   PACK
+   INDE ON NAM TO ETEM1
+   use lbeli1
+   pack
+   use lbeli2
+   pack
+   use ljual1
+   pack
+   use ljual2
+   pack
+   use nota
+   pack
+   use kred
+   pack
+   inde on nang to kred1
+   use keu
+   pack
+   use btok
+   pack
+   use tagih
+   pack
+   use stagih
+   pack
+   use lstok
+   pack
+   use pno
+   pack
+clos data
+set excl off
+return
+*
+proc bkup
+RETU
+CLOS data
+set excl on
+??SYS(2002)
+wait 'Back up data ...' wind timeout 0.5
+use stok
+   copy to D:\STOK.DBF
+use jual
+   copy to D:\JUAL.DBF 
+use beli
+   copy to D:\BELI.DBF 
+use anggota
+   copy to D:\ANGGOTA.DBF 
+use konsumsi
+   copy to D:\KONSUMSI.DBF 
+use keluar
+   copy to D:\KELUAR.DBF 
+use BROK
+   copy to D:\BROK.DBF 
+USE AHA
+   copy to D:\AHA.DBF 
+use meti
+   copy to D:\METI.DBF 
+use item
+   copy to D:\ITEM.DBF 
+use kots
+   copy to D:\KOTS.DBF 
+use sedia
+   copy to D:\SEDIA.DBF 
+use STPER
+   copy to D:\STPER.DBF 
+use hilang
+   copy to D:\HILANG.DBF 
+use TAMBAH
+   copy to D:\TAMBAH.DBF 
+USE CAD
+   copy to D:\CAD.DBF 
+USE RJUAL
+   copy to D:\RJUAL.DBF 
+USE RK
+   copy to D:\RK.DBF 
+USE ETEM
+   copy to D:\ETEM.DBF 
+use lbeli1
+   copy to D:\LBELI1.DBF 
+use lbeli2
+   copy to D:\LBELI2.DBF 
+use ljual1
+   copy to D:\LJUAL1.DBF 
+use ljual2
+   copy to D:\LJUAL2.DBF 
+use nota
+   copy to D:\NOTA.DBF 
+use kred
+   copy to D:\KRED.DBF 
+use keu
+   copy to D:\KEU.DBF 
+use btok
+   copy to D:\BTOK.DBF 
+clos data
+set defa to d:\sugio
+return
+********************************************************************************************************************************
+****************************** PERKUMPULAN RUTIN YANG BERPERAN PENTING UNTUK JUAL / BELI ***************************************
+*   xene
+proc cbc1
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn1)
+      do dftbar with kbn1,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn1=left(barcode,13)
+         kbg1=kbrg
+         nbg1=nbrg
+         do cekrego with kbg1, trf1, pilhar
+         sto1=trf1*jmp1
+      else
+         kbn1=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn1
+   if found().and.kbn1<>spac(13)
+      kbg1=kbrg
+      nbg1=nbrg
+      do cekrego with kbg1, trf1, pilhar
+      sto1=trf1*jmp1
+   endi
+   show gets
+retu
+*   
+proc cbc2
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn2)
+      do dftbar with kbn2,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn2=left(barcode,13)
+         kbg2=kbrg
+         nbg2=nbrg
+         do cekrego with kbg2, trf2, pilhar
+         sto2=trf2*jmp2
+      else
+         kbn2=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn2
+   if found().and.kbn2<>spac(13)
+      kbg2=kbrg
+      nbg2=nbrg
+      do cekrego with kbg2, trf2, pilhar
+      sto2=trf2*jmp2
+   endi
+   show gets
+retu
+*   
+proc cbc3
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn3)
+      do dftbar with kbn3,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn3=left(barcode,13)
+         kbg3=kbrg
+         nbg3=nbrg
+         do cekrego with kbg3, trf3, pilhar
+         sto3=trf3*jmp3
+      else
+         kbn3=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn3
+   if found().and.kbn3<>spac(13)
+      kbg3=kbrg
+      nbg3=nbrg
+      do cekrego with kbg3, trf3, pilhar
+      sto3=trf3*jmp3
+   endi
+   show gets
+retu
+*   
+proc cbc4
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn4)
+      do dftbar with kbn4,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn4=left(barcode,13)
+         kbg4=kbrg
+         nbg4=nbrg
+         do cekrego with kbg4, trf4, pilhar
+         sto4=trf4*jmp4
+      else
+         kbn4=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn4
+   if found().and.kbn4<>spac(13)
+      kbg4=kbrg
+      nbg4=nbrg
+      do cekrego with kbg4, trf4, pilhar
+      sto4=trf4*jmp4
+   endi
+   show gets
+retu
+*   
+proc cbc5
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn5)
+      do dftbar with kbn5,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn5=left(barcode,13)
+         kbg5=kbrg
+         nbg5=nbrg
+         do cekrego with kbg5, trf5, pilhar
+         sto5=trf5*jmp5
+      else
+         kbn5=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn5
+   if found().and.kbn5<>spac(13)
+      kbg5=kbrg
+      nbg5=nbrg
+      do cekrego with kbg5, trf5, pilhar
+      sto5=trf5*jmp5
+   endi
+   show gets
+retu
+*   
+proc cbc6
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn6)
+      do dftbar with kbn6,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn6=left(barcode,13)
+         kbg6=kbrg
+         nbg6=nbrg
+         do cekrego with kbg6, trf6, pilhar
+         sto6=trf6*jmp6
+      else
+         kbn6=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn6
+   if found().and.kbn6<>spac(13)
+      kbg6=kbrg
+      nbg6=nbrg
+      do cekrego with kbg6, trf6, pilhar
+      sto6=trf6*jmp6
+   endi
+   show gets
+retu
+*   
+proc cbc7
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn7)
+      do dftbar with kbn7,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn7=left(barcode,13)
+         kbg7=kbrg
+         nbg7=nbrg
+         do cekrego with kbg7, trf7, pilhar
+         sto7=trf7*jmp7
+      else
+         kbn7=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn7
+   if found().and.kbn7<>spac(13)
+      kbg7=kbrg
+      nbg7=nbrg
+      do cekrego with kbg7, trf7, pilhar
+      sto7=trf7*jmp7
+   endi
+   show gets
+retu
+*   
+proc cbc8
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn8)
+      do dftbar with kbn8,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn8=left(barcode,13)
+         kbg8=kbrg
+         nbg8=nbrg
+         do cekrego with kbg8, trf8, pilhar
+         sto8=trf8*jmp8
+      else
+         kbn8=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn8
+   if found().and.kbn8<>spac(13)
+      kbg8=kbrg
+      nbg8=nbrg
+      do cekrego with kbg8, trf8, pilhar
+      sto8=trf8*jmp8
+   endi
+   show gets
+retu
+*   
+proc cbc9
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn9)
+      do dftbar with kbn9,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn9=left(barcode,13)
+         kbg9=kbrg
+         nbg9=nbrg
+         do cekrego with kbg9, trf9, pilhar
+         sto9=trf9*jmp9
+      else
+         kbn9=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn9
+   if found().and.kbn6<>spac(13)
+      kbg9=kbrg
+      nbg9=nbrg
+      do cekrego with kbg9, trf9, pilhar
+      sto9=trf9*jmp9
+   endi
+   show gets
+retu
+*   
+proc cbc10
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn10)
+      do dftbar with kbn10,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn10=left(barcode,13)
+         kbg10=kbrg
+         nbg10=nbrg
+         do cekrego with kbg10, trf10, pilhar
+         sto10=trf10*jmp10
+      else
+         kbn10=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn10
+   if found().and.kbn10<>spac(13)
+      kbg10=kbrg
+      nbg10=nbrg
+      do cekrego with kbg10, trf10, pilhar
+      sto10=trf10*jmp10
+   endi
+   show gets
+retu
+*   
+proc cbc11
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn11)
+      do dftbar with kbn11,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn11=left(barcode,13)
+         kbg11=kbrg
+         nbg11=nbrg
+         do cekrego with kbg11, trf11, pilhar
+         sto11=trf11*jmp11
+      else
+         kbn11=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn11
+   if found().and.kbn11<>spac(13)
+      kbg11=kbrg
+      nbg11=nbrg
+      do cekrego with kbg11, trf11, pilhar
+      sto11=trf11*jmp11
+   endi
+   show gets
+retu
+*   
+proc cbc12
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn12)
+      do dftbar with kbn12,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn12=left(barcode,13)
+         kbg12=kbrg
+         nbg12=nbrg
+         do cekrego with kbg12, trf12, pilhar
+         sto12=trf12*jmp12
+      else
+         kbn12=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn12
+   if found().and.kbn12<>spac(13)
+      kbg12=kbrg
+      nbg12=nbrg
+      do cekrego with kbg12, trf12, pilhar
+      sto12=trf12*jmp12
+   endi
+   show gets
+retu
+*   
+proc cbc13
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn13)
+      do dftbar with kbn13,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn13=left(barcode,13)
+         kbg13=kbrg
+         nbg13=nbrg
+         do cekrego with kbg13, trf13, pilhar
+         sto13=trf13*jmp13
+      else
+         kbn13=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn13
+   if found().and.kbn13<>spac(13)
+      kbg13=kbrg
+      nbg13=nbrg
+      do cekrego with kbg13, trf13, pilhar
+      sto13=trf13*jmp13
+   endi
+   show gets
+retu
+*   
+proc cbc14
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn14)
+      do dftbar with kbn14,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn14=left(barcode,13)
+         kbg14=kbrg
+         nbg14=nbrg
+         do cekrego with kbg14, trf14, pilhar
+         sto14=trf14*jmp14
+      else
+         kbn14=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn14
+   if found().and.kbn14<>spac(13)
+      kbg14=kbrg
+      nbg14=nbrg
+      do cekrego with kbg14, trf14, pilhar
+      sto14=trf14*jmp14
+   endi
+   show gets
+retu
+*   
+proc cbc15
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn15)
+      do dftbar with kbn15,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn15=left(barcode,13)
+         kbg15=kbrg
+         nbg15=nbrg
+         do cekrego with kbg15, trf15, pilhar
+         sto15=trf15*jmp15
+      else
+         kbn15=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn15
+   if found().and.kbn15<>spac(13)
+      kbg15=kbrg
+      nbg15=nbrg
+      do cekrego with kbg15, trf15, pilhar
+      sto15=trf15*jmp15
+   endi
+   show gets
+retu
+*   
+proc cbc16
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn16)
+      do dftbar with kbn16,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn16=left(barcode,13)
+         kbg16=kbrg
+         nbg16=nbrg
+         do cekrego with kbg16, trf16, pilhar
+         sto16=trf16*jmp16
+      else
+         kbn16=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn16
+   if found().and.kbn16<>spac(13)
+      kbg16=kbrg
+      nbg16=nbrg
+      do cekrego with kbg16, trf16, pilhar
+      sto16=trf16*jmp16
+   endi
+   show gets
+retu
+*   
+proc cbc17
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn17)
+      do dftbar with kbn17,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn17=left(barcode,13)
+         kbg17=kbrg
+         nbg17=nbrg
+         do cekrego with kbg17, trf17, pilhar
+         sto17=trf17*jmp17
+      else
+         kbn17=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn17
+   if found().and.kbn17<>spac(13)
+      kbg17=kbrg
+      nbg17=nbrg
+      do cekrego with kbg17, trf17, pilhar
+      sto17=trf17*jmp17
+   endi
+   show gets
+retu
+*   
+proc cbc18
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn18)
+      do dftbar with kbn18,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn18=left(barcode,13)
+         kbg18=kbrg
+         nbg18=nbrg
+         do cekrego with kbg18, trf18, pilhar
+         sto18=trf18*jmp18
+      else
+         kbn18=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn18
+   if found().and.kbn18<>spac(13)
+      kbg18=kbrg
+      nbg18=nbrg
+      do cekrego with kbg18, trf18, pilhar
+      sto18=trf18*jmp18
+   endi
+   show gets
+retu
+*
+proc cbc19
+kgb=spac(9)
+   pilhar=0
+   if cextr(kbn19)
+      do dftbar with kbn19,pilhar
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn19=left(barcode,13)
+         kbg19=kbrg
+         nbg19=nbrg
+         do cekrego with kbg19, trf19, pilhar
+         sto19=trf19*jmp19
+      else
+         kbn19=spac(13)
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn19
+   if found().and.kbn19<>spac(13)
+      kbg19=kbrg
+      nbg19=nbrg
+      do cekrego with kbg19, trf19, pilhar
+      sto19=trf19*jmp19
+   endi
+   show gets
+retu
+*
+proc kbc1
+   pilhar=0
+   if cextr(kbg1)
+      do dftbar with kbg1,pilhar
+      kbg1=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg1,6)
+   if found().and.kbg1<>spac(9)
+      kbn1=left(barcode,13)
+      kbg1=kbrg
+      nbg1=nbrg
+      do cekrego with kbg1, trf1, pilhar
+      sto1=trf1*jmp1
+   else   
+      kbn1=spac(13)
+      nbg1=spac(28)
+      trf1=0
+      sto1=0
+   endi
+   show gets
+retu
+*   
+proc kbc2
+   pilhar=0
+   if cextr(kbg2)
+      do dftbar with kbg2,pilhar
+      kbg2=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg2,6)
+   if found().and.kbg2<>spac(9)
+      kbn2=left(barcode,13)
+      kbg2=kbrg
+      nbg2=nbrg
+      do cekrego with kbg2, trf2, pilhar
+      sto2=trf2*jmp2
+   else   
+      kbn2=spac(13)
+      nbg2=spac(28)
+      trf2=0
+      sto2=0
+   endi
+   show gets
+retu
+*   
+proc kbc3
+   pilhar=0
+   if cextr(kbg3)
+      do dftbar with kbg3,pilhar
+      kbg3=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg3,6)
+   if found().and.kbg3<>spac(9)
+      kbg3=kbrg
+      kbn3=left(barcode,13)
+      nbg3=nbrg
+      do cekrego with kbg3, trf3, pilhar
+      sto3=trf3*jmp3
+   else   
+      kbn3=spac(13)
+      nbg3=spac(28)
+      trf3=0
+      sto3=0
+   endi
+   show gets
+retu
+*   
+proc kbc4
+   pilhar=0
+   if cextr(kbg4)
+      do dftbar with kbg4,pilhar
+      kbg4=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg4,6)
+   if found().and.kbg4<>spac(9)
+      kbn4=left(barcode,13)
+      kbg4=kbrg
+      nbg4=nbrg
+      do cekrego with kbg4, trf4, pilhar
+      sto4=trf4*jmp4
+   else   
+      kbn4=spac(13)
+      nbg4=spac(28)
+      trf4=0
+      sto4=0
+   endi
+   show gets
+retu
+*   
+proc kbc5
+   pilhar=0
+   if cextr(kbg5)
+      do dftbar with kbg5,pilhar
+      kbg5=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg5,6)
+   if found().and.kbg5<>spac(9)
+      kbn5=left(barcode,13)
+      kbg5=kbrg
+      nbg5=nbrg
+      do cekrego with kbg5, trf5, pilhar
+      sto5=trf5*jmp5
+   else   
+      kbn5=spac(13)
+      nbg5=spac(28)
+      trf5=0
+      sto5=0
+   endi
+   show gets
+retu
+*   
+proc kbc6
+   pilhar=0
+   if cextr(kbg6)
+      do dftbar with kbg6,pilhar
+      kbg6=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg6,6)
+   if found().and.kbg6<>spac(9)
+      kbn6=left(barcode,13)
+      kbg6=kbrg
+      nbg6=nbrg
+      do cekrego with kbg6, trf6, pilhar
+      sto6=trf6*jmp6
+   else   
+      kbn6=spac(13)
+      nbg6=spac(28)
+      trf6=0
+      sto6=0
+   endi
+   show gets
+retu
+*   
+proc kbc7
+   pilhar=0
+   if cextr(kbg7)
+      do dftbar with kbg7,pilhar
+      kbg7=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg7,6)
+   if found().and.kbg7<>spac(9)
+      kbn7=left(barcode,13)
+      kbg7=kbrg
+      nbg7=nbrg
+      do cekrego with kbg7, trf7, pilhar
+      sto7=trf7*jmp7
+   else   
+      kbn7=spac(13)
+      nbg7=spac(28)
+      trf7=0
+      sto7=0
+   endi
+   show gets
+retu
+*   
+proc kbc8
+   pilhar=0
+   if cextr(kbg8)
+      do dftbar with kbg8,pilhar
+      kbg8=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg8,6)
+   if found().and.kbg8<>spac(9)
+      kbn8=left(barcode,13)
+      kbg8=kbrg
+      nbg8=nbrg
+      do cekrego with kbg8, trf8, pilhar
+      sto8=trf8*jmp8
+   else   
+      kbn8=spac(13)
+      nbg8=spac(28)
+      trf8=0
+      sto8=0
+   endi
+   show gets
+retu
+*   
+proc kbc9
+   pilhar=0
+   if cextr(kbg9)
+      do dftbar with kbg9,pilhar
+      kbg9=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg9,6)
+   if found().and.kbg9<>spac(9)
+      kbn9=left(barcode,13)
+      kbg9=kbrg
+      nbg9=nbrg
+      do cekrego with kbg9, trf9, pilhar
+      sto9=trf9*jmp9
+   else   
+      kbn9=spac(13)
+      nbg9=spac(28)
+      trf9=0
+      sto9=0
+   endi
+   show gets
+retu
+*   
+proc kbc10
+   pilhar=0
+   if cextr(kbg10)
+      do dftbar with kbg10,pilhar
+      kbg10=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg10,6)
+   if found().and.kbg10<>spac(9)
+      kbn10=left(barcode,13)
+      kbg10=kbrg
+      nbg10=nbrg
+      do cekrego with kbg10, trf10, pilhar
+      sto10=trf10*jmp10
+   else   
+      kbn10=spac(13)
+      nbg10=spac(28)
+      trf10=0
+      sto10=0
+   endi
+   show gets
+retu
+*   
+proc kbc11
+   pilhar=0
+   if cextr(kbg11)
+      do dftbar with kbg11,pilhar
+      kbg11=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg11,6)
+   if found().and.kbg11<>spac(9)
+      kbn11=left(barcode,13)
+      kbg11=kbrg
+      nbg11=nbrg
+      do cekrego with kbg11, trf11, pilhar
+      sto11=trf11*jmp11
+   else   
+      kbn11=spac(13)
+      nbg11=spac(28)
+      trf11=0
+      sto11=0
+   endi
+   show gets
+retu
+*   
+proc kbc12
+   pilhar=0
+   if cextr(kbg12)
+      do dftbar with kbg12,pilhar
+      kbg12=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg12,6)
+   if found().and.kbg12<>spac(9)
+      kbn12=left(barcode,13)
+      kbg12=kbrg
+      nbg12=nbrg
+      do cekrego with kbg12, trf12, pilhar
+      sto12=trf12*jmp12
+   else   
+      kbn12=spac(13)
+      nbg12=spac(28)
+      trf12=0
+      sto12=0
+   endi
+   show gets
+retu
+*   
+proc kbc13
+   pilhar=0
+   if cextr(kbg13)
+      do dftbar with kbg13,pilhar
+      kbg13=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg13,6)
+   if found().and.kbg13<>spac(9)
+      kbn13=left(barcode,13)
+      kbg13=kbrg
+      nbg13=nbrg
+      do cekrego with kbg13, trf13, pilhar
+      sto13=trf13*jmp13
+   else   
+      kbn13=spac(13)
+      nbg13=spac(28)
+      trf13=0
+      sto13=0
+   endi
+   show gets
+retu
+*   
+proc kbc14
+   pilhar=0
+   if cextr(kbg14)
+      do dftbar with kbg14,pilhar
+      kbg14=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg14,6)
+   if found().and.kbg14<>spac(9)
+      kbn14=left(barcode,13)
+      kbg14=kbrg
+      nbg14=nbrg
+      do cekrego with kbg14, trf14, pilhar
+      sto14=trf14*jmp14
+   else   
+      kbn14=spac(13)
+      nbg14=spac(28)
+      trf14=0
+      sto14=0
+   endi
+   show gets
+retu
+*   
+proc kbc15
+   pilhar=0
+   if cextr(kbg15)
+      do dftbar with kbg15,pilhar
+      kbg15=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg15,6)
+   if found().and.kbg15<>spac(9)
+      kbn15=left(barcode,13)
+      kbg15=kbrg
+      nbg15=nbrg
+      do cekrego with kbg15, trf15, pilhar
+      sto15=trf15*jmp15
+   else   
+      kbn15=spac(13)
+      nbg15=spac(28)
+      trf15=0
+      sto15=0
+   endi
+   show gets
+retu
+*   
+proc kbc16
+   pilhar=0
+   if cextr(kbg16)
+      do dftbar with kbg16,pilhar
+      kbg16=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg16,6)
+   if found().and.kbg16<>spac(9)
+      kbn16=left(barcode,13)
+      kbg16=kbrg
+      nbg16=nbrg
+      do cekrego with kbg16, trf16, pilhar
+      sto16=trf16*jmp16
+   else   
+      kbn16=spac(13)
+      nbg16=spac(28)
+      trf16=0
+      sto16=0
+   endi
+   show gets
+retu
+*   
+proc kbc17
+   pilhar=0
+   if cextr(kbg17)
+      do dftbar with kbg17,pilhar
+      kbg17=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg17,6)
+   if found().and.kbg17<>spac(9)
+      kbn17=left(barcode,13)
+      kbg17=kbrg
+      nbg17=nbrg
+      do cekrego with kbg17, trf17, pilhar
+      sto17=trf17*jmp17
+   else   
+      kbn17=spac(13)
+      nbg17=spac(28)
+      trf17=0
+      sto17=0
+   endi
+   show gets
+retu
+*   
+proc kbc18
+   pilhar=0
+   if cextr(kbg18)
+      do dftbar with kbg18,pilhar
+      kbg18=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg18,6)
+   if found().and.kbg18<>spac(9)
+      kbn18=left(barcode,13)
+      kbg18=kbrg
+      nbg18=nbrg
+      do cekrego with kbg18, trf18, pilhar
+      sto18=trf18*jmp18
+   else   
+      kbn18=spac(13)
+      nbg18=spac(28)
+      trf18=0
+      sto18=0
+   endi
+   show gets
+retu
+*   
+proc kbc19
+   pilhar=0
+   if cextr(kbg19)
+      do dftbar with kbg19,pilhar
+      kbg19=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg19,6)
+   if found().and.kbg19<>spac(9)
+      kbn19=left(barcode,13)
+      kbg19=kbrg
+      nbg19=nbrg
+      do cekrego with kbg19, trf19, pilhar
+      sto19=trf19*jmp19
+   else   
+      kbn19=spac(13)
+      nbg19=spac(28)
+      trf19=0
+      sto19=0
+   endi
+   show gets
+retu
+*
+proc ckjm1
+  do case
+  case dqr1=0
+       sto1=trf1*jmp1
+  case dqr1=1
+       sto1=trf1*jmp1
+  case dqr1=2
+       dsc=dsc1/100 
+       sto1=trf1*jmp1
+       sto1=sto1-(sto1*dsc)
+  case dqr1=3
+       sto1=(jmp1-dsc1)*trf1
+  case dqr1=4
+       sto1=(trf1-dsc1)*jmp1
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal
+  simp=.t.
+show gets  
+retu
+*
+proc ckjm2
+  do case
+  case dqr2=0
+       sto2=trf2*jmp2
+  case dqr2=1
+       sto2=trf2*jmp2
+  case dqr2=2
+       dsc=dsc2/100 
+       sto2=trf2*jmp2
+       sto2=sto2-(sto2*dsc)
+  case dqr2=3
+       sto2=(jmp2-dsc2)*trf2
+  case dqr2=4
+       sto2=(trf2-dsc2)*jmp2
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm3
+  do case
+  case dqr3=0
+       sto3=trf3*jmp3
+  case dqr3=1
+       sto3=trf3*jmp3
+  case dqr3=2
+       dsc=dsc3/100 
+       sto3=trf3*jmp3
+       sto3=sto3-(sto3*dsc)
+  case dqr3=3
+       sto3=(jmp3-dsc3)*trf3
+  case dqr3=4
+       sto3=(trf3-dsc3)*jmp3
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm4
+  do case
+  case dqr4=0
+       sto4=trf4*jmp4
+  case dqr4=1
+       sto4=trf4*jmp4
+  case dqr4=2
+       dsc=dsc4/100 
+       sto4=trf4*jmp4
+       sto4=sto4-(sto4*dsc)
+  case dqr4=3
+       sto4=(jmp4-dsc4)*trf4
+  case dqr4=4
+       sto4=(trf4-dsc4)*jmp4
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm5
+  do case
+  case dqr5=0
+       sto5=trf5*jmp5
+  case dqr5=1
+       sto5=trf5*jmp5
+  case dqr5=2
+       dsc=dsc5/100 
+       sto5=trf5*jmp5
+       sto5=sto5-(sto5*dsc)
+  case dqr5=3
+       sto5=(jmp5-dsc5)*trf5
+  case dqr5=4
+       sto5=(trf5-dsc5)*jmp5
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm6
+  do case
+  case dqr6=0
+       sto6=trf6*jmp6
+  case dqr6=1
+       sto6=trf6*jmp6
+  case dqr6=2
+       dsc=dsc6/100 
+       sto6=trf6*jmp6
+       sto6=sto6-(sto6*dsc)
+  case dqr6=3
+       sto6=(jmp6-dsc6)*trf6
+  case dqr6=4
+       sto6=(trf6-dsc6)*jmp6
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm7
+  do case
+  case dqr7=0
+       sto7=trf7*jmp7
+  case dqr7=1
+       sto7=trf7*jmp7
+  case dqr7=2
+       dsc=dsc7/100 
+       sto7=trf7*jmp7
+       sto7=sto7-(sto7*dsc)
+  case dqr7=3
+       sto7=(jmp7-dsc7)*trf7
+  case dqr7=4
+       sto7=(trf7-dsc7)*jmp7
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm8
+  do case
+  case dqr8=0
+       sto8=trf8*jmp8
+  case dqr8=1
+       sto8=trf8*jmp8
+  case dqr8=2
+       dsc=dsc8/100 
+       sto8=trf8*jmp8
+       sto8=sto8-(sto8*dsc)
+  case dqr8=3
+       sto8=(jmp8-dsc8)*trf8
+  case dqr8=4
+       sto8=(trf8-dsc8)*jmp8
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm9
+  do case
+  case dqr9=0
+       sto9=trf9*jmp9
+  case dqr9=1
+       sto9=trf9*jmp9
+  case dqr9=2
+       dsc=dsc9/100 
+       sto9=trf9*jmp9
+       sto9=sto9-(sto9*dsc)
+  case dqr9=3
+       sto9=(jmp9-dsc9)*trf9
+  case dqr9=4
+       sto9=(trf9-dsc9)*jmp9
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm10
+  do case
+  case dqr10=0
+       sto10=trf10*jmp10
+  case dqr10=1
+       sto10=trf10*jmp10
+  case dqr10=2
+       dsc=dsc10/100 
+       sto10=trf10*jmp10
+       sto10=sto10-(sto10*dsc)
+  case dqr10=3
+       sto10=(jmp10-dsc10)*trf10
+  case dqr10=4
+       sto10=(trf10-dsc10)*jmp10
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm11
+  do case
+  case dqr11=0
+       sto11=trf11*jmp11
+  case dqr11=1
+       sto11=trf11*jmp11
+  case dqr11=2
+       dsc=dsc11/100 
+       sto11=trf11*jmp11
+       sto11=sto11-(sto11*dsc)
+  case dqr11=3
+       sto11=(jmp11-dsc11)*trf11
+  case dqr11=4
+       sto11=(trf11-dsc11)*jmp11
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm12
+  do case
+  case dqr12=0
+       sto12=trf12*jmp12
+  case dqr12=1
+       sto12=trf12*jmp12
+  case dqr12=2
+       dsc=dsc12/100 
+       sto12=trf12*jmp12
+       sto12=sto12-(sto12*dsc)
+  case dqr12=3
+       sto12=(jmp12-dsc12)*trf12
+  case dqr12=4
+       sto12=(trf12-dsc12)*jmp12
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm13
+  do case
+  case dqr13=0
+       sto13=trf13*jmp13
+  case dqr13=1
+       sto13=trf13*jmp13
+  case dqr13=2
+       dsc=dsc13/100 
+       sto13=trf13*jmp13
+       sto13=sto13-(sto13*dsc)
+  case dqr13=3
+       sto13=(jmp13-dsc13)*trf13
+  case dqr13=4
+       sto13=(trf13-dsc13)*jmp13
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm14
+  do case
+  case dqr14=0
+       sto14=trf14*jmp14
+  case dqr14=1
+       sto14=trf14*jmp14
+  case dqr14=2
+       dsc=dsc14/100 
+       sto14=trf14*jmp14
+       sto14=sto14-(sto14*dsc)
+  case dqr14=3
+       sto14=(jmp14-dsc14)*trf14
+  case dqr14=4
+       sto14=(trf14-dsc14)*jmp14
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm15
+  do case
+  case dqr15=0
+       sto15=trf15*jmp15
+  case dqr15=1
+       sto15=trf15*jmp15
+  case dqr15=2
+       dsc=dsc15/100 
+       sto15=trf15*jmp15
+       sto15=sto15-(sto15*dsc)
+  case dqr15=3
+       sto15=(jmp15-dsc15)*trf15
+  case dqr15=4
+       sto15=(trf15-dsc15)*jmp15
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm16
+  do case
+  case dqr16=0
+       sto16=trf16*jmp16
+  case dqr16=1
+       sto16=trf16*jmp16
+  case dqr16=2
+       dsc=dsc16/100 
+       sto16=trf16*jmp16
+       sto16=sto16-(sto16*dsc)
+  case dqr16=3
+       sto16=(jmp16-dsc16)*trf16
+  case dqr16=4
+       sto16=(trf16-dsc16)*jmp16
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm17
+  do case
+  case dqr17=0
+       sto17=trf17*jmp17
+  case dqr17=1
+       sto17=trf17*jmp17
+  case dqr17=2
+       dsc=dsc17/100 
+       sto17=trf17*jmp17
+       sto17=sto17-(sto17*dsc)
+  case dqr17=3
+       sto17=(jmp17-dsc17)*trf17
+  case dqr17=4
+       sto17=(trf17-dsc17)*jmp17
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm18
+  do case
+  case dqr18=0
+       sto18=trf18*jmp18
+  case dqr18=1
+       sto18=trf18*jmp18
+  case dqr18=2
+       dsc=dsc18/100 
+       sto18=trf18*jmp18
+       sto18=sto18-(sto18*dsc)
+  case dqr18=3
+       sto18=(jmp18-dsc18)*trf18
+  case dqr18=4
+       sto18=(trf18-dsc18)*jmp18
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+*
+proc ckjm19
+  do case
+  case dqr19=0
+       sto19=trf19*jmp19
+  case dqr19=1
+       sto19=trf19*jmp19
+  case dqr19=2
+       dsc=dsc19/100 
+       sto19=trf19*jmp19
+       sto19=sto19-(sto19*dsc)
+  case dqr19=3
+       sto19=(jmp19-dsc19)*trf19
+  case dqr19=4
+       sto19=(trf19-dsc19)*jmp19
+  endcase
+  do slmula
+  do saveki
+  tot1=0
+  do notal           
+show gets  
+retu
+* 
+proc cbb1
+kgb=spac(9)
+   if cextr(kbn1)
+      do dftbar with kbn1
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn1=left(barcode,13)
+         kbg1=kbrg
+         nbg1=nbrg
+         trf1=hjual
+         sto1=trf1*jmp1
+         bbg1=nbrg
+      else
+         kbn1=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn1
+   if found().and.kbn1<>spac(13)
+      kbg1=kbrg
+      nbg1=nbrg
+      trf1=hjual
+      sto1=trf1*jmp1
+      bbg1=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb2
+kgb=spac(9)
+   if cextr(kbn2)
+      do dftbar with kbn2
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn2=left(barcode,13)
+         kbg2=kbrg
+         nbg2=nbrg
+         trf2=hjual
+         sto2=trf2*jmp2
+         bbg2=nbrg
+      else
+         kbn2=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn2
+   if found().and.kbn2<>spac(13)
+      kbg2=kbrg
+      nbg2=nbrg
+      trf2=hjual
+      sto2=trf2*jmp2
+      bbg2=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb3
+kgb=spac(9)
+   if cextr(kbn3)
+      do dftbar with kbn3
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn3=left(barcode,13)
+         kbg3=kbrg
+         nbg3=nbrg
+         trf3=hjual
+         sto3=trf3*jmp3
+         bbg3=nbrg
+      else
+         kbn3=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn3
+   if found().and.kbn3<>spac(13)
+      kbg3=kbrg
+      nbg3=nbrg
+      trf3=hjual
+      sto3=trf3*jmp3
+      bbg3=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb4
+kgb=spac(9)
+   if cextr(kbn4)
+      do dftbar with kbn4
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn4=left(barcode,13)
+         kbg4=kbrg
+         nbg4=nbrg
+         trf4=hjual
+         sto4=trf4*jmp4
+         bbg4=nbrg
+      else
+         kbn4=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn4
+   if found().and.kbn4<>spac(13)
+      kbg4=kbrg
+      nbg4=nbrg
+      trf4=hjual
+      sto4=trf4*jmp4
+      bbg4=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb5
+kgb=spac(9)
+   if cextr(kbn5)
+      do dftbar with kbn5
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn5=left(barcode,13)
+         kbg5=kbrg
+         nbg5=nbrg
+         trf5=hjual
+         sto5=trf5*jmp5
+         bbg5=nbrg
+      else
+         kbn5=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn5
+   if found().and.kbn5<>spac(13)
+      kbg5=kbrg
+      nbg5=nbrg
+      trf5=hjual
+      sto5=trf5*jmp5
+      bbg5=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb6
+kgb=spac(9)
+   if cextr(kbn6)
+      do dftbar with kbn6
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn6=left(barcode,13)
+         kbg6=kbrg
+         nbg6=nbrg
+         trf6=hjual
+         sto6=trf6*jmp6
+         bbg6=nbrg
+      else
+         kbn6=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn6
+   if found().and.kbn6<>spac(13)
+      kbg6=kbrg
+      nbg6=nbrg
+      trf6=hjual
+      sto6=trf6*jmp6
+      bbg6=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb7
+kgb=spac(9)
+   if cextr(kbn7)
+      do dftbar with kbn7
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn7=left(barcode,13)
+         kbg7=kbrg
+         nbg7=nbrg
+         trf7=hjual
+         sto7=trf7*jmp7
+         bbg7=nbrg
+      else
+         kbn7=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn7
+   if found().and.kbn7<>spac(13)
+      kbg7=kbrg
+      nbg7=nbrg
+      trf7=hjual
+      sto7=trf7*jmp7
+      bbg7=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb8
+kgb=spac(9)
+   if cextr(kbn8)
+      do dftbar with kbn8
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn8=left(barcode,13)
+         kbg8=kbrg
+         nbg8=nbrg
+         trf8=hjual
+         sto8=trf8*jmp8
+         bbg8=nbrg
+      else
+         kbn8=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn8
+   if found().and.kbn8<>spac(13)
+      kbg8=kbrg
+      nbg8=nbrg
+      trf8=hjual
+      sto8=trf8*jmp8
+      bbg8=nbrg
+   endi
+   show gets
+retu
+*   
+proc cbb9
+kgb=spac(9)
+   if cextr(kbn9)
+      do dftbar with kbn9
+      sele 1
+      set orde to 1
+      seek kgb
+      if found().and.kgb<>spac(9)
+         kbn9=left(barcode,13)
+         kbg9=kbrg
+         nbg9=nbrg
+         trf9=hjual
+         sto9=trf9*jmp9
+         bbg9=nbrg
+      else
+         kbn9=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn9
+   if found().and.kbn9<>spac(13)
+      kbg9=kbrg
+      nbg9=nbrg
+      trf9=hjual
+      sto9=trf9*jmp9
+      bbg9=nbrg
+   endi
+   show gets
+retu
+*   xene
+proc cbba1
+kgb=spac(9)
+if cextr(bbg1)
+   do dftbar with bbg1
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn1=left(barcode,13)
+      kbg1=kbrg
+      bbg1=nbrg
+      trf1=hjual
+      sto1=trf1*jmp1
+   else
+      bbg1=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg1)
+   if found().and.bbg1<>spac(28)
+      kbn1=left(barcode,13)
+      kbg1=kbrg
+      bbg1=nbrg
+      trf1=hjual
+      sto1=trf1*jmp1
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg1)
+if found().and.bbg1<>spac(28)
+   kbn1=left(barcode,13)
+   kbg1=kbrg
+   bbg1=nbrg
+   trf1=hjual
+   sto1=trf1*jmp1
+   menco=0
+   menco=ascan(ki,bbg1)
+   if menco>0
+      if her=1
+         wait trim(bbg1) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn1=spac(13)
+   kbg1=spac(9)
+   bbg1=spac(28)
+   trf1=0
+   sto1=0
+endi
+show gets
+retu
+*   
+proc cbba2
+kgb=spac(9)
+if cextr(bbg2)
+   do dftbar with bbg2
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn2=left(barcode,13)
+      kbg2=kbrg
+      bbg2=nbrg
+      trf2=hjual
+      sto2=trf2*jmp2
+   else
+      bbg2=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg2)
+   if found().and.bbg2<>spac(28)
+      kbn2=left(barcode,13)
+      kbg2=kbrg
+      bbg2=nbrg
+      trf2=hjual
+      sto2=trf2*jmp2
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg2)
+if found().and.bbg2<>spac(28)
+   kbn2=left(barcode,13)
+   kbg2=kbrg
+   bbg2=nbrg
+   trf2=hjual
+   sto2=trf2*jmp2
+   menco=0
+   menco=ascan(ki,bbg2)
+   if menco>0
+      if her=1
+         wait trim(bbg2) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn2=spac(13)
+   kbg2=spac(9)
+   bbg2=spac(28)
+   trf2=0
+   sto2=0
+endi
+show gets
+retu
+*   
+proc cbba3
+kgb=spac(9)
+if cextr(bbg3)
+   do dftbar with bbg3
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn3=left(barcode,13)
+      kbg3=kbrg
+      bbg3=nbrg
+      trf3=hjual
+      sto3=trf3*jmp3
+   else
+      bbg3=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg3)
+   if found().and.bbg3<>spac(28)
+      kbn3=left(barcode,13)
+      kbg3=kbrg
+      bbg3=nbrg
+      trf3=hjual
+      sto3=trf3*jmp3
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg3)
+if found().and.bbg3<>spac(28)
+   kbn3=left(barcode,13)
+   kbg3=kbrg
+   bbg3=nbrg
+   trf3=hjual
+   sto3=trf3*jmp3
+   menco=0
+   menco=ascan(ki,bbg3)
+   if menco>0
+      if her=1
+         wait trim(bbg3) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn3=spac(13)
+   kbg3=spac(9)
+   bbg3=spac(28)
+   trf3=0
+   sto3=0
+endi
+show gets
+retu
+*   
+proc cbba4
+kgb=spac(9)
+if cextr(bbg4)
+   do dftbar with bbg4
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn4=left(barcode,13)
+      kbg4=kbrg
+      bbg4=nbrg
+      trf4=hjual
+      sto4=trf4*jmp4
+   else
+      bbg4=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg4)
+   if found().and.bbg4<>spac(28)
+      kbn4=left(barcode,13)
+      kbg4=kbrg
+      bbg4=nbrg
+      trf4=hjual
+      sto4=trf4*jmp4
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg4)
+if found().and.bbg4<>spac(28)
+   kbn4=left(barcode,13)
+   kbg4=kbrg
+   bbg4=nbrg
+   trf4=hjual
+   sto4=trf4*jmp4
+   menco=0
+   menco=ascan(ki,bbg4)
+   if menco>0
+      if her=1
+         wait trim(bbg4) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn4=spac(13)
+   kbg4=spac(9)
+   bbg4=spac(28)
+   trf4=0
+   sto4=0
+endi
+show gets
+retu
+*   
+proc cbba5
+kgb=spac(9)
+if cextr(bbg5)
+   do dftbar with bbg5
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn5=left(barcode,13)
+      kbg5=kbrg
+      bbg5=nbrg
+      trf5=hjual
+      sto5=trf5*jmp5
+   else
+      bbg5=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg5)
+   if found().and.bbg5<>spac(28)
+      kbn5=left(barcode,13)
+      kbg5=kbrg
+      bbg5=nbrg
+      trf5=hjual
+      sto5=trf5*jmp5
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg5)
+if found().and.bbg5<>spac(28)
+   kbn5=left(barcode,13)
+   kbg5=kbrg
+   bbg5=nbrg
+   trf5=hjual
+   sto5=trf5*jmp5
+   menco=0
+   menco=ascan(ki,bbg5)
+   if menco>0
+      if her=1
+         wait trim(bbg5) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn5=spac(13)
+   kbg5=spac(9)
+   bbg5=spac(28)
+   trf5=0
+   sto5=0
+endi
+show gets
+retu
+*   
+proc cbba6
+kgb=spac(9)
+if cextr(bbg6)
+   do dftbar with bbg6
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn6=left(barcode,13)
+      kbg6=kbrg
+      bbg6=nbrg
+      trf6=hjual
+      sto6=trf6*jmp6
+   else
+      bbg6=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg6)
+   if found().and.bbg6<>spac(28)
+      kbn6=left(barcode,13)
+      kbg6=kbrg
+      bbg6=nbrg
+      trf6=hjual
+      sto6=trf6*jmp6
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg6)
+if found().and.bbg6<>spac(28)
+   kbn6=left(barcode,13)
+   kbg6=kbrg
+   bbg6=nbrg
+   trf6=hjual
+   sto6=trf6*jmp6
+   menco=0
+   menco=ascan(ki,bbg6)
+   if menco>0
+      if her=1
+         wait trim(bbg6) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn6=spac(13)
+   kbg6=spac(9)
+   bbg6=spac(28)
+   trf6=0
+   sto6=0
+endi
+show gets
+retu
+*   
+proc cbba7
+kgb=spac(9)
+if cextr(bbg7)
+   do dftbar with bbg7
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn7=left(barcode,13)
+      kbg7=kbrg
+      bbg7=nbrg
+      trf7=hjual
+      sto7=trf7*jmp7
+   else
+      bbg7=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg7)
+   if found().and.bbg7<>spac(28)
+      kbn7=left(barcode,13)
+      kbg7=kbrg
+      bbg7=nbrg
+      trf7=hjual
+      sto7=trf7*jmp7
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg7)
+if found().and.bbg7<>spac(28)
+   kbn7=left(barcode,13)
+   kbg7=kbrg
+   bbg7=nbrg
+   trf7=hjual
+   sto7=trf7*jmp7
+   menco=0
+   menco=ascan(ki,bbg7)
+   if menco>0
+      if her=1
+         wait trim(bbg7) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn7=spac(13)
+   kbg7=spac(9)
+   bbg7=spac(28)
+   trf7=0
+   sto7=0
+endi
+show gets
+retu
+*   
+proc cbba8
+kgb=spac(9)
+if cextr(bbg8)
+   do dftbar with bbg8
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn8=left(barcode,13)
+      kbg8=kbrg
+      bbg8=nbrg
+      trf8=hjual
+      sto8=trf8*jmp8
+   else
+      bbg8=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg8)
+   if found().and.bbg8<>spac(28)
+      kbn8=left(barcode,13)
+      kbg8=kbrg
+      bbg8=nbrg
+      trf8=hjual
+      sto8=trf8*jmp8
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg8)
+if found().and.bbg8<>spac(28)
+   kbn8=left(barcode,13)
+   kbg8=kbrg
+   bbg8=nbrg
+   trf8=hjual
+   sto8=trf8*jmp8
+   menco=0
+   menco=ascan(ki,bbg8)
+   if menco>0
+      if her=1
+         wait trim(bbg8) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn8=spac(13)
+   kbg8=spac(9)
+   bbg8=spac(28)
+   trf8=0
+   sto8=0
+endi
+show gets
+retu
+*   
+proc cbba9
+kgb=spac(9)
+if cextr(bbg9)
+   do dftbar with bbg9
+   sele 1
+   set orde to 1
+   seek kgb
+   if found().and.kgb<>spac(9)
+      kbn9=left(barcode,13)
+      kbg9=kbrg
+      bbg9=nbrg
+      trf9=hjual
+      sto9=trf9*jmp9
+   else
+      bbg9=spac(28)
+   endif
+else
+   sele 1
+   set orde to 1
+   seek trim(bbg9)
+   if found().and.bbg9<>spac(28)
+      kbn9=left(barcode,13)
+      kbg9=kbrg
+      bbg9=nbrg
+      trf9=hjual
+      sto9=trf9*jmp9
+   endif
+endif
+sele 1
+set orde to 2
+seek trim(bbg9)
+if found().and.bbg9<>spac(28)
+   kbn9=left(barcode,13)
+   kbg9=kbrg
+   bbg9=nbrg
+   trf9=hjual
+   sto9=trf9*jmp9
+   menco=0
+   menco=ascan(ki,bbg9)
+   if menco>0
+      if her=1
+         wait trim(bbg9) +' sudah ada'wind timeout 1
+      endif   
+   endif
+else   
+   kbn9=spac(13)
+   kbg9=spac(9)
+   bbg9=spac(28)
+   trf9=0
+   sto9=0
+endi
+show gets
+retu
+*   
+proc tbjm1
+  do case
+  case dqr1=0
+       sto1=trf1*jmp1
+  case dqr1=1
+       sto1=trf1*jmp1
+  case dqr1=2
+       dsc=dsc1/100 
+       sto1=trf1*jmp1
+       sto1=sto1-(sto1*dsc)
+  case dqr1=3
+       sto1=(abs(jmp1)-dsc1)*trf1
+       sto1=iif(jmp1<0,sto1*-1,sto1)
+  case dqr1=4
+       sto1=(trf1-dsc1)*jmp1
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(1) = bbg1 + kbn1 + kbg1 + str(trf1,10)
+  di(1) = str(dqr1,1) + str(dsc1,7,2)
+  ji(1) = str(jmp1,9,2)
+show gets  
+retu
+*
+proc tbjm2
+  do case
+  case dqr2=0
+       sto2=trf2*jmp2
+  case dqr2=1
+       sto2=trf2*jmp2
+  case dqr2=2
+       dsc=dsc2/100 
+       sto2=trf2*jmp2
+       sto2=sto2-(sto2*dsc)
+  case dqr2=3
+       sto2=(abs(jmp2)-dsc2)*trf2
+       sto2=iif(jmp2<0,sto2*-1,sto2)
+  case dqr2=4
+       sto2=(trf2-dsc2)*jmp2
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(2) = bbg2 + kbn2 + kbg2 + str(trf2,10)
+  di(2) = str(dqr2,1) + str(dsc2,7,2)
+  ji(2) = str(jmp2,9,2)
+show gets  
+retu
+*
+proc tbjm3
+  do case
+  case dqr3=0
+       sto3=trf3*jmp3
+  case dqr3=1
+       sto3=trf3*jmp3
+  case dqr3=2
+       dsc=dsc3/100 
+       sto3=trf3*jmp3
+       sto3=sto3-(sto3*dsc)
+  case dqr3=3
+       sto3=(abs(jmp3)-dsc3)*trf3
+       sto3=iif(jmp3<0,sto3*-1,sto3)
+  case dqr3=4
+       sto3=(trf3-dsc3)*jmp3
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(3) = bbg3 + kbn3 + kbg3 + str(trf3,10)
+  di(3) = str(dqr3,1) + str(dsc3,7,2)
+  ji(3) = str(jmp3,9,2)
+show gets  
+retu
+*
+proc tbjm4
+  do case
+  case dqr4=0
+       sto4=trf4*jmp4
+  case dqr4=1
+       sto4=trf4*jmp4
+  case dqr4=2
+       dsc=dsc4/100 
+       sto4=trf4*jmp4
+       sto4=sto4-(sto4*dsc)
+  case dqr4=3
+       sto4=(abs(jmp4)-dsc4)*trf4
+       sto4=iif(jmp4<0,sto4*-1,sto4)
+  case dqr4=4
+       sto4=(trf4-dsc4)*jmp4
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(4) = bbg4 + kbn4 + kbg4 + str(trf4,10)
+  di(4) = str(dqr4,1) + str(dsc4,7,2)
+  ji(4) = str(jmp4,9,2)
+show gets  
+retu
+*
+proc tbjm5
+  do case
+  case dqr5=0
+       sto5=trf5*jmp5
+  case dqr5=1
+       sto5=trf5*jmp5
+  case dqr5=2
+       dsc=dsc5/100 
+       sto5=trf5*jmp5
+       sto5=sto5-(sto5*dsc)
+  case dqr5=3
+       sto5=(abs(jmp5)-dsc5)*trf5
+       sto5=iif(jmp5<0,sto5*-1,sto5)
+  case dqr5=4
+       sto5=(trf5-dsc5)*jmp5
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(5) = bbg5 + kbn5 + kbg5 + str(trf5,10)
+  di(5) = str(dqr5,1) + str(dsc5,7,2)
+  ji(5) = str(jmp5,9,2)
+show gets  
+retu
+*
+proc tbjm6
+  do case
+  case dqr6=0
+       sto6=trf6*jmp6
+  case dqr6=1
+       sto6=trf6*jmp6
+  case dqr6=2
+       dsc=dsc6/100 
+       sto6=trf6*jmp6
+       sto6=sto6-(sto6*dsc)
+  case dqr6=3
+       sto6=(abs(jmp6)-dsc6)*trf6
+       sto6=iif(jmp6<0,sto6*-1,sto6)
+  case dqr6=4
+       sto6=(trf6-dsc6)*jmp6
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(6) = bbg6 + kbn6 + kbg6 + str(trf6,10)
+  di(6) = str(dqr6,1) + str(dsc6,7,2)
+  ji(6) = str(jmp6,9,2)
+show gets  
+retu
+*
+proc tbjm7
+  do case
+  case dqr7=0
+       sto7=trf7*jmp7
+  case dqr7=1
+       sto7=trf7*jmp7
+  case dqr7=2
+       dsc=dsc7/100 
+       sto7=trf7*jmp7
+       sto7=sto7-(sto7*dsc)
+  case dqr7=3
+       sto7=(abs(jmp7)-dsc7)*trf7
+       sto7=iif(jmp7<0,sto7*-1,sto7)
+  case dqr7=4
+       sto7=(trf7-dsc7)*jmp7
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(7) = bbg7 + kbn7 + kbg7 + str(trf7,10)
+  di(7) = str(dqr7,1) + str(dsc7,7,2)
+  ji(7) = str(jmp7,9,2)
+show gets  
+retu
+*
+proc tbjm8
+  do case
+  case dqr8=0
+       sto8=trf8*jmp8
+  case dqr8=1
+       sto8=trf8*jmp8
+  case dqr8=2
+       dsc=dsc8/100 
+       sto8=trf8*jmp8
+       sto8=sto8-(sto8*dsc)
+  case dqr8=3
+       sto8=(abs(jmp8)-dsc8)*trf8
+       sto8=iif(jmp8<0,sto8*-1,sto8)
+  case dqr8=4
+       sto8=(trf8-dsc8)*jmp8
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(8) = bbg8 + kbn8 + kbg8 + str(trf8,10)
+  di(8) = str(dqr8,1) + str(dsc8,7,2)
+  ji(8) = str(jmp8,9,2)
+show gets  
+retu
+*
+proc tbjm9
+  do case
+  case dqr9=0
+       sto9=trf9*jmp9
+  case dqr9=1
+       sto9=trf9*jmp9
+  case dqr9=2
+       dsc=dsc9/100 
+       sto9=trf9*jmp9
+       sto9=sto9-(sto9*dsc)
+  case dqr9=3
+       sto9=(abs(jmp9)-dsc9)*trf9
+       sto9=iif(jmp9<0,sto9*-1,sto9)
+  case dqr9=4
+       sto9=(trf9-dsc9)*jmp9
+  endcase
+  tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9
+  @35.3,98 to 37,170 clear
+  @35.3,98 say'puth.bmp'bitm
+  @35.5,98 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+  ki(9) = bbg9 + kbn9 + kbg9 + str(trf9,10)
+  di(9) = str(dqr9,1) + str(dsc9,7,2)
+  ji(9) = str(jmp9,9,2)
+show gets  
+retu
+*
+proc notal
+  tot1=0
+  for m=1 to 95
+      if left(ki(m),28)<>spac(28)
+         uke=val(left(ji(m),9))
+         qd=val(left(di(m),1))
+         jas=val(righ(di(m),7))
+         hbe=val(righ(ki(m),10))
+         tb=0
+         do case
+         case qd=0
+              tb=hbe*uke
+         case qd=1
+              tb=hbe*uke
+         case qd=2
+              jas=jas/100 
+              tb=hbe*uke
+              tb=tb-(tb*jas)
+         case qd=3
+              tb=(uke-jas)*hbe
+         case qd=4
+              tb=(hbe-jas)*uke
+         endcase
+         tot1=tot1+tb
+      endif   
+  next    
+  @35.3,106 to 37,170 clear
+  @35.3,106 say'puth.bmp'bitm
+  @35.5,107 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+retu
+*
+proc saveki
+     ki(mula)   = nbg1+ kbn1 + kbg1 + str(trf1,10)
+     di(mula)   = str(dqr1,1) + str(dsc1,7,2)
+     ji(mula)   = str(jmp1,9,2)
+     ki(mula+1) = nbg2+ kbn2 + kbg2 + str(trf2,10)
+     di(mula+1) = str(dqr2,1) + str(dsc2,7,2)
+     ji(mula+1) = str(jmp2,9,2)
+     ki(mula+2) = nbg3+ kbn3 + kbg3 + str(trf3,10)
+     di(mula+2) = str(dqr3,1) + str(dsc3,7,2)
+     ji(mula+2) = str(jmp3,9,2)
+     ki(mula+3) = nbg4+ kbn4 + kbg4 + str(trf4,10)
+     di(mula+3) = str(dqr4,1) + str(dsc4,7,2)
+     ji(mula+3) = str(jmp4,9,2)
+     ki(mula+4) = nbg5+ kbn5 + kbg5 + str(trf5,10)
+     di(mula+4) = str(dqr5,1) + str(dsc5,7,2)
+     ji(mula+4) = str(jmp5,9,2)
+     ki(mula+5) = nbg6+ kbn6 + kbg6 + str(trf6,10)
+     di(mula+5) = str(dqr6,1) + str(dsc6,7,2)
+     ji(mula+5) = str(jmp6,9,2)
+     ki(mula+6) = nbg7+ kbn7 + kbg7 + str(trf7,10)
+     di(mula+6) = str(dqr7,1) + str(dsc7,7,2)
+     ji(mula+6) = str(jmp7,9,2)
+     ki(mula+7) = nbg8+ kbn8 + kbg8 + str(trf8,10)
+     di(mula+7) = str(dqr8,1) + str(dsc8,7,2)
+     ji(mula+7) = str(jmp8,9,2)
+     ki(mula+8) = nbg9+ kbn9 + kbg9 + str(trf9,10)
+     di(mula+8) = str(dqr9,1) + str(dsc9,7,2)
+     ji(mula+8) = str(jmp9,9,2)
+     ki(mula+9) = nbg10+ kbn10 + kbg10 + str(trf10,10)
+     di(mula+9) = str(dqr10,1) + str(dsc10,7,2)
+     ji(mula+9) = str(jmp10,9,2)
+     ki(mula+10) = nbg11+ kbn11 + kbg11 + str(trf11,10)
+     di(mula+10) = str(dqr11,1) + str(dsc11,7,2)
+     ji(mula+10) = str(jmp11,9,2)
+     ki(mula+11) = nbg12+ kbn12 + kbg12 + str(trf12,10)
+     di(mula+11) = str(dqr12,1) + str(dsc12,7,2)
+     ji(mula+11) = str(jmp12,9,2)
+     ki(mula+12) = nbg13+ kbn13 + kbg13 + str(trf13,10)
+     di(mula+12) = str(dqr13,1) + str(dsc13,7,2)
+     ji(mula+12) = str(jmp13,9,2)
+     ki(mula+13) = nbg14+ kbn14 + kbg14 + str(trf14,10)
+     di(mula+13) = str(dqr14,1) + str(dsc14,7,2)
+     ji(mula+13) = str(jmp14,9,2)
+     ki(mula+14) = nbg15+ kbn15 + kbg15 + str(trf15,10)
+     di(mula+14) = str(dqr15,1) + str(dsc15,7,2)
+     ji(mula+14) = str(jmp15,9,2)
+     ki(mula+15) = nbg16+ kbn16 + kbg16 + str(trf16,10)
+     di(mula+15) = str(dqr16,1) + str(dsc16,7,2)
+     ji(mula+15) = str(jmp16,9,2)
+     ki(mula+16) = nbg17+ kbn17 + kbg17 + str(trf17,10)
+     di(mula+16) = str(dqr17,1) + str(dsc17,7,2)
+     ji(mula+16) = str(jmp17,9,2)
+     ki(mula+17) = nbg18+ kbn18 + kbg18 + str(trf18,10)
+     di(mula+17) = str(dqr18,1) + str(dsc18,7,2)
+     ji(mula+17) = str(jmp18,9,2)
+     ki(mula+18) = nbg19+ kbn19 + kbg19 + str(trf19,10)
+     di(mula+18) = str(dqr19,1) + str(dsc19,7,2)
+     ji(mula+18) = str(jmp19,9,2)
+show gets     
+retu   &&                             1         2         3         4         5         6         7         8
+*                            12345678901234567890123456789012345678901234567890123456789012345678901234567890
+*                            12345678901234567890123456781234567890123123456789
+proc uraiki
+     nbg1=left(ki(mula),28)
+     kbn1=subs(ki(mula),29,13)
+     kbg1=subs(ki(mula),42,9)
+     jmp1=val(left(ji(mula),9))
+     dqr1=val(left(di(mula),1))
+     dsc1=val(righ(di(mula),7))
+     trf1=val(righ(ki(mula),10))
+     do case
+     case dqr1=0
+          sto1=trf1*jmp1
+     case dqr1=1
+          sto1=trf1*jmp1
+     case dqr1=2
+          dsc=dsc1/100 
+          sto1=trf1*jmp1
+          sto1=sto1-(sto1*dsc)
+     case dqr1=3
+          sto1=(jmp1-dsc1)*trf1
+     case dqr1=4
+          sto1=(trf1-dsc1)*jmp1
+     endcase
+*
+     nbg2=left(ki(mula+1),28)
+     kbn2=subs(ki(mula+1),29,13)
+     kbg2=subs(ki(mula+1),42,9)
+     jmp2=val(left(ji(mula+1),9))
+     dqr2 =val(left(di(mula+1),1))
+     dsc2 =val(righ(di(mula+1),7))
+     trf2=val(righ(ki(mula+1),10))
+     do case
+     case dqr2=0
+          sto2=trf2*jmp2
+     case dqr2=1
+          sto2=trf2*jmp2
+     case dqr2=2
+          dsc=dsc2/100 
+          sto2=trf2*jmp2
+          sto2=sto2-(sto2*dsc)
+     case dqr2=3
+          sto2=(jmp2-dsc2)*trf2
+     case dqr2=4
+          sto2=(trf2-dsc2)*jmp2
+     endcase
+*
+     nbg3=left(ki(mula+2),28)
+     kbn3=subs(ki(mula+2),29,13)
+     kbg3=subs(ki(mula+2),42,9)
+     jmp3=val(left(ji(mula+2),9))
+     dqr3 =val(left(di(mula+2),1))
+     dsc3 =val(righ(di(mula+2),7))
+     trf3=val(righ(ki(mula+2),10))
+     do case
+     case dqr3=0
+          sto3=trf3*jmp3
+     case dqr3=1
+          sto3=trf3*jmp3
+     case dqr3=2
+          dsc=dsc3/100 
+          sto3=trf3*jmp3
+          sto3=sto3-(sto3*dsc)
+     case dqr3=3
+          sto3=(jmp3-dsc3)*trf3
+     case dqr3=4
+          sto3=(trf3-dsc3)*jmp3
+     endcase
+*
+     nbg4=left(ki(mula+3),28)
+     kbn4=subs(ki(mula+3),29,13)
+     kbg4=subs(ki(mula+3),42,9)
+     jmp4=val(left(ji(mula+3),9))
+     dqr4 =val(left(di(mula+3),1))
+     dsc4 =val(righ(di(mula+3),7))
+     trf4=val(righ(ki(mula+3),10))
+     do case
+     case dqr4=0
+          sto4=trf4*jmp4
+     case dqr4=1
+          sto4=trf4*jmp4
+     case dqr4=2
+          dsc=dsc4/100 
+          sto4=trf4*jmp4
+          sto4=sto4-(sto4*dsc)
+     case dqr4=3
+          sto4=(jmp4-dsc4)*trf4
+     case dqr4=4
+          sto4=(trf4-dsc4)*jmp4
+     endcase
+*
+     nbg5=left(ki(mula+4),28)
+     kbn5=subs(ki(mula+4),29,13)
+     kbg5=subs(ki(mula+4),42,9)
+     jmp5=val(left(ji(mula+4),9))
+     dqr5 =val(left(di(mula+4),1))
+     dsc5 =val(righ(di(mula+4),7))
+     trf5=val(righ(ki(mula+4),10))
+     do case
+     case dqr5=0
+          sto5=trf5*jmp5
+     case dqr5=1
+          sto5=trf5*jmp5
+     case dqr5=2
+          dsc=dsc5/100 
+          sto5=trf5*jmp5
+          sto5=sto5-(sto5*dsc)
+     case dqr5=3
+          sto5=(jmp5-dsc5)*trf5
+     case dqr5=4
+          sto5=(trf5-dsc5)*jmp5
+     endcase
+*
+     nbg6=left(ki(mula+5),28)
+     kbn6=subs(ki(mula+5),29,13)
+     kbg6=subs(ki(mula+5),42,9)
+     jmp6=val(left(ji(mula+5),9))
+     dqr6 =val(left(di(mula+5),1))
+     dsc6 =val(righ(di(mula+5),7))
+     trf6=val(righ(ki(mula+5),10))
+     do case
+     case dqr6=0
+          sto6=trf6*jmp6
+     case dqr6=1
+          sto6=trf6*jmp6
+     case dqr6=2
+          dsc=dsc6/100 
+          sto6=trf6*jmp6
+          sto6=sto6-(sto6*dsc)
+     case dqr6=3
+          sto6=(jmp6-dsc6)*trf6
+     case dqr6=4
+          sto6=(trf6-dsc6)*jmp6
+     endcase
+*
+     nbg7=left(ki(mula+6),28)
+     kbn7=subs(ki(mula+6),29,13)
+     kbg7=subs(ki(mula+6),42,9)
+     jmp7=val(left(ji(mula+6),9))
+     dqr7 =val(left(di(mula+6),1))
+     dsc7 =val(righ(di(mula+6),7))
+     trf7=val(righ(ki(mula+6),10))
+     do case
+     case dqr7=0
+          sto7=trf7*jmp7
+     case dqr7=1
+          sto7=trf7*jmp7
+     case dqr7=2
+          dsc=dsc7/100 
+          sto7=trf7*jmp7
+          sto7=sto7-(sto7*dsc)
+     case dqr7=3
+          sto7=(jmp7-dsc7)*trf7
+     case dqr7=4
+          sto7=(trf7-dsc7)*jmp7
+     endcase
+*
+     nbg8=left(ki(mula+7),28)
+     kbn8=subs(ki(mula+7),29,13)
+     kbg8=subs(ki(mula+7),42,9)
+     jmp8=val(left(ji(mula+7),9))
+     dqr8 =val(left(di(mula+7),1))
+     dsc8 =val(righ(di(mula+7),7))
+     trf8=val(righ(ki(mula+7),10))
+     do case
+     case dqr8=0
+          sto8=trf8*jmp8
+     case dqr8=1
+          sto8=trf8*jmp8
+     case dqr8=2
+          dsc=dsc8/100 
+          sto8=trf8*jmp8
+          sto8=sto8-(sto8*dsc)
+     case dqr8=3
+          sto8=(jmp8-dsc8)*trf8
+     case dqr8=4
+          sto8=(trf8-dsc8)*jmp8
+     endcase
+*
+     nbg9=left(ki(mula+8),28)
+     kbn9=subs(ki(mula+8),29,13)
+     kbg9=subs(ki(mula+8),42,9)
+     jmp9=val(left(ji(mula+8),9))
+     dqr9 =val(left(di(mula+8),1))
+     dsc9 =val(righ(di(mula+8),7))
+     trf9=val(righ(ki(mula+8),10))
+     do case
+     case dqr9=0
+          sto9=trf9*jmp9
+     case dqr9=1
+          sto9=trf9*jmp9
+     case dqr9=2
+          dsc=dsc9/100 
+          sto9=trf9*jmp9
+          sto9=sto9-(sto9*dsc)
+     case dqr9=3
+          sto9=(jmp9-dsc9)*trf9
+     case dqr9=4
+          sto9=(trf9-dsc9)*jmp9
+     endcase
+*
+     nbg10=left(ki(mula+9),28)
+     kbn10=subs(ki(mula+9),29,13)
+     kbg10=subs(ki(mula+9),42,9)
+     jmp10=val(left(ji(mula+9),9))
+     dqr10=val(left(di(mula+9),1))
+     dsc10=val(righ(di(mula+9),7))
+     trf10=val(righ(ki(mula+9),10))
+     do case
+     case dqr10=0
+          sto10=trf10*jmp10
+     case dqr10=1
+          sto10=trf10*jmp10
+     case dqr10=2
+          dsc=dsc10/100 
+          sto10=trf10*jmp10
+          sto10=sto10-(sto10*dsc)
+     case dqr10=3
+          sto10=(jmp10-dsc10)*trf10
+     case dqr10=4
+          sto10=(trf10-dsc10)*jmp10
+     endcase
+*
+     nbg11=left(ki(mula+10),28)
+     kbn11=subs(ki(mula+10),29,13)
+     kbg11=subs(ki(mula+10),42,9)
+     jmp11=val(left(ji(mula+10),9))
+     dqr11=val(left(di(mula+10),1))
+     dsc11=val(righ(di(mula+10),7))
+     trf11=val(righ(ki(mula+10),10))
+     do case
+     case dqr11=0
+          sto11=trf11*jmp11
+     case dqr11=1
+          sto11=trf11*jmp11
+     case dqr11=2
+          dsc=dsc11/100 
+          sto11=trf11*jmp11
+          sto11=sto11-(sto11*dsc)
+     case dqr11=3
+          sto11=(jmp11-dsc11)*trf11
+     case dqr11=4
+          sto11=(trf11-dsc11)*jmp11
+     endcase
+*
+     nbg12=left(ki(mula+11),28)
+     kbn12=subs(ki(mula+11),29,13)
+     kbg12=subs(ki(mula+11),42,9)
+     jmp12=val(left(ji(mula+11),9))
+     dqr12=val(left(di(mula+11),1))
+     dsc12=val(righ(di(mula+11),7))
+     trf12=val(righ(ki(mula+11),10))
+     do case
+     case dqr12=0
+          sto12=trf12*jmp12
+     case dqr12=1
+          sto12=trf12*jmp12
+     case dqr12=2
+          dsc=dsc12/100 
+          sto12=trf12*jmp12
+          sto12=sto12-(sto12*dsc)
+     case dqr12=3
+          sto12=(jmp12-dsc12)*trf12
+     case dqr12=4
+          sto12=(trf12-dsc12)*jmp12
+     endcase
+*
+     nbg13=left(ki(mula+12),28)
+     kbn13=subs(ki(mula+12),29,13)
+     kbg13=subs(ki(mula+12),42,9)
+     jmp13=val(left(ji(mula+12),9))
+     dqr13=val(left(di(mula+12),1))
+     dsc13=val(righ(di(mula+12),7))
+     trf13=val(righ(ki(mula+12),10))
+     do case
+     case dqr13=0
+          sto13=trf13*jmp13
+     case dqr13=1
+          sto13=trf13*jmp13
+     case dqr13=2
+          dsc=dsc13/100 
+          sto13=trf13*jmp13
+          sto13=sto13-(sto13*dsc)
+     case dqr13=3
+          sto13=(jmp13-dsc13)*trf13
+     case dqr13=4
+          sto13=(trf13-dsc13)*jmp13
+     endcase
+*
+     nbg14=left(ki(mula+13),28)
+     kbn14=subs(ki(mula+13),29,13)
+     kbg14=subs(ki(mula+13),42,9)
+     jmp14=val(left(ji(mula+13),9))
+     dqr14=val(left(di(mula+13),1))
+     dsc14=val(righ(di(mula+13),7))
+     trf14=val(righ(ki(mula+13),10))
+     do case
+     case dqr14=0
+          sto14=trf14*jmp14
+     case dqr14=1
+          sto14=trf14*jmp14
+     case dqr14=2
+          dsc=dsc14/100 
+          sto14=trf14*jmp14
+          sto14=sto14-(sto14*dsc)
+     case dqr14=3
+          sto14=(jmp14-dsc14)*trf14
+     case dqr14=4
+          sto14=(trf14-dsc14)*jmp14
+     endcase
+*
+     nbg15=left(ki(mula+14),28)
+     kbn15=subs(ki(mula+14),29,13)
+     kbg15=subs(ki(mula+14),42,9)
+     jmp15=val(left(ji(mula+14),9))
+     dqr15=val(left(di(mula+14),1))
+     dsc15=val(righ(di(mula+14),7))
+     trf15=val(righ(ki(mula+14),10))
+     do case
+     case dqr15=0
+          sto15=trf15*jmp15
+     case dqr15=1
+          sto15=trf15*jmp15
+     case dqr15=2
+          dsc=dsc15/100 
+          sto15=trf15*jmp15
+          sto15=sto15-(sto15*dsc)
+     case dqr15=3
+          sto15=(jmp15-dsc15)*trf15
+     case dqr15=4
+          sto15=(trf15-dsc15)*jmp15
+     endcase
+*
+     nbg16=left(ki(mula+15),28)
+     kbn16=subs(ki(mula+15),29,13)
+     kbg16=subs(ki(mula+15),42,9)
+     jmp16=val(left(ji(mula+15),9))
+     dqr16=val(left(di(mula+15),1))
+     dsc16=val(righ(di(mula+15),7))
+     trf16=val(righ(ki(mula+15),10))
+     do case
+     case dqr16=0
+          sto16=trf16*jmp16
+     case dqr16=1
+          sto16=trf16*jmp16
+     case dqr16=2
+          dsc=dsc16/100 
+          sto16=trf16*jmp16
+          sto16=sto16-(sto16*dsc)
+     case dqr16=3
+          sto16=(jmp16-dsc16)*trf16
+     case dqr16=4
+          sto16=(trf16-dsc16)*jmp16
+     endcase
+*
+     nbg17=left(ki(mula+16),28)
+     kbn17=subs(ki(mula+16),29,13)
+     kbg17=subs(ki(mula+16),42,9)
+     jmp17=val(left(ji(mula+16),9))
+     dqr17=val(left(di(mula+16),1))
+     dsc17=val(righ(di(mula+16),7))
+     trf17=val(righ(ki(mula+16),10))
+     do case
+     case dqr17=0
+          sto17=trf17*jmp17
+     case dqr17=1
+          sto17=trf17*jmp17
+     case dqr17=2
+          dsc=dsc17/100 
+          sto17=trf17*jmp17
+          sto17=sto17-(sto17*dsc)
+     case dqr17=3
+          sto17=(jmp17-dsc17)*trf17
+     case dqr17=4
+          sto17=(trf17-dsc17)*jmp17
+     endcase
+*
+     nbg18=left(ki(mula+17),28)
+     kbn18=subs(ki(mula+17),29,13)
+     kbg18=subs(ki(mula+17),42,9)
+     jmp18=val(left(ji(mula+17),9))
+     dqr18=val(left(di(mula+17),1))
+     dsc18=val(righ(di(mula+17),7))
+     trf18=val(righ(ki(mula+17),10))
+     do case
+     case dqr18=0
+          sto18=trf18*jmp18
+     case dqr18=1
+          sto18=trf18*jmp18
+     case dqr18=2
+          dsc=dsc18/100 
+          sto18=trf18*jmp18
+          sto18=sto18-(sto18*dsc)
+     case dqr18=3
+          sto18=(jmp18-dsc18)*trf18
+     case dqr18=4
+          sto18=(trf18-dsc18)*jmp18
+     endcase
+*
+     nbg19=left(ki(mula+18),28)
+     kbn19=subs(ki(mula+18),29,13)
+     kbg19=subs(ki(mula+18),42,9)
+     jmp19=val(left(ji(mula+18),9))
+     dqr19=val(left(di(mula+18),1))
+     dsc19=val(righ(di(mula+18),7))
+     trf19=val(righ(ki(mula+18),10))
+     do case
+     case dqr19=0
+          sto19=trf19*jmp19
+     case dqr19=1
+          sto19=trf19*jmp19
+     case dqr19=2
+          dsc=dsc19/100 
+          sto19=trf19*jmp19
+          sto19=sto19-(sto19*dsc)
+     case dqr19=3
+          sto19=(jmp19-dsc19)*trf19
+     case dqr19=4
+          sto19=(trf19-dsc19)*jmp19
+     endcase
+     tot1=sto1+sto2+sto3+sto4+sto5+sto6+sto7+sto8+sto9+sto10+sto11+sto12+sto13+sto14+sto15+sto16+sto17+sto18+sto19
+     show gets
+retu
+*
+proc prjual
+  set console off
+  set print on
+  instans=' '
+  sele 5
+  set orde to 1
+  seek kangw
+  if found()
+     instans=nins
+  endi
+  ?'Toko Gunung Agung'font'Century Gothic',12 styl'b'
+  ?'FJ.  : '+nbeliw font 'foxprint',8
+  ?'Tgl  : '+dtoc(tbeliw)+' '+TIME() font 'foxprint',8
+  ?
+  ?'Customer : '+kangw+' / '+trim(nangw) font 'foxprint',8
+  ?'Alamat   : '+instans font 'foxprint',8
+  ?
+*   12 123456   9,999,9999999.99999,999,999   
+  ?'===================================='font 'foxprint',8
+  ?'NO. NAMA-BARANG                     'font 'foxprint',8
+  ?'KODE   D     HARGA   QTY.      TOTAL'font 'foxprint',8
+  ?'------------------------------------'font 'foxprint',8
+  tot1=0
+  mmr=0
+  for mi=1 to 95
+      if left(ki(mi),28)<>spac(28)
+         lem=left(ki(mi),28)
+         brc=subs(ki(mi),7,13)
+         ukecilw=val(left(ji(mi),9))
+         rqd=val(left(di(mi),1))
+         jasaw=val(righ(di(mi),7))
+         hbeliw=val(righ(ki(mi),10))
+         tanda=' '
+         do case
+         case rqd=0
+              totbw=hbeliw*ukecilw
+         case rqd=1
+              totbw=hbeliw*ukecilw
+         case rqd=2
+              tanda='%'
+              jasaw=jasaw/100 
+              totbw=hbeliw*ukecilw
+              totbw=totbw-(totbw*jasaw)
+         case rqd=3
+              tanda='Q'
+              totbw=(ukecilw-jasaw)*hbeliw
+         case rqd=4
+              tanda='R'
+              totbw=(hbeliw-jasaw)*ukecilw
+         endcase
+         tot1=tot1+totbw
+         barang=lem
+         tdw=serd(rqd)
+         kbrgw=spac(9)
+         mmr=mmr+1
+         sele 1
+         set orde to 2
+         seek barang
+         if found()
+            kbrgw=kbrg
+         endif
+         ? STR(mmr,2)+'  '+barang font 'foxprint',8
+         ? LEFT(Kbrg,6)+' '+TANDA+' '+tran(hbeliw,'@z 9,999,999')+;
+           tran(UKECILw,'@z 9999.99')+tran(totbw,'@z 999,999,999') font 'foxprint',8
+      endif
+  next  
+  ?'===================================='font 'foxprint',8
+  ?' '+SPGW+SPAC(2)+KSR+SPAC(1)+'TOTAL:'+tran(TOT1,'@z 999,999,999')
+  ?'  DIBAYAR'+SPAC(7)+tran(boyor,'@Z 999,999,999')
+      susuke=0
+      if boyor-tot1>-1.and.boyor-tot1<0
+         susuke=0
+      else   
+         susuke=boyor-tot1
+      endif
+  ?'  KEMBALI'+SPAC(7)+tran(susuke,'@Z 999,999,999')
+  sele 3
+  go top
+  ?'------------------------------------'font 'foxprint',8
+  ?spac(6)+teks1 font 'foxprint',8
+  ?spac(6)+teks2 font 'foxprint',8
+  ?spac(6)+teks3 font 'foxprint',8
+  ?'------------------------------------'font 'foxprint',8
+  ?' '
+  ?' '
+  ?' '
+  ?' '
+  ?' '
+  ?' '
+  set print to
+  set print off
+retu
+*
+proc prtuba
+  set console off
+  set print on
+  ?'Toko Gunung Agung'font'Century Gothic',12 styl'b'
+  ??'Mojokerto'font'foxprint',8
+  ?'NOTA :'+nbeliw font 'foxprint',8
+  ?'Tgl  :'+dtoc(tbeliw)+' '+TIME() font 'foxprint',8
+*   12 123456   9,999,9999999.99999,999,999   
+  ?'===================================='font 'foxprint',8
+  ?'NO. NAMA-BARANG                     'font 'foxprint',8
+  ?'KODE   D     HARGA   QTY.      TOTAL'font 'foxprint',8
+  ?'------------------------------------'font 'foxprint',8
+  tot1=0
+  mmr=0
+  for mi=1 to 95
+      if left(ki(mi),28)<>spac(28)
+         lem=left(ki(mi),28)
+         brc=subs(ki(mi),7,13)
+         ukecilw=val(left(ji(mi),9))
+         rqd=val(left(di(mi),1))
+         jasaw=val(righ(di(mi),7))
+         hbeliw=val(righ(ki(mi),10))
+         tanda=' '
+         do case
+         case rqd=0
+              totbw=hbeliw*ukecilw
+         case rqd=1
+              totbw=hbeliw*ukecilw
+         case rqd=2
+              tanda='%'
+              jasaw=jasaw/100 
+              totbw=hbeliw*ukecilw
+              totbw=totbw-(totbw*jasaw)
+         case rqd=3
+              tanda='Q'
+              totbw=(ukecilw-jasaw)*hbeliw
+         case rqd=4
+              tanda='R'
+              totbw=(hbeliw-jasaw)*ukecilw
+         endcase
+         tot1=tot1+totbw
+         barang=lem
+         tdw=serd(rqd)
+         kbrgw=spac(9)
+         mmr=mmr+1
+         sele 1
+         set orde to 2
+         seek barang
+         if found()
+            kbrgw=kbrg
+         endif
+         ? STR(mmr,2)+'  '+barang font 'foxprint',8
+         ? LEFT(Kbrg,6)+' '+TANDA+' '+tran(hbeliw,'@z 9,999,999')+;
+           tran(UKECILw,'@z 9999.99')+tran(totbw,'@z 999,999,999') font 'foxprint',8
+      endif
+  next  
+  ?'===================================='font 'foxprint',8
+  ?' '+SPGW+SPAC(2)+KSR+SPAC(1)+'TOTAL:'+tran(TOT1,'@z 999,999,999')
+  ?'  DIBAYAR'+SPAC(7)+tran(boyor,'@Z 999,999,999')
+  ?'  KEMBALI'+SPAC(7)+tran(boyor-tot1,'@Z 999,999,999')
+  ?'------------------------------------'font 'foxprint',8
+  ?' '
+  ?' '
+  ?' '
+  ?' '
+  set print to
+  set print off
+retu
+*
+*******************************************************************************************************************************
+* xene
+proc bcbc1
+kgb=spac(9)
+   if cextr(kbn1)
+      do dftber with kbn1
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn1=left(barcode,13)
+         kbg1=kbg1
+         nbg1=nbrg
+         ONO=ASCAN(ki,nbg1)
+         if ONO=0
+            trf1=hsat
+         else
+            trf1=trf1
+         endif   
+         sto1=trf1*jmp1
+      else
+         kbn1=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn1
+   if found().and.kbn1<>spac(13)
+      kbg1=kbrg
+      nbg1=nbrg
+      ONO=ASCAN(ki,nbg1)
+      if ONO=0
+         trf1=hsat
+      else
+         trf1=trf1
+      endif   
+      sto1=trf1*jmp1
+   endi
+   show gets
+retu
+*   
+proc bcbc2
+kgb=spac(9)
+   if cextr(kbn2)
+      do dftber with kbn2
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn2=left(barcode,13)
+         kbg2=kbg2
+         nbg2=nbrg
+         ONO=ASCAN(ki,nbg2)
+         if ONO=0
+            trf2=hsat
+         else
+            trf2=trf2
+         endif   
+         sto2=trf2*jmp2
+      else
+         kbn2=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn2
+   if found().and.kbn2<>spac(13)
+      kbg2=kbrg
+      nbg2=nbrg
+      ONO=ASCAN(ki,nbg2)
+      if ONO=0
+         trf2=hsat
+      else
+         trf2=trf2
+      endif   
+      sto2=trf2*jmp2
+   endi
+   show gets
+retu
+*   
+proc bcbc3
+kgb=spac(9)
+   if cextr(kbn3)
+      do dftber with kbn3
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn3=left(barcode,13)
+         kbg3=kbg3
+         nbg3=nbrg
+         ONO=ASCAN(ki,nbg3)
+         if ONO=0
+            trf3=hsat
+         else
+            trf3=trf3
+         endif   
+         sto3=trf3*jmp3
+      else
+         kbn3=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn3
+   if found().and.kbn3<>spac(13)
+      kbg3=kbrg
+      nbg3=nbrg
+      ONO=ASCAN(ki,nbg3)
+      if ONO=0
+         trf3=hsat
+      else
+         trf3=trf3
+      endif   
+      sto3=trf3*jmp3
+   endi
+   show gets
+retu
+*   
+proc bcbc4
+kgb=spac(9)
+   if cextr(kbn4)
+      do dftber with kbn4
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn4=left(barcode,13)
+         kbg4=kbg4
+         nbg4=nbrg
+         ONO=ASCAN(ki,nbg4)
+         if ONO=0
+            trf4=hsat
+         else
+            trf4=trf4
+         endif   
+         sto4=trf4*jmp4
+      else
+         kbn4=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn4
+   if found().and.kbn4<>spac(13)
+      kbg4=kbrg
+      nbg4=nbrg
+      ONO=ASCAN(ki,nbg4)
+      if ONO=0
+         trf4=hsat
+      else
+         trf4=trf4
+      endif   
+      sto4=trf4*jmp4
+   endi
+   show gets
+retu
+*   
+proc bcbc5
+kgb=spac(9)
+   if cextr(kbn5)
+      do dftber with kbn5
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn5=left(barcode,13)
+         kbg5=kbg5
+         nbg5=nbrg
+         ONO=ASCAN(ki,nbg5)
+         if ONO=0
+            trf5=hsat
+         else
+            trf5=trf5
+         endif   
+         sto5=trf5*jmp5
+      else
+         kbn5=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn5
+   if found().and.kbn5<>spac(13)
+      kbg5=kbrg
+      nbg5=nbrg
+      ONO=ASCAN(ki,nbg5)
+      if ONO=0
+         trf5=hsat
+      else
+         trf5=trf5
+      endif   
+      sto5=trf5*jmp5
+   endi
+   show gets
+retu
+*   
+proc bcbc6
+kgb=spac(9)
+   if cextr(kbn6)
+      do dftber with kbn6
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn6=left(barcode,13)
+         kbg6=kbg6
+         nbg6=nbrg
+         ONO=ASCAN(ki,nbg6)
+         if ONO=0
+            trf6=hsat
+         else
+            trf6=trf6
+         endif   
+         sto6=trf6*jmp6
+      else
+         kbn6=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn6
+   if found().and.kbn6<>spac(13)
+      kbg6=kbrg
+      nbg6=nbrg
+      ONO=ASCAN(ki,nbg6)
+      if ONO=0
+         trf6=hsat
+      else
+         trf6=trf6
+      endif   
+      sto6=trf6*jmp6
+   endi
+   show gets
+retu
+*   
+proc bcbc7
+kgb=spac(9)
+   if cextr(kbn7)
+      do dftber with kbn7
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn7=left(barcode,13)
+         kbg7=kbg7
+         nbg7=nbrg
+         ONO=ASCAN(ki,nbg7)
+         if ONO=0
+            trf7=hsat
+         else
+            trf7=trf7
+         endif   
+         sto7=trf7*jmp7
+      else
+         kbn7=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn7
+   if found().and.kbn7<>spac(13)
+      kbg7=kbrg
+      nbg7=nbrg
+      ONO=ASCAN(ki,nbg7)
+      if ONO=0
+         trf7=hsat
+      else
+         trf7=trf7
+      endif   
+      sto7=trf7*jmp7
+   endi
+   show gets
+retu
+*   
+proc bcbc8
+kgb=spac(9)
+   if cextr(kbn8)
+      do dftber with kbn8
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn8=left(barcode,13)
+         kbg8=kbg8
+         nbg8=nbrg
+         ONO=ASCAN(ki,nbg8)
+         if ONO=0
+            trf8=hsat
+         else
+            trf8=trf8
+         endif   
+         sto8=trf8*jmp8
+      else
+         kbn8=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn8
+   if found().and.kbn8<>spac(13)
+      kbg8=kbrg
+      nbg8=nbrg
+      ONO=ASCAN(ki,nbg8)
+      if ONO=0
+         trf8=hsat
+      else
+         trf8=trf8
+      endif   
+      sto8=trf8*jmp8
+   endi
+   show gets
+retu
+*   
+proc bcbc9
+kgb=spac(9)
+   if cextr(kbn9)
+      do dftber with kbn9
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn9=left(barcode,13)
+         kbg9=kbg9
+         nbg9=nbrg
+         ONO=ASCAN(ki,nbg9)
+         if ONO=0
+            trf9=hsat
+         else
+            trf9=trf9
+         endif   
+         sto9=trf9*jmp9
+      else
+         kbn9=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn9
+   if found().and.kbn9<>spac(13)
+      kbg9=kbrg
+      nbg9=nbrg
+      ONO=ASCAN(ki,nbg9)
+      if ONO=0
+         trf9=hsat
+      else
+         trf9=trf9
+      endif   
+      sto9=trf9*jmp9
+   endi
+   show gets
+retu
+*   
+proc bcbc10
+kgb=spac(9)
+   if cextr(kbn10)
+      do dftber with kbn10
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn10=left(barcode,13)
+         kbg10=kbg10
+         nbg10=nbrg
+         ONO=ASCAN(ki,nbg10)
+         if ONO=0
+            trf10=hsat
+         else
+            trf10=trf10
+         endif   
+         sto10=trf10*jmp10
+      else
+         kbn10=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn10
+   if found().and.kbn10<>spac(13)
+      kbg10=kbrg
+      nbg10=nbrg
+      ONO=ASCAN(ki,nbg10)
+      if ONO=0
+         trf10=hsat
+      else
+         trf10=trf10
+      endif   
+      sto10=trf10*jmp10
+   endi
+   show gets
+retu
+*   
+proc bcbc11
+kgb=spac(9)
+   if cextr(kbn11)
+      do dftber with kbn11
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn11=left(barcode,13)
+         kbg11=kbg11
+         nbg11=nbrg
+         ONO=ASCAN(ki,nbg11)
+         if ONO=0
+            trf11=hsat
+         else
+            trf11=trf11
+         endif   
+         sto11=trf11*jmp11
+      else
+         kbn11=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn11
+   if found().and.kbn11<>spac(13)
+      kbg11=kbrg
+      nbg11=nbrg
+      ONO=ASCAN(ki,nbg11)
+      if ONO=0
+         trf11=hsat
+      else
+         trf11=trf11
+      endif   
+      sto11=trf11*jmp11
+   endi
+   show gets
+retu
+*   
+proc bcbc12
+kgb=spac(9)
+   if cextr(kbn12)
+      do dftber with kbn12
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn12=left(barcode,13)
+         kbg12=kbg12
+         nbg12=nbrg
+         ONO=ASCAN(ki,nbg12)
+         if ONO=0
+            trf12=hsat
+         else
+            trf12=trf12
+         endif   
+         sto12=trf12*jmp12
+      else
+         kbn12=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn12
+   if found().and.kbn12<>spac(13)
+      kbg12=kbrg
+      nbg12=nbrg
+      ONO=ASCAN(ki,nbg12)
+      if ONO=0
+         trf12=hsat
+      else
+         trf12=trf12
+      endif   
+      sto12=trf12*jmp12
+   endi
+   show gets
+retu
+*   
+proc bcbc13
+kgb=spac(9)
+   if cextr(kbn13)
+      do dftber with kbn13
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn13=left(barcode,13)
+         kbg13=kbg13
+         nbg13=nbrg
+         ONO=ASCAN(ki,nbg13)
+         if ONO=0
+            trf13=hsat
+         else
+            trf13=trf13
+         endif   
+         sto13=trf13*jmp13
+      else
+         kbn13=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn13
+   if found().and.kbn13<>spac(13)
+      kbg13=kbrg
+      nbg13=nbrg
+      ONO=ASCAN(ki,nbg13)
+      if ONO=0
+         trf13=hsat
+      else
+         trf13=trf13
+      endif   
+      sto13=trf13*jmp13
+   endi
+   show gets
+retu
+*   
+proc bcbc14
+kgb=spac(9)
+   if cextr(kbn14)
+      do dftber with kbn14
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn14=left(barcode,13)
+         kbg14=kbg14
+         nbg14=nbrg
+         ONO=ASCAN(ki,nbg14)
+         if ONO=0
+            trf14=hsat
+         else
+            trf14=trf14
+         endif   
+         sto14=trf14*jmp14
+      else
+         kbn14=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn14
+   if found().and.kbn14<>spac(13)
+      kbg14=kbrg
+      nbg14=nbrg
+         ONO=ASCAN(ki,nbg14)
+         if ONO=0
+            trf14=hsat
+         else
+            trf14=trf14
+         endif   
+      sto14=trf14*jmp14
+   endi
+   show gets
+retu
+*   
+proc bcbc15
+kgb=spac(9)
+   if cextr(kbn15)
+      do dftber with kbn15
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn15=left(barcode,13)
+         kbg15=kbg15
+         nbg15=nbrg
+         ONO=ASCAN(ki,nbg15)
+         if ONO=0
+            trf15=hsat
+         else
+            trf15=trf15
+         endif   
+         sto15=trf15*jmp15
+      else
+         kbn15=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn15
+   if found().and.kbn15<>spac(13)
+      kbg15=kbrg
+      nbg15=nbrg
+         ONO=ASCAN(ki,nbg15)
+         if ONO=0
+            trf15=hsat
+         else
+            trf15=trf15
+         endif   
+      sto15=trf15*jmp15
+   endi
+   show gets
+retu
+*   
+proc bcbc16
+kgb=spac(9)
+   if cextr(kbn16)
+      do dftber with kbn16
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn16=left(barcode,13)
+         kbg16=kbg16
+         nbg16=nbrg
+         ONO=ASCAN(ki,nbg16)
+         if ONO=0
+            trf16=hsat
+         else
+            trf16=trf16
+         endif   
+         sto16=trf16*jmp16
+      else
+         kbn16=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn16
+   if found().and.kbn16<>spac(13)
+      kbg16=kbrg
+      nbg16=nbrg
+         ONO=ASCAN(ki,nbg16)
+         if ONO=0
+            trf16=hsat
+         else
+            trf16=trf16
+         endif   
+      sto16=trf16*jmp16
+   endi
+   show gets
+retu
+*   
+proc bcbc17
+kgb=spac(9)
+   if cextr(kbn17)
+      do dftber with kbn17
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn17=left(barcode,13)
+         kbg17=kbg17
+         nbg17=nbrg
+         ONO=ASCAN(ki,nbg17)
+         if ONO=0
+            trf17=hsat
+         else
+            trf17=trf17
+         endif   
+         sto17=trf17*jmp17
+      else
+         kbn17=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn17
+   if found().and.kbn17<>spac(13)
+      kbg17=kbrg
+      nbg17=nbrg
+         ONO=ASCAN(ki,nbg17)
+         if ONO=0
+            trf17=hsat
+         else
+            trf17=trf17
+         endif   
+      sto17=trf17*jmp17
+   endi
+   show gets
+retu
+*   
+proc bcbc18
+kgb=spac(9)
+   if cextr(kbn18)
+      do dftber with kbn18
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn18=left(barcode,13)
+         kbg18=kbg18
+         nbg18=nbrg
+         ONO=ASCAN(ki,nbg18)
+         if ONO=0
+            trf18=hsat
+         else
+            trf18=trf18
+         endif   
+         sto18=trf18*jmp18
+      else
+         kbn18=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn18
+   if found().and.kbn18<>spac(13)
+      kbg18=kbrg
+      nbg18=nbrg
+         ONO=ASCAN(ki,nbg18)
+         if ONO=0
+            trf18=hsat
+         else
+            trf18=trf18
+         endif   
+      sto18=trf18*jmp18
+   endi
+   show gets
+retu
+*   
+proc bcbc19
+kgb=spac(9)
+   if cextr(kbn19)
+      do dftber with kbn19
+      sele 1
+      set orde to 1
+      seek left(kgb,6)
+      if found().and.kgb<>spac(9)
+         kbn19=left(barcode,13)
+         kbg19=kbg19
+         nbg19=nbrg
+         ONO=ASCAN(ki,nbg19)
+         if ONO=0
+            trf19=hsat
+         else
+            trf19=trf19
+         endif   
+         sto19=trf19*jmp19
+      else
+         kbn19=spac(13)   
+      endif
+   endif
+   sele 1
+   set orde to 3
+   seek kbn19
+   if found().and.kbn19<>spac(13)
+      kbg19=kbrg
+      nbg19=nbrg
+         ONO=ASCAN(ki,nbg19)
+         if ONO=0
+            trf19=hsat
+         else
+            trf19=trf19
+         endif   
+      sto19=trf19*jmp19
+   endi
+   show gets
+retu
+*   
+proc bkbc1
+   if cextr(kbg1)
+      do dftber with kbg1
+      kbg1=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg1,6)
+   if found().and.kbg1<>spac(9)
+      kbn1=left(barcode,13)
+      kbg1=kbg1
+      nbg1=nbrg
+      ONO=ASCAN(ki,nbg1)
+      if ONO=0
+         trf1=hsat
+         hju1=hjual
+      else
+         trf1=trf1
+         hju1=hju1
+      endif   
+      sto1=trf1*jmp1
+   else   
+      kbn1=spac(13)
+      nbg1=spac(28)
+      trf1=0
+      hju1=0
+      sto1=0
+   endi
+   show gets
+retu
+*   
+proc bkbc2
+   if cextr(kbg2)
+      do dftber with kbg2
+      kbg2=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg2,6)
+   if found().and.kbg2<>spac(9)
+      kbn2=left(barcode,13)
+      kbg2=kbg2
+      nbg2=nbrg
+      ONO=ASCAN(ki,nbg2)
+      if ONO=0
+         trf2=hsat
+         hju2=hjual
+      else
+         trf2=trf2
+         hju2=hju2
+      endif   
+      sto2=trf2*jmp2
+   else   
+      kbn2=spac(13)
+      nbg2=spac(28)
+      trf2=0
+      hju2=0
+      sto2=0
+   endi
+   show gets
+retu
+*   
+proc bkbc3
+   if cextr(kbg3)
+      do dftber with kbg3
+      kbg3=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg3,6)
+   if found().and.kbg3<>spac(9)
+      kbn3=left(barcode,13)
+      kbg3=kbg3
+      nbg3=nbrg
+      ONO=ASCAN(ki,nbg3)
+      if ONO=0
+         trf3=hsat
+         hju3=hjual
+      else
+         trf3=trf3
+         hju3=hju3
+      endif   
+      sto3=trf3*jmp3
+   else   
+      kbn3=spac(13)
+      nbg3=spac(28)
+      trf3=0
+      hju3=0
+      sto3=0
+   endi
+   show gets
+retu
+*   
+proc bkbc4
+   if cextr(kbg4)
+      do dftber with kbg4
+      kbg4=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg4,6)
+   if found().and.kbg4<>spac(9)
+      kbn4=left(barcode,13)
+      kbg4=kbg4
+      nbg4=nbrg
+      ONO=ASCAN(ki,nbg4)
+      if ONO=0
+         trf4=hsat
+         hju4=hjual
+      else
+         trf4=trf4
+         hju4=hju4
+      endif   
+      sto4=trf4*jmp4
+   else   
+      kbn4=spac(13)
+      nbg4=spac(28)
+      trf4=0
+      hju4=0
+      sto4=0
+   endi
+   show gets
+retu
+*   
+proc bkbc5
+   if cextr(kbg5)
+      do dftber with kbg5
+      kbg5=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg5,6)
+   if found().and.kbg5<>spac(9)
+      kbn5=left(barcode,13)
+      kbg5=kbg5
+      nbg5=nbrg
+      ONO=ASCAN(ki,nbg5)
+      if ONO=0
+         trf5=hsat
+         hju5=hjual
+      else
+         trf5=trf5
+         hju5=hju5
+      endif   
+      sto5=trf5*jmp5
+   else   
+      kbn5=spac(13)
+      nbg5=spac(28)
+      trf5=0
+      hju5=0
+      sto5=0
+   endi
+   show gets
+retu
+*   
+proc bkbc6
+   if cextr(kbg6)
+      do dftber with kbg6
+      kbg6=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg6,6)
+   if found().and.kbg6<>spac(9)
+      kbn6=left(barcode,13)
+      kbg6=kbg6
+      nbg6=nbrg
+      ONO=ASCAN(ki,nbg6)
+      if ONO=0
+         trf6=hsat
+         hju6=hjual
+      else
+         trf6=trf6
+         hju6=hju6
+      endif   
+      sto6=trf6*jmp6
+   else   
+      kbn6=spac(13)
+      nbg6=spac(28)
+      trf6=0
+      hju6=0
+      sto6=0
+   endi
+   show gets
+retu
+*   
+proc bkbc7
+   if cextr(kbg7)
+      do dftber with kbg7
+      kbg7=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg7,6)
+   if found().and.kbg7<>spac(9)
+      kbn7=left(barcode,13)
+      kbg7=kbg7
+      nbg7=nbrg
+      ONO=ASCAN(ki,nbg7)
+      if ONO=0
+         trf7=hsat
+         hju7=hjual
+      else
+         trf7=trf7
+         hju7=hju7
+      endif   
+      sto7=trf7*jmp7
+   else   
+      kbn7=spac(13)
+      nbg7=spac(28)
+      trf7=0
+      hju7=0
+      sto7=0
+   endi
+   show gets
+retu
+*   
+proc bkbc8
+   if cextr(kbg8)
+      do dftber with kbg8
+      kbg8=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg8,6)
+   if found().and.kbg8<>spac(9)
+      kbn8=left(barcode,13)
+      kbg8=kbg8
+      nbg8=nbrg
+      ONO=ASCAN(ki,nbg8)
+      if ONO=0
+         trf8=hsat
+         hju8=hjual
+      else
+         trf8=trf8
+         hju8=hju8
+      endif   
+      sto8=trf8*jmp8
+   else   
+      kbn8=spac(13)
+      nbg8=spac(28)
+      trf8=0
+      hju8=0
+      sto8=0
+   endi
+   show gets
+retu
+*   
+proc bkbc9
+   if cextr(kbg9)
+      do dftber with kbg9
+      kbg9=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg9,6)
+   if found().and.kbg9<>spac(9)
+      kbn9=left(barcode,13)
+      kbg9=kbg9
+      nbg9=nbrg
+      ONO=ASCAN(ki,nbg9)
+      if ONO=0
+         trf9=hsat
+         hju9=hjual
+      else
+         trf9=trf9
+         hju9=hju9
+      endif   
+      sto9=trf9*jmp9
+   else   
+      kbn9=spac(13)
+      nbg9=spac(28)
+      trf9=0
+      hju9=0
+      sto9=0
+   endi
+   show gets
+retu
+*   
+proc bkbc10
+   if cextr(kbg10)
+      do dftber with kbg10
+      kbg10=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg10,6)
+   if found().and.kbg10<>spac(9)
+      kbn10=left(barcode,13)
+      kbg10=kbg10
+      nbg10=nbrg
+      ONO=ASCAN(ki,nbg10)
+      if ONO=0
+         trf10=hsat
+         hju10=hjual
+      else
+         trf10=trf10
+         hju10=hju10
+      endif   
+      sto10=trf10*jmp10
+   else   
+      kbn10=spac(13)
+      nbg10=spac(28)
+      trf10=0
+      hju10=0
+      sto10=0
+   endi
+   show gets
+retu
+*   
+proc bkbc11
+   if cextr(kbg11)
+      do dftber with kbg11
+      kbg11=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg11,6)
+   if found().and.kbg11<>spac(9)
+      kbn11=left(barcode,13)
+      kbg11=kbg11
+      nbg11=nbrg
+      ONO=ASCAN(ki,nbg11)
+      if ONO=0
+         trf11=hsat
+         hju11=hjual
+      else
+         trf11=trf11
+         hju11=hju11
+      endif   
+      sto11=trf11*jmp11
+   else   
+      kbn11=spac(13)
+      nbg11=spac(28)
+      trf11=0
+      hju11=0
+      sto11=0
+   endi
+   show gets
+retu
+*   
+proc bkbc12
+   if cextr(kbg12)
+      do dftber with kbg12
+      kbg12=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg12,6)
+   if found().and.kbg12<>spac(9)
+      kbn12=left(barcode,13)
+      kbg12=kbg12
+      nbg12=nbrg
+      ONO=ASCAN(ki,nbg12)
+      if ONO=0
+         trf12=hsat
+         hju12=hjual
+      else
+         trf12=trf12
+         hju12=hju12
+      endif   
+      sto12=trf12*jmp12
+   else   
+      kbn12=spac(13)
+      nbg12=spac(28)
+      trf12=0
+      hju12=0
+      sto12=0
+   endi
+   show gets
+retu
+*   
+proc bkbc13
+   if cextr(kbg13)
+      do dftber with kbg13
+      kbg13=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg13,6)
+   if found().and.kbg13<>spac(9)
+      kbn13=left(barcode,13)
+      kbg13=kbg13
+      nbg13=nbrg
+      ONO=ASCAN(ki,nbg13)
+      if ONO=0
+         trf13=hsat
+         hju13=hjual
+      else
+         trf13=trf13
+         hju13=hju13
+      endif   
+      sto13=trf13*jmp13
+   else   
+      kbn13=spac(13)
+      nbg13=spac(28)
+      trf13=0
+      hju13=0
+      sto13=0
+   endi
+   show gets
+retu
+*   
+proc bkbc14
+   if cextr(kbg14)
+      do dftber with kbg14
+      kbg14=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg14,6)
+   if found().and.kbg14<>spac(9)
+      kbn14=left(barcode,13)
+      kbg14=kbg14
+      nbg14=nbrg
+      ONO=ASCAN(ki,nbg14)
+      if ONO=0
+         trf14=hsat
+         hju14=hjual
+      else
+         trf14=trf14
+         hju14=hju14
+      endif   
+      sto14=trf14*jmp14
+   else   
+      kbn14=spac(13)
+      nbg14=spac(28)
+      trf14=0
+      hju14=0
+      sto14=0
+   endi
+   show gets
+retu
+*   
+proc bkbc15
+   if cextr(kbg15)
+      do dftber with kbg15
+      kbg15=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg15,6)
+   if found().and.kbg15<>spac(9)
+      kbn15=left(barcode,13)
+      kbg15=kbg15
+      nbg15=nbrg
+      ONO=ASCAN(ki,nbg15)
+      if ONO=0
+         trf15=hsat
+         hju15=hjual
+      else
+         trf15=trf15
+         hju15=hju15
+      endif   
+      sto15=trf15*jmp15
+   else   
+      kbn15=spac(13)
+      nbg15=spac(28)
+      trf15=0
+      hju15=0
+      sto15=0
+   endi
+   show gets
+retu
+*   
+proc bkbc16
+   if cextr(kbg16)
+      do dftber with kbg16
+      kbg16=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg16,6)
+   if found().and.kbg16<>spac(9)
+      kbn16=left(barcode,13)
+      kbg16=kbg16
+      nbg16=nbrg
+      ONO=ASCAN(ki,nbg16)
+      if ONO=0
+         trf16=hsat
+         hju16=hjual
+      else
+         trf16=trf16
+         hju16=hju16
+      endif   
+      sto16=trf16*jmp16
+   else   
+      kbn16=spac(13)
+      nbg16=spac(28)
+      trf16=0
+      hju16=0
+      sto16=0
+   endi
+   show gets
+retu
+*   
+proc bkbc17
+   if cextr(kbg17)
+      do dftber with kbg17
+      kbg17=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg17,6)
+   if found().and.kbg17<>spac(9)
+      kbn17=left(barcode,13)
+      kbg17=kbg17
+      nbg17=nbrg
+      ONO=ASCAN(ki,nbg17)
+      if ONO=0
+         trf17=hsat
+         hju17=hjual
+      else
+         trf17=trf17
+         hju17=hju17
+      endif   
+      sto17=trf17*jmp17
+   else   
+      kbn17=spac(13)
+      nbg17=spac(28)
+      trf17=0
+      hju17=0
+      sto17=0
+   endi
+   show gets
+retu
+*   
+proc bkbc18
+   if cextr(kbg18)
+      do dftber with kbg18
+      kbg18=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg18,6)
+   if found().and.kbg18<>spac(9)
+      kbn18=left(barcode,13)
+      kbg18=kbg18
+      nbg18=nbrg
+      ONO=ASCAN(ki,nbg18)
+      if ONO=0
+         trf18=hsat
+         hju18=hjual
+      else
+         trf18=trf18
+         hju18=hju18
+      endif   
+      sto18=trf18*jmp18
+   else   
+      kbn18=spac(13)
+      nbg18=spac(28)
+      trf18=0
+      hju18=0
+      sto18=0
+   endi
+   show gets
+retu
+*   
+proc bkbc19
+   if cextr(kbg19)
+      do dftber with kbg19
+      kbg19=kgb
+   endif
+   sele 1
+   set orde to 1
+   seek left(kbg19,6)
+   if found().and.kbg19<>spac(9)
+      kbn19=left(barcode,13)
+      kbg19=kbg19
+      nbg19=nbrg
+      ONO=ASCAN(ki,nbg19)
+      if ONO=0
+         trf19=hsat
+         hju19=hjual
+      else
+         trf19=trf19
+         hju19=hju19
+      endif   
+      sto19=trf19*jmp19
+   else   
+      kbn19=spac(13)
+      nbg19=spac(28)
+      trf19=0
+      hju19=0
+      sto19=0
+   endi
+   show gets
+retu
+*
+proc ccekup
+if scekup=cekup
+  if !wis   
+    do case
+    case cekup=1
+        @6.3,100.7 say'pnh01.bmp'bitm
+    case cekup=2
+        @6.3,100.7 say'pnh02.bmp'bitm
+    case cekup=3
+        @6.3,100.7 say'pnh03.bmp'bitm
+    case cekup=4
+        @6.3,100.7 say'pnh04.bmp'bitm
+    case cekup=5
+        @6.3,100.7 say'pnh05.bmp'bitm
+    case cekup=6
+        @6.3,100.7 say'pnh06.bmp'bitm
+    case cekup=7
+        @6.3,100.7 say'pnh07.bmp'bitm
+    case cekup=8
+        @6.3,100.7 say'pnh08.bmp'bitm
+    case cekup=9
+        @6.3,100.7 say'pnh09.bmp'bitm
+    case cekup=10
+        @6.3,100.7 say'pnh10.bmp'bitm
+    case cekup=11
+        @6.3,100.7 say'pnh11.bmp'bitm
+    case cekup=12
+        @6.3,100.7 say'pnh12.bmp'bitm
+    case cekup=13
+        @6.3,100.7 say'pnh13.bmp'bitm
+    case cekup=14
+        @6.3,100.7 say'pnh14.bmp'bitm
+    case cekup=15
+        @6.3,100.7 say'pnh15.bmp'bitm
+    case cekup=16
+        @6.3,100.7 say'pnh16.bmp'bitm
+    case cekup=17
+        @6.3,100.7 say'pnh17.bmp'bitm
+    case cekup=18
+        @6.3,100.7 say'pnh18.bmp'bitm
+    case cekup=19
+        @6.3,100.7 say'pnh19.bmp'bitm
+    endcase
+    wis=.t.
+  else   
+    @6.3,100.7 say'pnh00.bmp'bitm
+    wis=.f.
+    cekup=0
+  endif
+else
+  scekup=cekup
+  do case
+    case cekup=1
+        @6.3,100.7 say'pnh01.bmp'bitm
+    case cekup=2
+        @6.3,100.7 say'pnh02.bmp'bitm
+    case cekup=3
+        @6.3,100.7 say'pnh03.bmp'bitm
+    case cekup=4
+        @6.3,100.7 say'pnh04.bmp'bitm
+    case cekup=5
+        @6.3,100.7 say'pnh05.bmp'bitm
+    case cekup=6
+        @6.3,100.7 say'pnh06.bmp'bitm
+    case cekup=7
+        @6.3,100.7 say'pnh07.bmp'bitm
+    case cekup=8
+        @6.3,100.7 say'pnh08.bmp'bitm
+    case cekup=9
+        @6.3,100.7 say'pnh09.bmp'bitm
+    case cekup=10
+        @6.3,100.7 say'pnh10.bmp'bitm
+    case cekup=11
+        @6.3,100.7 say'pnh11.bmp'bitm
+    case cekup=12
+        @6.3,100.7 say'pnh12.bmp'bitm
+    case cekup=13
+        @6.3,100.7 say'pnh13.bmp'bitm
+    case cekup=14
+        @6.3,100.7 say'pnh14.bmp'bitm
+    case cekup=15
+        @6.3,100.7 say'pnh15.bmp'bitm
+    case cekup=16
+        @6.3,100.7 say'pnh16.bmp'bitm
+    case cekup=17
+        @6.3,100.7 say'pnh17.bmp'bitm
+    case cekup=18
+        @6.3,100.7 say'pnh18.bmp'bitm
+    case cekup=19
+        @6.3,100.7 say'pnh19.bmp'bitm
+  endcase
+  wis=.t.
+endif
+retu
+*
+proc bup1
+  if cekup=1
+     nail=upe1/100
+     hju1=trf1+(trf1*nail)
+  endi   
+show gets   
+retu
+*
+proc bup2
+  if cekup=2
+     nail=upe2/100
+     hju2=trf2+(trf2*nail)
+  endif
+show gets   
+retu
+*
+proc bup3
+  if cekup=3
+     nail=upe3/100
+     hju3=trf3+(trf3*nail)
+  endif
+show gets   
+retu
+*
+proc bup4
+  if cekup=4
+     nail=upe4/100
+     hju4=trf4+(trf4*nail)
+  endif
+show gets   
+retu
+*
+proc bup5
+  if cekup=5
+     nail=upe5/100
+     hju5=trf5+(trf5*nail)
+  endif
+show gets   
+retu
+*
+proc bup6
+  if cekup=6
+     nail=upe6/100
+     hju6=trf6+(trf6*nail)
+  endif
+show gets   
+retu
+*
+proc bup7
+  if cekup=7
+     nail=upe7/100
+     hju7=trf7+(trf7*nail)
+  endif
+show gets   
+retu
+*
+proc bup8
+  if cekup=8
+     nail=upe8/100
+     hju8=trf8+(trf8*nail)
+  endif
+show gets   
+retu
+*
+proc bup9
+  if cekup=9
+     nail=upe9/100
+     hju9=trf9+(trf9*nail)
+  endif
+show gets   
+retu
+*
+proc bup10
+  if cekup=10
+     nail=upe10/100
+     hju10=trf10+(trf10*nail)
+  endif   
+show gets   
+retu
+*
+proc bup11
+  if cekup=11
+     nail=upe11/100
+     hju11=trf11+(trf11*nail)
+  endif
+show gets   
+retu
+*
+proc bup12
+  if cekup=12
+     nail=upe12/100
+     hju12=trf12+(trf12*nail)
+  endif
+show gets   
+retu
+*
+proc bup13
+  if cekup=13
+     nail=upe13/100
+     hju13=trf13+(trf13*nail)
+  endif
+show gets   
+retu
+*
+proc bup14
+  if cekup=14
+     nail=upe14/100
+     hju14=trf14+(trf14*nail)
+  endif
+show gets   
+retu
+*
+proc bup15
+  if cekup=15
+     nail=upe15/100
+     hju15=trf15+(trf15*nail)
+  endif
+show gets   
+retu
+*
+proc bup16
+  if cekup=16
+     nail=upe16/100
+     hju16=trf16+(trf16*nail)
+  endif
+show gets   
+retu
+*
+proc bup17
+  if cekup=17
+     nail=upe17/100
+     hju17=trf17+(trf17*nail)
+  endif
+show gets   
+retu
+*
+proc bup18
+  if cekup=18
+     nail=upe18/100
+     hju18=trf18+(trf18*nail)
+  endif
+show gets   
+retu
+*
+proc bup19
+  if cekup=19
+     nail=upe19/100
+     hju19=trf19+(trf19*nail)
+  endif
+show gets   
+retu
+*
+proc bkjm1
+  sto1=trf1*jmp1
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm2
+  sto2=trf2*jmp2
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm3
+  sto3=trf3*jmp3
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm4
+  sto4=trf4*jmp4
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm5
+  sto5=trf5*jmp5
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm6
+  sto6=trf6*jmp6
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm7
+  sto7=trf7*jmp7
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm8
+  sto8=trf8*jmp8
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm9
+  sto9=trf9*jmp9
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm10
+  sto10=trf10*jmp10
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm11
+  sto11=trf11*jmp11
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm12
+  sto12=trf12*jmp12
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm13
+  sto13=trf13*jmp13
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm14
+  sto14=trf14*jmp14
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm15
+  sto15=trf15*jmp15
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm16
+  sto16=trf16*jmp16
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm17
+  sto17=trf17*jmp17
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm18
+  sto18=trf18*jmp18
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+*
+proc bkjm19
+  sto19=trf19*jmp19
+  do slmula
+  do baveki
+  tot1=0
+  do botal           
+show gets  
+retu
+* 
+proc slmula
+  do case
+  case hl=1
+       mula=1
+  case hl=2
+       mula=20
+  case hl=3
+       mula=39
+  case hl=4
+       mula=58
+  case hl=5
+       mula=77
+  endcase
+retu
+*    
+proc botal
+  tot1=0
+  for m=1 to 95
+      if left(ki(m),28)<>spac(28)
+         uke=val(left(ji(m),9))
+         hbe=val(righ(ki(m),10))
+         tb=0
+         tb=hbe*uke
+         tot1=tot1+tb
+      endif   
+  next    
+  @35.3,106 to 37,170 clear
+  @35.3,106 say'puth.bmp'bitm
+  @35.5,107 say tot1 pict'@z 9,999,999,999' colo rgb(0,0,0,255,255,255) font'Book Antiqua',30 styl'b'
+retu
+*
+proc baveki
+     ki(mula)   = nbg1+ kbn1 +kbg1+ str(trf1,10)
+     di(mula)   = str(upe1,2) + str(hju1,10)
+     ji(mula)   = str(jmp1,9,2)
+     ki(mula+1) = nbg2+ kbn2 +kbg2+ str(trf2,10)
+     di(mula+1) = str(upe2,2) + str(hju2,10)
+     ji(mula+1) = str(jmp2,9,2)
+     ki(mula+2) = nbg3+ kbn3 +kbg3+ str(trf3,10)
+     di(mula+2) = str(upe3,2) + str(hju3,10)
+     ji(mula+2) = str(jmp3,9,2)
+     ki(mula+3) = nbg4+ kbn4 +kbg4+ str(trf4,10)
+     di(mula+3) = str(upe4,2) + str(hju4,10)
+     ji(mula+3) = str(jmp4,9,2)
+     ki(mula+4) = nbg5+ kbn5 +kbg5+ str(trf5,10)
+     di(mula+4) = str(upe5,2) + str(hju5,10)
+     ji(mula+4) = str(jmp5,9,2)
+     ki(mula+5) = nbg6+ kbn6 +kbg6+ str(trf6,10)
+     di(mula+5) = str(upe6,2) + str(hju6,10)
+     ji(mula+5) = str(jmp6,9,2)
+     ki(mula+6) = nbg7+ kbn7 +kbg7+ str(trf7,10)
+     di(mula+6) = str(upe7,2) + str(hju7,10)
+     ji(mula+6) = str(jmp7,9,2)
+     ki(mula+7) = nbg8+ kbn8 +kbg8+ str(trf8,10)
+     di(mula+7) = str(upe8,2) + str(hju8,10)
+     ji(mula+7) = str(jmp8,9,2)
+     ki(mula+8) = nbg9+ kbn9 +kbg9+ str(trf9,10)
+     di(mula+8) = str(upe9,2) + str(hju9,10)
+     ji(mula+8) = str(jmp9,9,2)
+     ki(mula+9) = nbg10+ kbn10 +kbg10+ str(trf10,10)
+     di(mula+9) = str(upe10,2) + str(hju10,10)
+     ji(mula+9) = str(jmp10,9,2)
+     ki(mula+10) = nbg11+ kbn11 +kbg11+ str(trf11,10)
+     di(mula+10) = str(upe11,2) + str(hju11,10)
+     ji(mula+10) = str(jmp11,9,2)
+     ki(mula+11) = nbg12+ kbn12 +kbg12+ str(trf12,10)
+     di(mula+11) = str(upe12,2) + str(hju12,10)
+     ji(mula+11) = str(jmp12,9,2)
+     ki(mula+12) = nbg13+ kbn13 +kbg13+ str(trf13,10)
+     di(mula+12) = str(upe13,2) + str(hju13,10)
+     ji(mula+12) = str(jmp13,9,2)
+     ki(mula+13) = nbg14+ kbn14 +kbg14+ str(trf14,10)
+     di(mula+13) = str(upe14,2) + str(hju14,10)
+     ji(mula+13) = str(jmp14,9,2)
+     ki(mula+14) = nbg15+ kbn15 +kbg15+ str(trf15,10)
+     di(mula+14) = str(upe15,2) + str(hju15,10)
+     ji(mula+14) = str(jmp15,9,2)
+     ki(mula+15) = nbg16+ kbn16 +kbg16+ str(trf16,10)
+     di(mula+15) = str(upe16,2) + str(hju16,10)
+     ji(mula+15) = str(jmp16,9,2)
+     ki(mula+16) = nbg17+ kbn17 +kbg17+ str(trf17,10)
+     di(mula+16) = str(upe17,2) + str(hju17,10)
+     ji(mula+16) = str(jmp17,9,2)
+     ki(mula+17) = nbg18+ kbn18 +kbg18+ str(trf18,10)
+     di(mula+17) = str(upe18,2) + str(hju18,10)
+     ji(mula+17) = str(jmp18,9,2)
+     ki(mula+18) = nbg19+ kbn19 +kbg19+ str(trf19,10)
+     di(mula+18) = str(upe19,2) + str(hju19,10)
+     ji(mula+18) = str(jmp19,9,2)
+show gets     
+retu
+*
+proc braik
+     nbg1=left(ki(mula),28)
+     kbn1=subs(ki(mula),29,13)
+     kbg1=subs(ki(mula),42,9)
+     jmp1=val(left(ji(mula),9))
+     upe1=val(left(di(mula),2))
+     hju1=val(righ(di(mula),10))
+     trf1=val(righ(ki(mula),10))
+     sto1=trf1*jmp1
+*
+     nbg2=left(ki(mula+1),28)
+     kbn2=subs(ki(mula+1),29,13)
+     kbg2=subs(ki(mula+1),42,9)
+     jmp2=val(left(ji(mula+1),9))
+     upe2 =val(left(di(mula+1),2))
+     hju2 =val(righ(di(mula+1),10))
+     trf2=val(righ(ki(mula+1),10))
+     sto2=trf2*jmp2
+*
+     nbg3=left(ki(mula+2),28)
+     kbn3=subs(ki(mula+2),29,13)
+     kbg3=subs(ki(mula+2),42,9)
+     jmp3=val(left(ji(mula+2),9))
+     upe3 =val(left(di(mula+2),2))
+     hju3 =val(righ(di(mula+2),10))
+     trf3=val(righ(ki(mula+2),10))
+     sto3=trf3*jmp3
+*
+     nbg4=left(ki(mula+3),28)
+     kbn4=subs(ki(mula+3),29,13)
+     kbg4=subs(ki(mula+3),42,9)
+     jmp4=val(left(ji(mula+3),9))
+     upe4 =val(left(di(mula+3),2))
+     hju4 =val(righ(di(mula+3),10))
+     trf4=val(righ(ki(mula+3),10))
+     sto4=trf4*jmp4
+*
+     nbg5=left(ki(mula+4),28)
+     kbn5=subs(ki(mula+4),29,13)
+     kbg5=subs(ki(mula+4),42,9)
+     jmp5=val(left(ji(mula+4),9))
+     upe5 =val(left(di(mula+4),2))
+     hju5 =val(righ(di(mula+4),10))
+     trf5=val(righ(ki(mula+4),10))
+     sto5=trf5*jmp5
+*
+     nbg6=left(ki(mula+5),28)
+     kbn6=subs(ki(mula+5),29,13)
+     kbg6=subs(ki(mula+5),42,9)
+     jmp6=val(left(ji(mula+5),9))
+     upe6 =val(left(di(mula+5),2))
+     hju6 =val(righ(di(mula+5),10))
+     trf6=val(righ(ki(mula+5),10))
+     sto6=trf6*jmp6
+*
+     nbg7=left(ki(mula+6),28)
+     kbn7=subs(ki(mula+6),29,13)
+     kbg7=subs(ki(mula+6),42,9)
+     jmp7=val(left(ji(mula+6),9))
+     upe7 =val(left(di(mula+6),2))
+     hju7 =val(righ(di(mula+6),10))
+     trf7=val(righ(ki(mula+6),10))
+     sto7=trf7*jmp7
+*
+     nbg8=left(ki(mula+7),28)
+     kbn8=subs(ki(mula+7),29,13)
+     kbg8=subs(ki(mula+7),42,9)
+     jmp8=val(left(ji(mula+7),9))
+     upe8 =val(left(di(mula+7),2))
+     hju8 =val(righ(di(mula+7),10))
+     trf8=val(righ(ki(mula+7),10))
+     sto8=trf8*jmp8
+*
+     nbg9=left(ki(mula+8),28)
+     kbn9=subs(ki(mula+8),29,13)
+     kbg9=subs(ki(mula+8),42,9)
+     jmp9=val(left(ji(mula+8),9))
+     upe9 =val(left(di(mula+8),2))
+     hju9 =val(righ(di(mula+8),10))
+     trf9=val(righ(ki(mula+8),10))
+     sto9=trf9*jmp9
+*
+     nbg10=left(ki(mula+9),28)
+     kbn10=subs(ki(mula+9),29,13)
+     kbg10=subs(ki(mula+9),42,9)
+     jmp10=val(left(ji(mula+9),9))
+     upe10=val(left(di(mula+9),2))
+     hju10=val(righ(di(mula+9),10))
+     trf10=val(righ(ki(mula+9),10))
+     sto10=trf10*jmp10
+*
+     nbg11=left(ki(mula+10),28)
+     kbn11=subs(ki(mula+10),29,13)
+     kbg11=subs(ki(mula+10),42,9)
+     jmp11=val(left(ji(mula+10),9))
+     upe11=val(left(di(mula+10),2))
+     hju11=val(righ(di(mula+10),10))
+     trf11=val(righ(ki(mula+10),10))
+     sto11=trf11*jmp11
+*
+     nbg12=left(ki(mula+11),28)
+     kbn12=subs(ki(mula+11),29,13)
+     kbg12=subs(ki(mula+11),42,9)
+     jmp12=val(left(ji(mula+11),9))
+     upe12=val(left(di(mula+11),2))
+     hju12=val(righ(di(mula+11),10))
+     trf12=val(righ(ki(mula+11),10))
+     sto12=trf12*jmp12
+*
+     nbg13=left(ki(mula+12),28)
+     kbn13=subs(ki(mula+12),29,13)
+     kbg13=subs(ki(mula+12),42,9)
+     jmp13=val(left(ji(mula+12),9))
+     upe13=val(left(di(mula+12),2))
+     hju13=val(righ(di(mula+12),10))
+     trf13=val(righ(ki(mula+12),10))
+     sto13=trf13*jmp13
+*
+     nbg14=left(ki(mula+13),28)
+     kbn14=subs(ki(mula+13),29,13)
+     kbg14=subs(ki(mula+13),42,9)
+     jmp14=val(left(ji(mula+13),9))
+     upe14=val(left(di(mula+13),2))
+     hju14=val(righ(di(mula+13),10))
+     trf14=val(righ(ki(mula+13),10))
+     sto14=trf14*jmp14
+*
+     nbg15=left(ki(mula+14),28)
+     kbn15=subs(ki(mula+14),29,13)
+     kbg15=subs(ki(mula+14),42,9)
+     jmp15=val(left(ji(mula+14),9))
+     upe15=val(left(di(mula+14),2))
+     hju15=val(righ(di(mula+14),10))
+     trf15=val(righ(ki(mula+14),10))
+     sto15=trf15*jmp15
+*
+     nbg16=left(ki(mula+15),28)
+     kbn16=subs(ki(mula+15),29,13)
+     kbg16=subs(ki(mula+15),42,9)
+     jmp16=val(left(ji(mula+15),9))
+     upe16=val(left(di(mula+15),2))
+     hju16=val(righ(di(mula+15),10))
+     trf16=val(righ(ki(mula+15),10))
+     sto16=trf16*jmp16
+*
+     nbg17=left(ki(mula+16),28)
+     kbn17=subs(ki(mula+16),29,13)
+     kbg17=subs(ki(mula+16),42,9)
+     jmp17=val(left(ji(mula+16),9))
+     upe17=val(left(di(mula+16),2))
+     hju17=val(righ(di(mula+16),10))
+     trf17=val(righ(ki(mula+16),10))
+     sto17=trf17*jmp17
+*
+     nbg18=left(ki(mula+17),28)
+     kbn18=subs(ki(mula+17),29,13)
+     kbg18=subs(ki(mula+17),42,9)
+     jmp18=val(left(ji(mula+17),9))
+     upe18=val(left(di(mula+17),2))
+     hju18=val(righ(di(mula+17),10))
+     trf18=val(righ(ki(mula+17),10))
+     sto18=trf18*jmp18
+*
+     nbg19=left(ki(mula+18),28)
+     kbn19=subs(ki(mula+18),29,13)
+     kbg19=subs(ki(mula+18),42,9)
+     jmp19=val(left(ji(mula+18),9))
+     upe19=val(left(di(mula+18),2))
+     hju19=val(righ(di(mula+18),10))
+     trf19=val(righ(ki(mula+18),10))
+     sto19=trf19*jmp19
+     show gets
+retu
+*
+proc prbeli
+  set console off
+  set print on
+  ?'KP-RI "Bahagia"'font'Century Gothic',12 styl'b'
+  ?'BKK.  : '+nbeliw font'foxprint',8
+  ?'Tgl.  : '+dtoc(tbeliw)+' '+time() font'foxprint',8
+    IF KANGW#SPAC(5) 
+       ? 'SUPPLIER: '+KANGW+'  '+TRIM(NANGW) font'foxprint',8
+       ? IIF(APEM=0,'( TUNAI )','( HUTANG )') font'foxprint',8
+    ENDIF  
+  ?'====================================' font'foxprint',8
+  ?'NO. KODE-BRG  NAMA BARANG' font'foxprint',8
+  ?' HRG-BELI HARGA-JUAL  QTY      TOTAL' font'foxprint',8
+  ?'------------------------------------' font'foxprint',8
+ *  1234567890123456789012345678
+  tot1=0          &&    9999.99 999,999,999
+  mmr=0
+  for mi=1 to 95
+      if left(ki(mi),28)<>spac(28)
+         lem=left(ki(mi),28)
+         brc=subs(ki(mi),7,13)
+         jum=val(left(ji(mi),9))
+         upw=val(left(di(mi),2))
+         hrgj=val(righ(di(mi),10))
+         harga=val(righ(ki(mi),10))
+         tot=harga*jum
+         tot1=tot1+tot
+         nabar=lem
+         kode=spac(9)
+         edok=spac(6)
+         sele 1
+         set orde to 2
+         seek nabar
+         if found()
+            kode=kbrg
+            EDOK=LEFT(Kbrg,6)
+         endif
+         mmr=mmr+1
+         ? STR(mmr,3)+' '+kode+' '+left(nabar,25) font'foxprint',8
+         ? tran(harga,'@z 9,999,999')+tran(hrgj,'@z 9,999,999')+tran(jum,'@z 9999.99')+;
+           tran(tot,'@z 999,999,999') font'foxprint',8
+         endif       
+       next
+       ?'====================================' font'foxprint',8
+       ?'             DEBET      KREDIT' font'foxprint',8
+       ?' 5001 :'+tran(tot1,'@z 999,999,999') font'foxprint',8
+       ?' 1111 :'+spac(11)+' '+tran(tot1,'@z 999,999,999') font'foxprint',8
+       ?'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' font'foxprint',8
+       ?' '
+       ?' '
+  set print to
+  set print off
+retu
+*************************************************************************************************************************
+PROC jedit
+do dmn
+CLOS DATA
+sele 1
+use jual inde juale
+sele 2
+use stok inde stok1
+sele 3
+use ljual1
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-57)/2 to 24.7,((wcols()-57)/2)+57 system title'Melihat yang edit penjualan ';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,0 to wrows(),wcols() system title'Melihat yang edit penjualan' font'arial' clos icon file'guni.ico'
+acti wind dokt2
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+jancok1=tawal
+jancok2=takhir
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'ok1.bmp'bitm
+   @4.5,6 say 'Tanggal' styl'b'
+   @5.7,6 say  's/d'styl'b'
+   @4.5,19 get jancok1 font'Book Antiqua',12 size 1,12
+   @5.7,19 get jancok2 font'Book Antiqua',12 size 1,12
+   @7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+    size 2.3,16.2,0 default 0 
+   read
+   if read()=12.or.nud=2
+      exit
+   endi
+   if jancok1>jancok2
+      loop
+   endif
+   sele 3
+   dele all
+   sele 1
+   seek left(dtoc(jancok1,1),6)
+   if !found()
+      loop
+   endif
+   tor=recno()   
+   GO TOR
+   do while !eof()
+      nom=Njual
+      tanggalw=dtoc(Tjual)
+      kodew=left(Kbrg,6)
+      jmlw=ukecil
+      hargaw=Hjual
+      totalw=TOTb
+      ksw=ks
+      spgw=spg
+      ketw=dtoc(TEDIT)
+      generikw=oleh
+      obatw=spac(28)
+      sele 2
+      seek kodew
+      if found()
+         obatw=nbrg
+      endif    
+      sele 1
+      if dtoc(TEDIT,1)>=dtoc(jancok1,1).AND.dtoc(TEDIT,1)<=dtoc(jancok2,1)
+         if edit='E'
+            sele 3
+            appe blan
+            repl no with nom, tanggal with tanggalw, kode with kodew, jml with jmlw, harga with hargaw,;
+                 total with totalw, ks with ksw, ket with ketw, obat with obatw, spg with spgw,;
+                 generik with generikw
+            sele 1     
+         endif        
+      endif
+      sele 1
+      skip
+   enddo
+   if nud=1
+      sele 3
+      go top
+      brow fiel no, tanggal, ks, Spg, kode, obat:h='Item',;
+                jml:p='@z 9999.99', harga:p='@z 999,999,999', total:p='@z 9,999,999,999',;
+                ket:h='Tgl-Edit',generik:h='Oleh'  wind dokt3 noedit nomenu
+   endif
+ENDDO
+CLOS DATA
+DEAC WIND dokt2
+do emn
+RETU
+*
+PROC bedit
+do dmn
+CLOS DATA
+sele 1
+use beli inde belie
+sele 2
+use stok inde stok1
+sele 3
+use lbeli1
+sele 4
+use anggota inde anggota1
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-57)/2 to 24.7,((wcols()-57)/2)+57 system title'Melihat yang edit pembelian ';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,0 to wrows(),wcols() system title'Melihat yang edit pembelian' font'arial' clos icon file'guni.ico'
+acti wind dokt2
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+jancok1=tawal
+jancok2=takhir
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'ok1.bmp'bitm
+   @4.5,6 say 'Tanggal' styl'b'
+   @5.7,6 say  's/d'styl'b'
+   @4.5,19 get jancok1 font'Book Antiqua',12 size 1,12
+   @5.7,19 get jancok2 font'Book Antiqua',12 size 1,12
+   @7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+    size 2.3,16.2,0 default 0 
+   read
+   if read()=12.or.nud=2
+      exit
+   endi
+   if jancok1>jancok2
+      loop
+   endif
+   sele 3
+   dele all
+   sele 1
+   seek left(dtoc(jancok1,1),6)
+   if !found()
+      loop
+   endif
+   tor=recno()   
+   GO TOR
+   do while !eof()
+      nom=NBELI
+      tanggalw=dtoc(TBELI)
+      kodew=left(Kbrg,6)
+      jmlw=ukecil
+      kangw=kang
+      hargaw=HBELI
+      totalw=TOTJ
+      pasienw=oleh
+      ketw=dtoc(TEDIT)
+      obatw=spac(28)
+      dokterw=spac(20)
+      sele 2
+      seek kodew
+      if found()
+         obatw=nbrg
+      endif    
+      sele 4
+      seek kangw
+      if found()
+         dokterw=nang
+      endif   
+      sele 1
+      if dtoc(TEDIT,1)>=dtoc(jancok1,1).AND.dtoc(TEDIT,1)<=dtoc(jancok2,1)
+         if edit='E'
+            sele 3
+            appe blan
+            repl no with nom, tanggal with tanggalw, kode with kodew, jml with jmlw, harga with hargaw,;
+                 total with totalw, pasien with pasienw, ket with ketw, obat with obatw, dokter with dokterw
+            sele 1     
+         endif        
+      endif
+      sele 1
+      skip
+   enddo
+   if nud=1
+      sele 3
+      go top
+      brow fiel no, tanggal, dokter:h='Supplier', kode, obat:h='Item',;
+                jml:p='@z 9999.99', harga:p='@z 999,999,999', total:p='@z 9,999,999,999',;
+                ket:h='Tgl-Edit', pasien:h='Oleh'  wind dokt3 noedit nomenu
+   endif
+ENDDO
+CLOS DATA
+DEAC WIND dokt2
+do emn
+RETU
+*
+PROC rrspg
+do dmn
+CLOS DATA
+sele 1
+use jual inde jualc
+sele 2
+use ljual1
+sele 3
+use ljual2
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-57)/2 to 24.7,((wcols()-57)/2)+57 system title'Melihat % penjualan oleh spg';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-40)/2 to wrows()-1,((wcols()-40)/2)+40 system title'Melihat yang edit pembelian' font'arial' clos
+acti wind dokt2
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+tglx=tawal
+tgly=takhir
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'ok1.bmp'bitm
+   @4.5,6 say 'Tanggal' styl'b'
+   @5.7,6 say  's/d'styl'b'
+   @4.5,19 get tglx font'Book Antiqua',12 size 1,12
+   @5.7,19 get tgly font'Book Antiqua',12 size 1,12
+   @7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+    size 2.3,16.2,0 default 0 
+   read
+   if read()=12.or.nud=2
+      exit
+   endi
+   if tglx>tgly
+      loop
+   endif
+   sele 2
+   dele all
+   sele 3
+   dele all
+   sele 1
+   seek left(dtoc(tglx,1),6)
+   if !found()
+      loop
+   endif
+   tot=0
+   tor=recno()   
+   GO TOR
+   do while !eof()
+      if dtoc(tjual,1)>=dtoc(tglx,1).and.dtoc(tjual,1)<=dtoc(tgly,1)
+         nom=Njual
+         tanggalw=dtoc(Tjual)
+         kodew=left(Kbrg,6)
+         jmlw=ukecil
+         hargaw=hjual
+         totalw=TOTb
+         tot=tot+totalw
+         spgw=spg
+         ketw=dtoc(TEDIT)
+         obatw=spac(28)
+         dokterw=spac(20)
+         sele 2
+         appe blan
+         repl no with nom, tanggal with tanggalw, kode with kodew, jml with jmlw, harga with hargaw,;
+              total with totalw, spg with spgw, tg1 with dtoc(tglx), tg2 with dtoc(tgly)
+      endif
+      sele 1
+      skip
+   enddo
+   dime ddat(370)
+   dime dmax(370)
+   sele 2
+   go top
+   nn=0
+   tote=0
+   spgw=spac(3)
+   do while !eof()
+      sele 2
+      IF SPGW=SPG
+         SPGW=SPGW
+         tote=total+tote
+         sele 3
+         repl ks with str(nn,3), spg with spgw, total with tote/tot*100, tg1 with dtoc(tglx), tg2 with dtoc(tgly)
+      ELSE
+         SPGW=SPG
+         nn=nn+1
+         tote=total
+         sele 3
+         appe blan
+         repl ks with str(nn,3), spg with spgw, total with tote/tot*100, tg1 with dtoc(tglx), tg2 with dtoc(tgly)
+      ENDI
+      sele 2
+      skip
+   ENDDO
+   if nud=1
+      sele 3
+      go top
+      brow fiel ks:h='No.', spg, total:h='Prosentase':p='@z 999,999.99';
+                titl '% spg : '+dtoc(tglx)+' - '+dtoc(tgly) noedit nomenu wind dokt3
+      repo form rrx to prin prom          
+   endif             
+ENDDO
+CLOS DATA
+DEAC WIND dokt2
+do emn
+RETU
+*
+PROC persel
+do dmn
+CLOS DATA
+sele 1
+use jual inde jualb, jual2
+sele 2
+use stok inde stok1
+sele 3
+use ljual2
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-57)/2 to 24.7,((wcols()-57)/2)+57 system title'Prosentase penjualan tiap item';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-106)/2 to wrows()-1,((wcols()-106)/2)+106 system title'Melihat yang edit pembelian' font'arial' clos icon file'guni.ico'
+acti wind dokt2
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+tglx=tawal
+tgly=takhir
+store spac(6) to kd1, kd2
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'ok1.bmp'bitm
+   @4.5,3 say 'Kode' styl'b'
+   @5.7,3 say  's/d'styl'b'
+   @4.5,27 say 'Tanggal' styl'b'
+   @5.7,27 say  's/d'styl'b'
+   @4.5,11 get kd1 font'Book Antiqua',12 size 1,7
+   @5.7,11 get kd2 font'Book Antiqua',12 size 1,7
+   @4.5,38 get tglx font'Book Antiqua',12 size 1,12
+   @5.7,38 get tgly font'Book Antiqua',12 size 1,12
+   @7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+    size 2.3,16.2,0 default 0 
+   read
+   if read()=12.or.nud=2
+      exit
+   endi
+   if tglx>tgly
+      loop
+   endif
+   sele 3
+   dele all
+   sele 2
+   seek trim(kd1)
+   if found()
+      do while LEFT(kbrg,len(TRIM(kd1))) >= TRIM(kd1).AND.;
+         LEFT(kbrg,LEN(TRIM(kd2))) <= TRIM(kd2).AND.!EOF() 
+         knr=left(kbrg,6)
+         bnr=nbrg
+         sele 3
+         appe blan
+         repl kode with knr, obat with bnr
+         sele 2
+         skip
+      enddo   
+   endif
+   sele 1
+   set orde to 2
+   seek left(dtoc(tglx,1),6)
+   if !found()
+      loop
+   endif
+   tot=0
+   tor=recno()   
+   GO TOR
+   do while !eof()
+      if dtoc(tjual,1)>=dtoc(tglx,1).and.dtoc(tjual,1)<=dtoc(tgly,1)
+         totalw=TOTb
+         tot=tot+totalw
+         sele 1     
+      endif
+      sele 1
+      skip
+   enddo
+   sele 3
+   go top
+   do while !eof()
+      kob=kode
+      jmlw=0
+      hargaw=0
+      sele 1
+      set orde to 1
+      seek trim(kob)
+      if found()
+         do while kbrg=trim(kob).and.!eof()
+            if tjual>=tglx.and.tjual<=tgly
+               jmlw=jmlw+ukecil
+               hargaw=hargaw+totb
+            endif
+            sele 1
+            set orde to 1
+            skip
+         enddo
+      endi         
+      sele 3
+      repl jml with jmlw, harga with hargaw, total with hargaw/tot*100
+      skip
+   enddo
+   sele 3
+   toju=0
+   toha=0
+   go top
+   do while !eof()
+      toju=toju+jml
+      toha=toha+harga 
+      skip
+   enddo
+   appe blan
+   repl obat with spac(10)+'TOTAL', jml with toju, harga with toha, total with toha/tot*100
+   if nud=1
+      sele 3
+      go top
+      brow fiel kode, obat:h='Item', jml:p='@z 99,999.99', harga:p='@z 99,999,999,999':h='Nilai Rp.',;
+                total:p='@z 999.99':h='Prosentase' titl 'Total '+dtoc(tglx)+' - '+dtoc(tgly)+tran(tot,'@z 99,999,999,999');
+                noedit nomenu wind dokt3
+   endif             
+ENDDO
+CLOS DATA
+DEAC WIND dokt2
+do emn
+RETU
+*
+PROC ABSENSI
+do dmn
+CLOS DATA
+USE AHA INDE AHA1
+DEFI WIND dokt2;
+FROM 10.5,(wcols()-55)/2 to 24.7,((wcols()-55)/2)+55 system title'Pemakaian program';
+colo rgb(0,0,0,166,205,167) font'Times New Roman',12
+DEFI WIND dokt3;
+FROM 0,(wcols()-106)/2 to wrows()-1,((wcols()-106)/2)+106 system title'Pemakaian program' font'arial' clos icon file'guni.ico'
+acti wind dokt2
+store ctod('  /  /  ') to tawal,takhir
+do cartang
+tg1=tawal
+tg2=takhir
+do while.t.
+   clear
+   ??sys(2002,1)
+   @0,0 say 'hdr12.bmp'bitm
+   @7.5,0 say 'ok1.bmp'bitm
+   @4.5,6 say 'Tanggal' styl'b'
+   @5.7,6 say  's/d'styl'b'
+   @4.5,19 get tg1 font'Book Antiqua',12 size 1,12
+   @5.7,19 get tg2 font'Book Antiqua',12 size 1,12
+   @7.5,0 get nud PICTURE '@*IHT ;' font 'Arial',9;
+    size 2.3,16.2,0 default 0 
+   read
+   if read()=12.or.nud=2
+      exit
+   endi
+   if tg1>tg2
+      loop
+   endif
+   GO TOP
+   BROW FIEL TB:R:H='TG.IN',;
+             JB:R:H='JM.IN',;
+             TT:R:H='TG.OUT',;  
+             JT:R:H='JM.OUT',;
+             KET:R FOR TB>=TG1.AND.TB<=TG2.AND.!EOF() WIND dokt3 nomenu
+ENDDO
+CLOS DATA
+DEAC WIND dokt2
+do emn
+RETU
+*
+proc dtop
+modi wind screen title'toko Gunung Agung' colo rgb(0,0,0,3,73,174) icon file 'guni.ico' nominim nogrow nozoom noclos;
+font'arial'
+clea
+@2,(wcols()-134)/2 say'dsk00.bmp'bitm
+@2,((wcols()-134)/2)+8.4 say'dsk01.bmp'bitm
+@2,((wcols()-134)/2)+16.7 say'dsk02.bmp'bitm
+@2,((wcols()-134)/2)+25 say'dsk03.bmp'bitm
+@2,((wcols()-134)/2)+33.4 say'dsk04.bmp'bitm
+@2,((wcols()-134)/2)+41.7 say'dsk05.bmp'bitm
+@2,((wcols()-134)/2)+50 say'dsk06.bmp'bitm
+@2,((wcols()-134)/2)+58.4 say'dsk07.bmp'bitm
+@2,((wcols()-134)/2)+66.7 say'dsk08.bmp'bitm
+@2,((wcols()-134)/2)+75 say'dsk09.bmp'bitm
+@2,((wcols()-134)/2)+83.4 say'dsk10.bmp'bitm
+@2,((wcols()-134)/2)+91.7 say'dsk11.bmp'bitm
+@2,((wcols()-134)/2)+100 say'dsk12.bmp'bitm
+@2,((wcols()-134)/2)+108.4 say'dsk13.bmp'bitm
+@2,((wcols()-134)/2)+116.7 say'dsk14.bmp'bitm
+@2,((wcols()-134)/2)+125.0 say'dsk15.bmp'bitm
+retu
+*
+PROCEDURE DFTBOR
+para naaw
+if simp
+   simp=.f.
+endi   
+if naaw=spac(6)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 1,10 to 37.8,128 system title'Daftar Item' clos colo rgb(0,0,0,200,227,201) font'Times New Roman'icon file'guni.ico'
+KGB=SPAC(9)
+sele 1
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nbrg,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nbrg,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=nbrg+spac(1)+tran(ukecil,'@Jz 999,999.99')+spac(1)+tran(hsat,'@z 99,999,999')+spac(1)+kbrg
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+@0.3,3 say'item.bmp'bitm
+@0.3,79 say'qty.bmp'bitm
+@0.3,97.6 say'hbeli.bmp'bitm
+@0.3,116 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@30.2,0 say'mso1.bmp'bitm
+@30.2,74.1 say'mso2.bmp'bitm
+@ 2,1 GET mchoice POPUP psn FUNCTION '&T' SIZE 25.5,62.3 font'Foxprint',12 styl'b'
+@31.3,90 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,4 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(9)
+   brkl=spac(28)
+   naaw=spac(6)
+   set readb off
+   retu
+endi
+kgb=righ(am(mchoice),9)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),28)
+rele am
+set readb off
+RETU
+*
+*editer
+PROCEDURE DFTBAR
+para naaw,pilhar
+if simp
+   simp=.f.
+endi   
+if naaw=spac(6)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 0,20 to wrows()-1,175;
+system title'Daftar Item' clos colo rgb(0,0,0,200,227,201) font'Times New Roman'icon file'guni.ico'
+KGB=SPAC(9)
+sele 1
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nbrg,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nbrg,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=nbrg+spac(1)+tran(ukecil,'@Jz 999,999.99')+spac(1)+tran(hjual,'@z 99,999,999')+spac(1)+;
+          tran(hjua2,'@z 99,999,999')+spac(1)+tran(hjua3,'@z 99,999,999')+spac(1)+kbrg
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+STORE 0 TO pilhar,tari
+@0.3,3 say'item.bmp'bitm
+@0.3,79 say'qty.bmp'bitm
+@0.3,97 say'hjual.bmp'bitm
+@0.3,121 say'hjua2.bmp'bitm
+@0.3,145.3 say'hjua3.bmp'bitm
+@0.3,163.5 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+??sys(2002,1)
+@35.2,0 say'mwo1.bmp'bitm
+@35.2,74.1 say'mwo2.bmp'bitm
+@ 2,1 GET mchoice POPUP psn FUNCTION '&' SIZE 30,83 font'Foxprint',12 styl'b'
+@36.8,123 get pilhar pict '@z 9' size 1,3 valid tamha() font'Book Antiqua',18 &&pilhar>=1.and.pilhar<=3 erro 'pilih 1 atau 2 atau 3 saja'
+@36.8,col()+2 get tari pict'@z 999,999,999' font'Book Antiqua',18 styl'b' disa
+@37,2 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,4 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(9)
+   brkl=spac(28)
+   naaw=spac(6)
+   set readb off
+   retu
+endi
+kgb=righ(am(mchoice),9)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),28)
+rele am
+set readb off
+RETU
+*
+proc tamha
+   sele 1
+   set orde to 1
+   seek righ(am(mchoice),9)
+   if found()
+      do case
+      case pilhar=1
+          tari=hjual
+      case pilhar=2
+          tari=hjua2
+      case pilhar=3
+          tari=hjua3
+      other    
+          tari=0
+      endcase
+   endif   
+show gets
+retu
+*
+PROCEDURE DFTBER
+para naaw
+if simp
+   simp=.f.
+endi   
+if naaw=spac(6)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 0,(wcols()-118)/2 to wrows()-1,((wcols()-118)/2)+118 system title'Daftar Item' clos colo rgb(0,0,0,200,227,201) font'Times New Roman'icon file'guni.ico'
+KGB=SPAC(9)
+sele 1
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nbrg,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nbrg,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=nbrg+spac(1)+tran(ukecil,'@Jz 999,999.99')+spac(1)+tran(hsat,'@z 99,999,999')+spac(1)+kbrg
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+@0.3,3 say'item.bmp'bitm
+@0.3,79 say'qty.bmp'bitm
+@0.3,97.5 say'hbeli.bmp'bitm
+@0.3,116 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@35.2,0 say'mso1.bmp'bitm
+@35.2,74.1 say'mso2.bmp'bitm
+@ 2,1 GET mchoice POPUP psn FUNCTION '&T' SIZE 30.3,62.3 font'Foxprint',12 styl'b'
+@37,2 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,4 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(9)
+   brkl=spac(28)
+   naaw=spac(6)
+   set readb off
+   retu
+endi
+kgb=righ(am(mchoice),9)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),28)
+rele am
+set readb off
+RETU
+*
+PROCEDURE DFTSUP
+para naaw
+if simp
+   simp=.f.
+endi   
+if naaw=spac(5)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 1,10 to 37.8,128 system title'Daftar Suplier' clos colo rgb(0,0,0,200,227,201) font'Book Antiqua'icon file'guni.ico'
+KGB=SPAC(5)
+sele 1
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=nang+spac(1)+alang+spac(1)+tlang+spac(1)+kang
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+@0.3,3 say'nama.bmp'bitm
+@0.3,40.6 say'alamat.bmp'bitm
+@0.3,80 say'telp.bmp'bitm
+@0.3,100 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@28.3,0 say'mso1.bmp'bitm
+@28.3,61.7 say'mso2.bmp'bitm
+@ 2,1 GET mchoice POPUP psn FUNCTION '&T' SIZE 25.5,62.3 font'Foxprint',12 styl'b'
+@29.8,80 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,3 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(9)
+   brkl=spac(28)
+   naaw=spac(6)
+   set readb off
+   retu
+endi
+kgb=righ(am(mchoice),5)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),20)
+rele am
+set readb off
+RETU
+*
+PROCEDURE DFTREK
+para naaw
+if simp
+   simp=.f.
+endi   
+if naaw=spac(7)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 1,30 to 37.8,100 system title'Daftar Rekening' clos colo rgb(0,0,0,200,227,201) font'Book Antiqua'icon file'guni.ico'
+KGB=SPAC(7)
+sele 1
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(perkiraan,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(perkiraan,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=no_perk+spac(1)+perkiraan
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@28.3,0 say'mso1.bmp'bitm
+@28.3,61.7 say'mso2.bmp'bitm
+@ 2,2 GET mchoice POPUP psn FUNCTION '&T' SIZE 25.5,35 font'Foxprint',12 styl'b'
+@29.8,3 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,3 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(7)
+   brkl=spac(28)
+   naaw=spac(7)
+   set readb off
+   retu
+endi
+kgb=left(am(mchoice),7)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),25)
+rele am
+set readb off
+RETU
+*
+PROCEDURE DFTINS
+para naaw
+if simp
+   simp=.f.
+endi   
+if naaw=spac(3)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 1,30 to 37.8,100 system title'Daftar Instansi' clos colo rgb(0,0,0,200,227,201) font'Book Antiqua'icon file'guni.ico'
+KGB=SPAC(3)
+sele 1
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nins,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nins,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=nins+spac(1)+kins
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+@0.3,4 say'instansi.bmp'bitm
+@0.3,49.6 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@28.3,0 say'mso1.bmp'bitm
+@28.3,61.7 say'mso2.bmp'bitm
+@ 2,2 GET mchoice POPUP psn FUNCTION '&T' SIZE 25.5,35 font'Foxprint',12 styl'b'
+@29.8,3 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,3 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(3)
+   brkl=spac(28)
+   naaw=spac(3)
+   set readb off
+   retu
+endi
+kgb=righ(am(mchoice),3)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),25)
+rele am
+set readb off
+RETU
+*
+PROCEDURE DFTCES
+para naaw
+if naaw=spac(5)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 1,10 to 37.8,128 system title'Daftar Anggota' clos colo rgb(0,0,0,200,227,201) font'Book Antiqua'icon file'guni.ico'
+KGB=SPAC(5)
+sele 3
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=nang+spac(1)+left(nins,20)+spac(1)+kang
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+@0.3,3 say'nama.bmp'bitm
+@0.3,60 say'instansi.bmp'bitm
+@0.3,98 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@28.3,0 say'mso1.bmp'bitm
+@28.3,61.7 say'mso2.bmp'bitm
+@ 2,1 GET mchoice POPUP psn FUNCTION '&T' SIZE 25.5,62.3 font'Foxprint',12 styl'b'
+@29.8,80 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,3 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(5)
+   brkl=spac(28)
+   naaw=spac(5)
+   set readb off
+   retu
+endi
+kgb=righ(am(mchoice),5)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),20)
+rele am
+set readb off
+RETU
+*
+PROCEDURE DFTCUS
+para naaw
+if simp
+   simp=.f.
+endi   
+if naaw=spac(5)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 1,10 to 37.8,128 system title'Daftar Customer' clos colo rgb(0,0,0,200,227,201) font'Book Antiqua'icon file'guni.ico'
+KGB=SPAC(5)
+sele 1
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=left(nang,20)+spac(1)+nins+spac(1)+kang
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+@0.3,3 say'nama.bmp'bitm
+@0.3,40.6 say'instansi.bmp'bitm
+@0.3,89 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@28.3,0 say'mso1.bmp'bitm
+@28.3,61.7 say'mso2.bmp'bitm
+@ 2,1 GET mchoice POPUP psn FUNCTION '&T' SIZE 25.5,62.3 font'Foxprint',12 styl'b'
+@29.8,80 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,3 default 0
+READ	
+simp=.t.
+if read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kgb=SPAC(9)
+   brkl=spac(28)
+   naaw=spac(6)
+   set readb off
+   retu
+endi
+kgb=righ(am(mchoice),5)
+deac wind pas2
+rele popup psn
+brkl=left(am(mchoice),20)
+rele am
+set readb off
+RETU
+*
+PROCEDURE DFTCOS
+para naaw
+if simp
+   simp=.f.
+endi   
+if naaw=spac(5)
+   retu
+endif   
+set readb on
+DEFI WIND pas2 FROM 1,10 to 37.8,128 system title'Daftar Customer' clos colo rgb(0,0,0,200,227,201) font'Book Antiqua' icon file'guni.ico'
+KGB=SPAC(5)
+sele 5
+set orde to 2  
+seek trim(naaw)
+if.not.found()
+   set readb off
+   retu
+endif
+jp=0
+norek=recno()
+go norek
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   jp=jp+1        
+   skip
+enddo
+if jp>500
+   wait'Over Size data, ketikkan yang lebih khusus'windo
+   DEAC WIND pas1
+   deac wind pas2
+   set readb off
+   RETU
+endi   
+dime AM(JP)
+go norek
+ct=0 
+do while left(nang,len(trim(naaw)))=trim(naaw).and.!eof()
+   ct=ct+1
+   AM(ct)=nang+spac(1)+left(nins,20)+spac(1)+kang
+   skip
+enddo
+acti wind pas2
+clea
+STORE 1 TO mchoice
+@0.3,3 say'nama.bmp'bitm
+@0.3,60 say'instansi.bmp'bitm
+@0.3,98 say'kode.bmp'bitm
+defi popup psn from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+for konter=1 to ct
+    DEFINE BAR konter OF psn PROMPT AM(konter)
+next konter
+@28.3,0 say'mso1.bmp'bitm
+@28.3,61.7 say'mso2.bmp'bitm
+@ 2,1 GET mchoice POPUP psn FUNCTION '&T' SIZE 25.5,62.3 font'Foxprint',12 styl'b'
+if penyu=1
+   @29.8,4 get tra PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,3 default 0
+endif   
+if penyu=2
+   @29.8,64 get tra PICTURE '@*HT \<OK;\<Cancel;\<Transaksi' font'Arial' styl'b' size 2.5,15,3 default 0
+endif   
+READ	
+simp=.t.
+do case
+case (tra=1.or.read()=15.or.last()=13).and.(tra<>3)
+   kag=righ(am(mchoice),5)
+   deac wind pas2
+   rele popup psn
+   brkl=left(am(mchoice),20)
+   set readb off
+   rele am
+   retu
+case read()=12.or.lastk()=27.or.tra=2
+   rele am
+   rele popup psn
+   deac wind pas2
+   kag=SPAC(5)
+   brkl=spac(28)
+   naaw=spac(5)
+   set readb off
+   retu
+case tra=3
+   kag=righ(am(mchoice),5)
+   sele 2
+   set orde to 2
+   seek kag
+   if found()
+      kerno=recno()
+      fc=0
+      go kerno
+      do while kang=kag.and.!eof()
+         fc=fc+1
+         skip
+      enddo   
+      jc=1
+      dime ton(fc)
+      trg=spac(10)
+      go kerno
+      do while kang=kag.and.!eof()
+         tanggalw=dtoc(tjual)
+         qtyw=ukecil
+         hargaw=hjual
+         notaw=njual
+         kb=kbrg
+         itemw=' '
+         sele 1
+         set orde to 1
+         seek kb
+         if found()
+            itemw=nbrg
+         endif
+         sele 2
+         set orde to 2
+         if trg=notaw
+            trg=trg
+            ton(jc)=spac(10)+' '+itemw+' '+str(qtyw,4)+' '+tran(hargaw,'@z 99,999,999')+'    '+notaw
+         else
+            trg=notaw
+            ton(jc)=tanggalw+' '+itemw+' '+str(qtyw,4)+' '+tran(hargaw,'@z 99,999,999')+'    '+notaw
+         endif
+         jc=jc+1
+         skip
+      enddo
+   else
+      nbeliw=SPAC(7)
+      rele ton
+      rele popup psn
+      deac wind pas3
+      rele am
+      rele popup psnd
+      deac wind pas2
+      set readb off
+      return            
+   endif   
+   defi WIND pas3 FROM 0,30 to 36.8,140 system title kag+' '+left(am(mchoice),30) clos colo rgb(0,0,0,200,227,201) font'Book Antiqua'
+   acti WIND pas3
+   clea
+   STORE 1 TO mchoice
+   @0.3,3 say'tgl.bmp'bitm
+   @0.3,24 say'item.bmp'bitm
+   @0.3,75.6 say'qty.bmp'bitm
+   @0.3,90 say'hjual.bmp'bitm
+   defi popup psnx from 2,1 margin scro COLOR ,rgb(0,0,0,255,255,255),,,,W+/B,,,,W/B 
+   for konter=1 to fc
+       DEFINE BAR konter OF psnx PROMPT ton(konter)
+   next
+   @28.3,0 say'mso1.bmp'bitm
+   @28.3,61.7 say'mso2.bmp'bitm
+   @2,1 GET mchoice POPUP psnx FUNCTION '&T' SIZE 25.5,58.3 font'Foxprint',12 styl'b'
+   @29.8,4 get tras PICTURE '@*HT \<OK;\<Cancel' font'Arial' styl'b' size 2.5,15,3 default 0
+   READ	
+   simp=.t.
+   if read()=12.or.lastk()=27.or.tras=2
+      rele popup psn
+      deac wind pas3
+      rele am
+      rele ton
+      rele popup psnx
+      deac wind pas2
+      nbeliw=SPAC(7)
+      set readb off
+      retu
+   endi
+   nbeliw=righ(ton(mchoice),7)
+   rele ton
+   rele am
+   rele popup psnx
+   rele popup psn
+   deac wind pas2
+   deac wind pas3
+   set readb off
+endcase
+RETU
+*
+proc emn
+DEFINE PAD stokpad   OF _MSYSMENU PROMPT '\<Item   '  COLOR SCHEME 3 ;
+	KEY ALT+I, '' mess'Menu kontrol stok';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD angpad   OF _MSYSMENU PROMPT '\<Suplier   '  COLOR SCHEME 3 ;
+	KEY ALT+S, '' mess'Menu kontrol supplier';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD aggpad   OF _MSYSMENU PROMPT '\<Customer   '  COLOR SCHEME 3 ;
+	KEY ALT+A, '' mess'Menu kontrol customer';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD kpbpad OF _MSYSMENU PROMPT '\<Beli   ' COLOR SCHEME 3 ;
+	KEY ALT+B, '' mess'Menu Kontrol Transaksi pembelian';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD kpapad OF _MSYSMENU PROMPT '\<Jual   ' COLOR SCHEME 3 ;
+	KEY ALT+J, '' mess'Menu Kontrol Transaksi Penjualan'
+DEFINE PAD indpad   OF _MSYSMENU PROMPT '\<Tools   '   COLOR SCHEME 3 ;
+	KEY ALT+R, '' mess'Reindex data';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD outpad   OF _MSYSMENU PROMPT 'E\<xit   '   COLOR SCHEME 3 ;
+	KEY ALT+X, '' mess'keluar dari program'
+*
+proc dmn
+DEFINE PAD stokpad   OF _MSYSMENU PROMPT '\Item   '  COLOR SCHEME 3 ;
+	KEY ALT+I, '' mess'Menu kontrol stok';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD angpad   OF _MSYSMENU PROMPT '\Suplier   '  COLOR SCHEME 3 ;
+	KEY ALT+S, '' mess'Menu kontrol supplier';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD aggpad   OF _MSYSMENU PROMPT '\Customer   '  COLOR SCHEME 3 ;
+	KEY ALT+A, '' mess'Menu kontrol customer';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD kpbpad OF _MSYSMENU PROMPT '\Beli   ' COLOR SCHEME 3 ;
+	KEY ALT+B, '' mess'Menu Kontrol Transaksi pembelian';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD kpapad OF _MSYSMENU PROMPT '\Jual   ' COLOR SCHEME 3 ;
+	KEY ALT+J, '' mess'Menu Kontrol Transaksi Penjualan'
+DEFINE PAD indpad   OF _MSYSMENU PROMPT '\Tools   '   COLOR SCHEME 3 ;
+	KEY ALT+R, '' mess'Reindex data';
+	skip for upper(left(ASMO,5))='KASIR'
+DEFINE PAD outpad   OF _MSYSMENU PROMPT '\Exit   '   COLOR SCHEME 3 ;
+	KEY ALT+X, '' mess'keluar dari program'
+retu	
+*
+proc cextr
+para xtr
+     if subs(xtr,1,1) $ '0123456789'
+        return .f.
+     endif
+retu
+*
+proc settgl
+DEFI WIND abcd FROM 10,(wcols()-20)/2 TO 17,((wcols()-20)/2)+20 TITL'Set Tanggal :'font'Arial',9
+acti wind abcd
+clea
+??sys(2002,1)
+@0,0 say 'stg1.bmp'bitm
+@0,12.9 say 'stg2.bmp'bitm
+@4,3.6 get tgskr font'book antiqua',12 size 1,12.7
+read
+deac wind abcd
+retu
+*
+proc cekrego
+para qode, rego, pilhar
+sele 2
+set orde to 4
+seek nbeliw+qode
+if found()
+   rego=rego
+else
+   sele 1
+   set orde to 1
+   seek qode
+   if found()
+      do case
+      case pilhar=1
+         rego=hjual
+      case pilhar=2
+         rego=hjua2
+      case pilhar=3
+         rego=hjua3
+      endcase   
+   endif   
+endif
+retu rego
+*
+proc pesn
+   wait'Ada error'wind
+retu
+*
