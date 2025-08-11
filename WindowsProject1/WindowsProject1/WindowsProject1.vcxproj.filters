@@ -36,6 +36,12 @@
     <ClInclude Include="DBFValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DBFTableManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="temp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowsProject1.cpp">
@@ -48,6 +54,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="temp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SupplierDBManager.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DBFTableManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

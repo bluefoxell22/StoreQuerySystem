@@ -1,18 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\",
+  "WorkspaceRootPath": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\temp.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|solutionrelative:WindowsProject1\\temp.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFTableManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|solutionrelative:WindowsProject1\\DBFTableManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\DBFManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|solutionrelative:WindowsProject1\\DBFManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFTableManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|solutionrelative:WindowsProject1\\DBFTableManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\DBFManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\ProductDBManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|solutionrelative:WindowsProject1\\ProductDBManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|solutionrelative:WindowsProject1\\DBFManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\ProductDBManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{ED930B5B-4469-4A39-A9F4-BAA5FD39B6A0}|WindowsProject1\\WindowsProject1.vcxproj|solutionrelative:WindowsProject1\\ProductDBManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,43 +30,69 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DBFManager.h",
-              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\DBFManager.h",
-              "RelativeDocumentMoniker": "WindowsProject1\\DBFManager.h",
-              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\DBFManager.h",
-              "RelativeToolTip": "WindowsProject1\\DBFManager.h",
-              "ViewState": "AgIAADMAAAAAAAAAAAAywD0AAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-08-06T07:49:31.997Z",
+              "DocumentIndex": 0,
+              "Title": "DBFTableManager.cpp",
+              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFTableManager.cpp",
+              "RelativeDocumentMoniker": "WindowsProject1\\DBFTableManager.cpp",
+              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFTableManager.cpp*",
+              "RelativeToolTip": "WindowsProject1\\DBFTableManager.cpp*",
+              "ViewState": "AgIAABAAAAAAAAAAAAAywC8AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-08-11T05:07:49.543Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "temp.cpp",
-              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\temp.cpp",
-              "RelativeDocumentMoniker": "WindowsProject1\\temp.cpp",
-              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\temp.cpp",
-              "RelativeToolTip": "WindowsProject1\\temp.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-08-06T07:20:45.724Z",
+              "DocumentIndex": 1,
+              "Title": "DBFTableManager.h",
+              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFTableManager.h",
+              "RelativeDocumentMoniker": "WindowsProject1\\DBFTableManager.h",
+              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFTableManager.h",
+              "RelativeToolTip": "WindowsProject1\\DBFTableManager.h",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAAEwAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-08-11T04:30:47.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ProductDBManager.h",
+              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\ProductDBManager.h",
+              "RelativeDocumentMoniker": "WindowsProject1\\ProductDBManager.h",
+              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\ProductDBManager.h",
+              "RelativeToolTip": "WindowsProject1\\ProductDBManager.h",
+              "ViewState": "AgIAABEAAAAAAAAAAAAywDsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-08-09T05:11:43.545Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "ProductDBManager.cpp",
+              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\ProductDBManager.cpp",
+              "RelativeDocumentMoniker": "WindowsProject1\\ProductDBManager.cpp",
+              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\ProductDBManager.cpp",
+              "RelativeToolTip": "WindowsProject1\\ProductDBManager.cpp",
+              "ViewState": "AgIAAPsAAAAAAAAAAAAAADwAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-08-09T05:12:17.749Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "DBFManager.cpp",
-              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\DBFManager.cpp",
+              "DocumentMoniker": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFManager.cpp",
               "RelativeDocumentMoniker": "WindowsProject1\\DBFManager.cpp",
-              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\WindowsProject1\\WindowsProject1\\DBFManager.cpp",
+              "ToolTip": "C:\\Users\\Audrey\\Gunung Agung\\StoreQuerySystem\\WindowsProject1\\WindowsProject1\\DBFManager.cpp",
               "RelativeToolTip": "WindowsProject1\\DBFManager.cpp",
-              "ViewState": "AgIAAHkAAAAAAAAAAAAywJMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJAAAAAAAAAAAAAywD4BAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-08-05T12:13:28.725Z",
               "EditorCaption": ""

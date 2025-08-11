@@ -1,3 +1,35 @@
-﻿  DBFReadWrite.cpp
-C:\Users\Audrey\Gunung Agung\WindowsProject1\WindowsProject1\DBFReadWrite.cpp(116,40): error C2589: '(': illegal token on right side of '::'
-C:\Users\Audrey\Gunung Agung\WindowsProject1\WindowsProject1\DBFReadWrite.cpp(116,40): error C2059: syntax error: ')'
+﻿  DBFManager.cpp
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFManager.cpp(36,18): warning C4244: 'initializing': conversion from 'std::streamoff' to 'long', possible loss of data
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFManager.cpp(157,14): warning C4244: 'initializing': conversion from 'std::streamoff' to 'long', possible loss of data
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFManager.cpp(189,90): warning C4267: '=': conversion from 'size_t' to 'unsigned short', possible loss of data
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFManager.cpp(274,26): warning C4244: 'initializing': conversion from 'std::streamoff' to 'long', possible loss of data
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFManager.cpp(278,33): warning C4244: 'initializing': conversion from 'std::streamoff' to 'long', possible loss of data
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFManager.cpp(327,18): warning C4244: 'initializing': conversion from 'std::streamoff' to 'long', possible loss of data
+  DBFTableManager.cpp
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.cpp(8,109): error C2572: 'DBFTableManager::AddRecord': redefinition of default argument: parameter 1
+      C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.h(65,10):
+      see declaration of 'DBFTableManager::AddRecord'
+  
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.cpp(29,115): error C2572: 'DBFTableManager::DeleteRecord': redefinition of default argument: parameter 1
+      C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.h(68,10):
+      see declaration of 'DBFTableManager::DeleteRecord'
+  
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.cpp(40,77): error C2572: 'DBFTableManager::UpdateRecord': redefinition of default argument: parameter 1
+      C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.h(71,10):
+      see declaration of 'DBFTableManager::UpdateRecord'
+  
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.cpp(51,1): error C2589: 'bool': illegal token on right side of '::'
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.cpp(48,6): error C2062: type '<error type>' unexpected
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.cpp(48,42): error C2143: syntax error: missing ';' before '{'
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFTableManager.cpp(48,42): error C2447: '{': missing function header (old-style formal list?)
+  ProductDBManager.cpp
+  SupplierDBManager.h
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\SupplierDBManager.h(31,21): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\SupplierDBManager.h(31,40): error C2143: syntax error: missing ',' before '&'
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\SupplierDBManager.h(33,45): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\SupplierDBManager.h(33,64): error C2143: syntax error: missing ',' before '&'
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\SupplierDBManager.h(35,44): error C2061: syntax error: identifier 'ProductFields'
+  temp.cpp
+  WindowsProject1.cpp
+  Generating Code...
+C:\Users\Audrey\Gunung Agung\StoreQuerySystem\WindowsProject1\WindowsProject1\DBFManager.cpp(223,1): warning C4715: 'DBFManager::DeleteFileW': not all control paths return a value

@@ -1,65 +1,59 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 
-#include "DBFManager.h"
+#include "DBFTableManager.h"
 #include <vector>
 #include <string>
 
-class Product {
+class Product : public DBFTableManager {
 public:
     struct ProductFields {
-        std::string id;         // Unique identifier
-        std::string name;       // Product name
-        double cost;            // Current cost per unit
-        double price;           // Selling price
-        int stock;              // Current stock level
-        std::string supplier;   // Supplier information
+        std::string id;         // Primary key
+        std::string name;
+        double cost;
+        double price;
+        int stock;
+        std::string supplierId;
     };
 
     struct InventoryMovement {
-        std::string date;       // Date of transaction (YYYYMMDD)
-        std::string productId;  // Reference to product
-        int quantity;           // Positive for purchases, negative for sales
-        double unitCost;        // Cost per unit at time of transaction
-        std::string type;       // "PURCHASE", "SALE", "ADJUSTMENT", etc.
-        std::string reference;  // PO number, invoice number, etc.
+        std::string date;
+        std::string productId;
+        int quantity;
+        double unitCost;
+        std::string type;
+        std::string reference;
     };
 
     Product();
 
-    bool CreateNewDB();
+    // Product CRUD operations
     bool AddProduct(const ProductFields& product);
+    bool UpdateProduct(const std::string& id, const ProductFields& updates);
     bool DeleteProduct(const std::string& id);
-    bool EditProduct(const std::string& id, const ProductFields& updatedFields);
-    bool DeleteDB();
     bool GetProduct(const std::string& id, ProductFields& out);
-    bool PackDatabase();
 
-    // Inventory movement methods
+    // Inventory operations
     bool RecordMovement(const InventoryMovement& movement);
     bool RecordPurchase(const std::string& productId, const std::string& date,
         int quantity, double unitCost, const std::string& reference = "");
     bool RecordSale(const std::string& productId, const std::string& date,
         int quantity, const std::string& reference = "");
+
+    // Reporting
     double CalculateCOGS_FIFO(const std::string& productId,
         const std::string& startDate,
         const std::string& endDate);
     double CalculateCOGS_Average(const std::string& productId,
         const std::string& startDate,
         const std::string& endDate);
-    InventoryMovement ParseMovementRecord(const std::vector<std::string>& record);
 
 private:
-    DBFManager productsDB;
-    DBFManager movementsDB;
-    const std::string PRODUCTS_DB = "products.dbf";
-    const std::string MOVEMENTS_DB = "inventory_movements.dbf";
-
-    std::vector<FIELD_DESCRIPTOR> productFields;
+    DBFTableManager movementsDB;
     std::vector<FIELD_DESCRIPTOR> movementFields;
-
-    void InitializeFieldDescriptors();
     bool UpdateProductStock(const std::string& productId, int quantityChange);
+
+    InventoryMovement ParseMovementRecord(const std::vector<std::string>& record);
 };
 
 #endif

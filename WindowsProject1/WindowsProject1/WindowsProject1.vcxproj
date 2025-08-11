@@ -124,16 +124,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DBFManager.h" />
+    <ClInclude Include="DBFTableManager.h" />
     <ClInclude Include="DBFValue.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ProductDBManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="temp.h" />
     <ClInclude Include="WindowsProject1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DBFManager.cpp" />
+    <ClCompile Include="DBFTableManager.cpp" />
     <ClCompile Include="ProductDBManager.cpp" />
+    <ClCompile Include="SupplierDBManager.h" />
     <ClCompile Include="temp.cpp" />
     <ClCompile Include="WindowsProject1.cpp" />
   </ItemGroup>
